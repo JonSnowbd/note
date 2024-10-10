@@ -1,0 +1,37 @@
+[gd_scene load_steps=2 format=3 uid="uid://cyyqadfw5ohdd"]
+
+[ext_resource type="Script" path="res://addons/note/script/note_center.gd" id="1_o5ma5"]
+
+[node name="NoteCenter" type="Node" node_paths=PackedStringArray("container", "screen_cover", "blackout")]
+process_mode = 3
+process_priority = -128
+process_physics_priority = -128
+process_thread_group = 1
+process_thread_group_order = 0
+process_thread_messages = 0
+script = ExtResource("1_o5ma5")
+container = NodePath("CanvasLayer")
+screen_cover = NodePath("CanvasLayer/ScreenCover")
+blackout = NodePath("Blackout/ColorRect")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 100
+
+[node name="ScreenCover" type="TextureRect" parent="CanvasLayer"]
+z_index = 128
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch_mode = 3
+
+[node name="Blackout" type="CanvasLayer" parent="."]
+layer = 128
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="Blackout"]
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.0745098, 0.0745098, 0.0745098, 1)

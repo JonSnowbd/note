@@ -1,0 +1,285 @@
+[gd_resource type="Resource" script_class="InputTextureMap" load_steps=134 format=3 uid="uid://dvj8sljw217df"]
+
+[ext_resource type="Script" path="res://addons/note/script/input_texture_map.gd" id="1_1yek8"]
+[ext_resource type="Texture2D" uid="uid://cpdhqnbhihr4q" path="res://addons/note/texture/keyboard/keyboard_0.png" id="1_vaojr"]
+[ext_resource type="Texture2D" uid="uid://c07s3rk1ri5rt" path="res://addons/note/texture/keyboard/keyboard_1.png" id="2_yyyu0"]
+[ext_resource type="Texture2D" uid="uid://dhvttprb1mjj0" path="res://addons/note/texture/keyboard/keyboard_2.png" id="3_bqe1w"]
+[ext_resource type="Texture2D" uid="uid://c1e18dpgs1j5m" path="res://addons/note/texture/keyboard/keyboard_3.png" id="4_h7hs5"]
+[ext_resource type="Texture2D" uid="uid://bte0i0b61mqlo" path="res://addons/note/texture/keyboard/keyboard_4.png" id="5_v1euv"]
+[ext_resource type="Texture2D" uid="uid://clgudi20n4is6" path="res://addons/note/texture/keyboard/keyboard_5.png" id="6_j2el2"]
+[ext_resource type="Texture2D" uid="uid://fwa25r4o7kw1" path="res://addons/note/texture/keyboard/keyboard_6.png" id="7_cnkvv"]
+[ext_resource type="Texture2D" uid="uid://cl203hb0rwqyv" path="res://addons/note/texture/keyboard/keyboard_7.png" id="8_akbng"]
+[ext_resource type="Texture2D" uid="uid://dbox0e2wv3m3s" path="res://addons/note/texture/keyboard/keyboard_8.png" id="9_i5ojd"]
+[ext_resource type="Texture2D" uid="uid://cdqjeof8vr1t7" path="res://addons/note/texture/keyboard/keyboard_9.png" id="10_hiej5"]
+[ext_resource type="Texture2D" uid="uid://bxh4b3gowq76x" path="res://addons/note/texture/keyboard/keyboard_a.png" id="11_pdntb"]
+[ext_resource type="Texture2D" uid="uid://k2ocqobfc06s" path="res://addons/note/texture/keyboard/keyboard_alt.png" id="12_3w6xy"]
+[ext_resource type="Texture2D" uid="uid://vxsgi7tdm6hc" path="res://addons/note/texture/keyboard/keyboard_b.png" id="12_lqfvh"]
+[ext_resource type="Texture2D" uid="uid://b8g36n6sw3jxh" path="res://addons/note/texture/keyboard/keyboard_arrows_all.png" id="12_qwec2"]
+[ext_resource type="Texture2D" uid="uid://c5okg440nso5y" path="res://addons/note/texture/keyboard/keyboard_any.png" id="13_80id8"]
+[ext_resource type="Texture2D" uid="uid://dmwjl8akknwxo" path="res://addons/note/texture/keyboard/keyboard_backspace_icon_alternative.png" id="13_a2fcu"]
+[ext_resource type="Texture2D" uid="uid://cjap15bgkwv4d" path="res://addons/note/texture/keyboard/keyboard_apostrophe.png" id="14_ajp6p"]
+[ext_resource type="Texture2D" uid="uid://byv2jcxvgu1rj" path="res://addons/note/texture/keyboard/keyboard_c.png" id="14_ce3et"]
+[ext_resource type="Texture2D" uid="uid://ccfiojx07l2mh" path="res://addons/note/texture/keyboard/keyboard_capslock_icon.png" id="15_eqb1k"]
+[ext_resource type="Texture2D" uid="uid://dc5pmullut8q3" path="res://addons/note/texture/keyboard/keyboard_bracket_close.png" id="16_5b4jn"]
+[ext_resource type="Texture2D" uid="uid://b7hvl7tlsqlb7" path="res://addons/note/texture/keyboard/keyboard_slash_back.png" id="16_y5woe"]
+[ext_resource type="Texture2D" uid="uid://cegp0oo3crfot" path="res://addons/note/texture/keyboard/keyboard_colon.png" id="17_m3ov1"]
+[ext_resource type="Texture2D" uid="uid://cavprb42ogxcf" path="res://addons/note/texture/keyboard/keyboard_comma.png" id="18_i0j5l"]
+[ext_resource type="Texture2D" uid="uid://lnhoyqtyg34h" path="res://addons/note/texture/keyboard/keyboard_escape.png" id="19_iwc61"]
+[ext_resource type="Texture2D" uid="uid://c8rlogojg3c0j" path="res://addons/note/texture/keyboard/keyboard_f1.png" id="20_eueuc"]
+[ext_resource type="Texture2D" uid="uid://b42dwftmqbbsb" path="res://addons/note/texture/keyboard/keyboard_f10.png" id="21_655d5"]
+[ext_resource type="Texture2D" uid="uid://dm10cddwnunef" path="res://addons/note/texture/keyboard/keyboard_f11.png" id="22_14skq"]
+[ext_resource type="Texture2D" uid="uid://d2kqyitx5oa1n" path="res://addons/note/texture/keyboard/keyboard_d.png" id="22_fsys7"]
+[ext_resource type="Texture2D" uid="uid://co3lifuw7wvbt" path="res://addons/note/texture/keyboard/keyboard_f12.png" id="23_232qt"]
+[ext_resource type="Texture2D" uid="uid://f6ht781q4l3m" path="res://addons/note/texture/keyboard/keyboard_arrows_down.png" id="23_mq3po"]
+[ext_resource type="Texture2D" uid="uid://c5vlmnyft2v16" path="res://addons/note/texture/keyboard/keyboard_minus.png" id="24_0kbji"]
+[ext_resource type="Texture2D" uid="uid://nr3uug28xt42" path="res://addons/note/texture/keyboard/keyboard_f2.png" id="24_p2b42"]
+[ext_resource type="Texture2D" uid="uid://4tdkj2vehkns" path="res://addons/note/texture/keyboard/keyboard_f3.png" id="25_4f5pf"]
+[ext_resource type="Texture2D" uid="uid://dek1cgqswyels" path="res://addons/note/texture/keyboard/keyboard_delete.png" id="25_vofdd"]
+[ext_resource type="Texture2D" uid="uid://bt8rcqjwmb7j6" path="res://addons/note/texture/keyboard/keyboard_f4.png" id="26_3qff7"]
+[ext_resource type="Texture2D" uid="uid://duoipg1x4qf4k" path="res://addons/note/texture/keyboard/keyboard_arrow_down.png" id="26_lwd6b"]
+[ext_resource type="Texture2D" uid="uid://cu4iotfowexgu" path="res://addons/note/texture/keyboard/keyboard_f5.png" id="27_cfsxa"]
+[ext_resource type="Texture2D" uid="uid://bx88gung65m6w" path="res://addons/note/texture/keyboard/keyboard_e.png" id="27_unqf2"]
+[ext_resource type="Texture2D" uid="uid://g53316d11pmk" path="res://addons/note/texture/keyboard/keyboard_end.png" id="28_cttyv"]
+[ext_resource type="Texture2D" uid="uid://sifhj8evhndy" path="res://addons/note/texture/keyboard/keyboard_f6.png" id="28_m2acw"]
+[ext_resource type="Texture2D" uid="uid://bm5qtvc6v5a3n" path="res://addons/note/texture/keyboard/keyboard_enter.png" id="29_0tw31"]
+[ext_resource type="Texture2D" uid="uid://dp3q5ju2sdcci" path="res://addons/note/texture/keyboard/keyboard_f7.png" id="29_jeebt"]
+[ext_resource type="Texture2D" uid="uid://c4jcigpmmjgsd" path="res://addons/note/texture/keyboard/keyboard_f8.png" id="30_oln81"]
+[ext_resource type="Texture2D" uid="uid://3nvcdi44ki0a" path="res://addons/note/texture/keyboard/keyboard_equals.png" id="30_y431l"]
+[ext_resource type="Texture2D" uid="uid://bt3uipgkvhdyx" path="res://addons/note/texture/keyboard/keyboard_f9.png" id="31_rviuh"]
+[ext_resource type="Texture2D" uid="uid://cdc4dqf4fjrle" path="res://addons/note/texture/keyboard/keyboard_f.png" id="32_vu08a"]
+[ext_resource type="Texture2D" uid="uid://cxripst6ddmx6" path="res://addons/note/texture/keyboard/keyboard_period.png" id="33_51h5q"]
+[ext_resource type="Texture2D" uid="uid://bjthwdui5blwu" path="res://addons/note/texture/keyboard/keyboard_g.png" id="45_jo4vn"]
+[ext_resource type="Texture2D" uid="uid://c8ncjc7hwnuwk" path="res://addons/note/texture/keyboard/keyboard_h.png" id="46_c7ki3"]
+[ext_resource type="Texture2D" uid="uid://b3ls2c68yeo2s" path="res://addons/note/texture/keyboard/keyboard_question.png" id="46_uvhel"]
+[ext_resource type="Texture2D" uid="uid://cyaygimjaab0u" path="res://addons/note/texture/keyboard/keyboard_arrows_horizontal.png" id="47_024by"]
+[ext_resource type="Texture2D" uid="uid://wvwc3cjdeecc" path="res://addons/note/texture/keyboard/keyboard_i.png" id="48_mpop5"]
+[ext_resource type="Texture2D" uid="uid://be5bh38fqukbm" path="res://addons/note/texture/keyboard/keyboard_insert.png" id="49_qx4t6"]
+[ext_resource type="Texture2D" uid="uid://dqx7sh2vufh2e" path="res://addons/note/texture/keyboard/keyboard_home.png" id="50_as5t7"]
+[ext_resource type="Texture2D" uid="uid://comhvjvdmsdjy" path="res://addons/note/texture/keyboard/keyboard_j.png" id="50_g5yxc"]
+[ext_resource type="Texture2D" uid="uid://clr3066db8dmj" path="res://addons/note/texture/keyboard/keyboard_k.png" id="51_wg57e"]
+[ext_resource type="Texture2D" uid="uid://ymyqb1e8aik4" path="res://addons/note/texture/keyboard/keyboard_l.png" id="52_2a0u0"]
+[ext_resource type="Texture2D" uid="uid://cyjphkg3sij6e" path="res://addons/note/texture/keyboard/keyboard_arrows_left.png" id="53_2anbs"]
+[ext_resource type="Texture2D" uid="uid://hfmtxpr63i1v" path="res://addons/note/texture/keyboard/keyboard_ctrl.png" id="55_4ctjo"]
+[ext_resource type="Texture2D" uid="uid://d0uj7vxnek8b2" path="res://addons/note/texture/keyboard/keyboard_arrow_left.png" id="56_4ipw6"]
+[ext_resource type="Texture2D" uid="uid://bkf0ywfsdkmi0" path="res://addons/note/texture/keyboard/keyboard_command.png" id="57_lsdoh"]
+[ext_resource type="Texture2D" uid="uid://dd165hclkope3" path="res://addons/note/texture/keyboard/keyboard_m.png" id="58_yvbej"]
+[ext_resource type="Texture2D" uid="uid://4dw7fbk5h2g1" path="res://addons/note/texture/keyboard/keyboard_shift.png" id="59_iqe81"]
+[ext_resource type="Texture2D" uid="uid://cfb1oa52iy5uu" path="res://addons/note/texture/keyboard/keyboard_n.png" id="59_utw5k"]
+[ext_resource type="Texture2D" uid="uid://bh40huk61hw0t" path="res://addons/note/texture/keyboard/keyboard_o.png" id="60_yncxu"]
+[ext_resource type="Texture2D" uid="uid://c41hurnjvenk7" path="res://addons/note/texture/keyboard/keyboard_p.png" id="61_pva1t"]
+[ext_resource type="Texture2D" uid="uid://bonouar4u2ox5" path="res://addons/note/texture/keyboard/keyboard_page_down.png" id="63_wx61f"]
+[ext_resource type="Texture2D" uid="uid://cff8dsb7nnrhr" path="res://addons/note/texture/keyboard/keyboard_page_up.png" id="64_sfx1t"]
+[ext_resource type="Texture2D" uid="uid://b8ibyvw4gggho" path="res://addons/note/texture/keyboard/keyboard_bracket_open.png" id="64_wselb"]
+[ext_resource type="Texture2D" uid="uid://cgu4gamlhkbfw" path="res://addons/note/texture/keyboard/keyboard_arrows_right.png" id="65_bj3rw"]
+[ext_resource type="Texture2D" uid="uid://cc7d1oisbnpk6" path="res://addons/note/texture/keyboard/keyboard_arrow_right.png" id="66_rcuxp"]
+[ext_resource type="Texture2D" uid="uid://c66hyblxlcyeh" path="res://addons/note/texture/keyboard/keyboard_arrows_up.png" id="67_ecg8o"]
+[ext_resource type="Texture2D" uid="uid://d2xv3xblg61pm" path="res://addons/note/texture/keyboard/keyboard_arrow_up.png" id="68_4kqhb"]
+[ext_resource type="Texture2D" uid="uid://btqt3ubii88g0" path="res://addons/note/texture/keyboard/keyboard_printscreen.png" id="69_kd6xx"]
+[ext_resource type="Texture2D" uid="uid://c43j5rik3iqbw" path="res://addons/note/texture/keyboard/keyboard_arrows_vertical.png" id="69_xlvhs"]
+[ext_resource type="Texture2D" uid="uid://122uexo2633y" path="res://addons/note/texture/keyboard/keyboard_arrows.png" id="70_mr1la"]
+[ext_resource type="Texture2D" uid="uid://ubkp6thcte7d" path="res://addons/note/texture/keyboard/keyboard_r.png" id="70_muqik"]
+[ext_resource type="Texture2D" uid="uid://bhsngi773onht" path="res://addons/note/texture/keyboard/keyboard_q.png" id="70_qtiii"]
+[ext_resource type="Texture2D" uid="uid://dtq6001032exy" path="res://addons/note/texture/keyboard/keyboard_s.png" id="73_q0v5c"]
+[ext_resource type="Texture2D" uid="uid://eoj3tkibfrmq" path="res://addons/note/texture/keyboard/keyboard_space_icon.png" id="75_cwptj"]
+[ext_resource type="Texture2D" uid="uid://bf8tn5venyq1o" path="res://addons/note/texture/keyboard/keyboard_t.png" id="76_bdusg"]
+[ext_resource type="Texture2D" uid="uid://dvb1lmyhphfq" path="res://addons/note/texture/keyboard/keyboard_tab_icon.png" id="77_m4unw"]
+[ext_resource type="Texture2D" uid="uid://b2x0wfhnrvtwd" path="res://addons/note/texture/keyboard/keyboard_tilde.png" id="78_m6a0v"]
+[ext_resource type="Texture2D" uid="uid://cae0nfpldo8bq" path="res://addons/note/texture/keyboard/keyboard_u.png" id="79_34ps6"]
+[ext_resource type="Texture2D" uid="uid://qpwj8s6g5jq" path="res://addons/note/texture/keyboard/keyboard_v.png" id="82_8cssq"]
+[ext_resource type="Texture2D" uid="uid://con7c26eadp0s" path="res://addons/note/texture/keyboard/keyboard_w.png" id="84_o0i1k"]
+[ext_resource type="Texture2D" uid="uid://bqfitam6r2mfa" path="res://addons/note/texture/keyboard/keyboard_x.png" id="86_3vop3"]
+[ext_resource type="Texture2D" uid="uid://b0kk2fkgmdqy0" path="res://addons/note/texture/keyboard/keyboard_y.png" id="87_m6yl5"]
+[ext_resource type="Texture2D" uid="uid://bhj0g2lkkqk04" path="res://addons/note/texture/keyboard/keyboard_z.png" id="88_ean01"]
+[ext_resource type="Texture2D" uid="uid://cl2pqw3oxk6wo" path="res://addons/note/texture/keyboard/mouse_move.png" id="90_lxtn1"]
+[ext_resource type="Texture2D" uid="uid://bf5r6fqet06ny" path="res://addons/note/texture/xbox/xbox_button_a.png" id="91_g1s05"]
+[ext_resource type="Texture2D" uid="uid://cowhye418dxyw" path="res://addons/note/texture/keyboard/mouse_horizontal.png" id="91_lb4hd"]
+[ext_resource type="Texture2D" uid="uid://dnp7rlvnntlty" path="res://addons/note/texture/xbox/xbox_dpad_round_all.png" id="92_exaa6"]
+[ext_resource type="Texture2D" uid="uid://dc5prdarkwtqp" path="res://addons/note/texture/xbox/xbox_button_b.png" id="92_imb3u"]
+[ext_resource type="Texture2D" uid="uid://dmxk46qfaxydl" path="res://addons/note/texture/keyboard/mouse_left.png" id="92_kpkrk"]
+[ext_resource type="Texture2D" uid="uid://gb0e3fp5b6ft" path="res://addons/note/texture/keyboard/mouse_right.png" id="93_h4vqq"]
+[ext_resource type="Texture2D" uid="uid://ccpgbrs47j3gk" path="res://addons/note/texture/xbox/xbox_button_x.png" id="93_qpow7"]
+[ext_resource type="Texture2D" uid="uid://bgd5txl8j0ese" path="res://addons/note/texture/xbox/xbox_button_view.png" id="94_bnyeh"]
+[ext_resource type="Texture2D" uid="uid://bh1vyy6iqtlln" path="res://addons/note/texture/keyboard/mouse_vertical.png" id="94_n1cug"]
+[ext_resource type="Texture2D" uid="uid://c37jqvc8y13jj" path="res://addons/note/texture/xbox/xbox_button_y.png" id="94_t6r4h"]
+[ext_resource type="Texture2D" uid="uid://cik7d1oapbsrs" path="res://addons/note/texture/xbox/xbox_dpad_round_down.png" id="95_158nt"]
+[ext_resource type="Texture2D" uid="uid://7ylbsax8y8od" path="res://addons/note/texture/keyboard/mouse_scroll.png" id="95_p36wb"]
+[ext_resource type="Texture2D" uid="uid://k2irna6250pr" path="res://addons/note/texture/keyboard/mouse_scroll_down.png" id="96_isv7i"]
+[ext_resource type="Texture2D" uid="uid://b3j5m31nbv7jo" path="res://addons/note/texture/xbox/xbox_stick_l_down.png" id="96_tisxl"]
+[ext_resource type="Texture2D" uid="uid://dj41xre6j046t" path="res://addons/note/texture/keyboard/mouse_scroll_up.png" id="97_ahc6n"]
+[ext_resource type="Texture2D" uid="uid://cdph305b4mpg6" path="res://addons/note/texture/xbox/xbox_stick_r_down.png" id="97_fvhwb"]
+[ext_resource type="Texture2D" uid="uid://otq56o1d4m5b" path="res://addons/note/texture/xbox/xbox_dpad_round.png" id="98_dwwfy"]
+[ext_resource type="Texture2D" uid="uid://df2d2r04pwid6" path="res://addons/note/texture/xbox/xbox_guide.png" id="99_2r5it"]
+[ext_resource type="Texture2D" uid="uid://b3bqbgk7f28ck" path="res://addons/note/texture/xbox/xbox_dpad_round_horizontal.png" id="100_palb2"]
+[ext_resource type="Texture2D" uid="uid://bhkewqr1ckrxr" path="res://addons/note/texture/xbox/xbox_stick_l_horizontal.png" id="101_u8dm1"]
+[ext_resource type="Texture2D" uid="uid://pjdyihqytohq" path="res://addons/note/texture/xbox/xbox_stick_r_horizontal.png" id="102_k8m7g"]
+[ext_resource type="Texture2D" uid="uid://c774nlaooalj6" path="res://addons/note/texture/xbox/xbox_stick_l_press.png" id="103_a7v10"]
+[ext_resource type="Texture2D" uid="uid://crwa70ewodrho" path="res://addons/note/texture/xbox/xbox_dpad_round_left.png" id="104_2u3cg"]
+[ext_resource type="Texture2D" uid="uid://dn6beg8q8qfob" path="res://addons/note/texture/xbox/xbox_stick_l_left.png" id="105_vwj2d"]
+[ext_resource type="Texture2D" uid="uid://o51fhej4dt8m" path="res://addons/note/texture/xbox/xbox_stick_r_left.png" id="106_svmv7"]
+[ext_resource type="Texture2D" uid="uid://bmkr7bpx0u2gf" path="res://addons/note/texture/xbox/xbox_lb.png" id="107_8mv47"]
+[ext_resource type="Texture2D" uid="uid://dpxrvgvc7r5vj" path="res://addons/note/texture/xbox/xbox_stick_l.png" id="108_12i7s"]
+[ext_resource type="Texture2D" uid="uid://b1vto1rs5dnxl" path="res://addons/note/texture/xbox/xbox_lt.png" id="109_05lvl"]
+[ext_resource type="Texture2D" uid="uid://dq5rj8iaklnom" path="res://addons/note/texture/xbox/xbox_stick_r_press.png" id="110_xmf2x"]
+[ext_resource type="Texture2D" uid="uid://dusp6eie7ylbf" path="res://addons/note/texture/xbox/xbox_dpad_round_right.png" id="111_out6v"]
+[ext_resource type="Texture2D" uid="uid://bf7y3oki5o0rb" path="res://addons/note/texture/xbox/xbox_stick_l_right.png" id="112_n7a2u"]
+[ext_resource type="Texture2D" uid="uid://fcey42w77am4" path="res://addons/note/texture/xbox/xbox_stick_r_right.png" id="113_l5syt"]
+[ext_resource type="Texture2D" uid="uid://1g0d8nvex01g" path="res://addons/note/texture/xbox/xbox_rb.png" id="114_xlkae"]
+[ext_resource type="Texture2D" uid="uid://b1tmt2shba82a" path="res://addons/note/texture/xbox/xbox_stick_r.png" id="115_em4eq"]
+[ext_resource type="Texture2D" uid="uid://dhwoly0ligflg" path="res://addons/note/texture/xbox/xbox_rt.png" id="116_ewull"]
+[ext_resource type="Texture2D" uid="uid://b0efiqm5e1als" path="res://addons/note/texture/xbox/xbox_button_menu.png" id="117_15ysc"]
+[ext_resource type="Texture2D" uid="uid://cs081yaq0axbq" path="res://addons/note/texture/xbox/xbox_dpad_round_up.png" id="118_28dmi"]
+[ext_resource type="Texture2D" uid="uid://cjqdu64dkute6" path="res://addons/note/texture/xbox/xbox_stick_l_up.png" id="119_6tpk3"]
+[ext_resource type="Texture2D" uid="uid://uyltraubbul3" path="res://addons/note/texture/xbox/xbox_stick_r_up.png" id="120_lckbk"]
+[ext_resource type="Texture2D" uid="uid://dqywho7owvkqj" path="res://addons/note/texture/xbox/xbox_dpad_round_vertical.png" id="121_drfbn"]
+[ext_resource type="Texture2D" uid="uid://cftnsv73dwmuo" path="res://addons/note/texture/xbox/xbox_stick_l_vertical.png" id="122_h0sbo"]
+[ext_resource type="Texture2D" uid="uid://dvjyjjeshrdak" path="res://addons/note/texture/xbox/xbox_stick_r_vertical.png" id="123_fv00a"]
+
+[resource]
+script = ExtResource("1_1yek8")
+key_1 = ExtResource("2_yyyu0")
+key_2 = ExtResource("3_bqe1w")
+key_3 = ExtResource("4_h7hs5")
+key_4 = ExtResource("5_v1euv")
+key_5 = ExtResource("6_j2el2")
+key_6 = ExtResource("7_cnkvv")
+key_7 = ExtResource("8_akbng")
+key_8 = ExtResource("9_i5ojd")
+key_9 = ExtResource("10_hiej5")
+key_0 = ExtResource("1_vaojr")
+key_dash = ExtResource("24_0kbji")
+key_equals = ExtResource("30_y431l")
+key_q = ExtResource("70_qtiii")
+key_w = ExtResource("84_o0i1k")
+key_e = ExtResource("27_unqf2")
+key_r = ExtResource("70_muqik")
+key_t = ExtResource("76_bdusg")
+key_y = ExtResource("87_m6yl5")
+key_u = ExtResource("79_34ps6")
+key_i = ExtResource("48_mpop5")
+key_o = ExtResource("60_yncxu")
+key_p = ExtResource("61_pva1t")
+key_a = ExtResource("11_pdntb")
+key_s = ExtResource("73_q0v5c")
+key_d = ExtResource("22_fsys7")
+key_f = ExtResource("32_vu08a")
+key_g = ExtResource("45_jo4vn")
+key_h = ExtResource("46_c7ki3")
+key_j = ExtResource("50_g5yxc")
+key_k = ExtResource("51_wg57e")
+key_l = ExtResource("52_2a0u0")
+key_z = ExtResource("88_ean01")
+key_x = ExtResource("86_3vop3")
+key_c = ExtResource("14_ce3et")
+key_v = ExtResource("82_8cssq")
+key_b = ExtResource("12_lqfvh")
+key_n = ExtResource("59_utw5k")
+key_m = ExtResource("58_yvbej")
+key_tilde = ExtResource("78_m6a0v")
+key_bkspc = ExtResource("13_a2fcu")
+key_space = ExtResource("75_cwptj")
+key_tab = ExtResource("77_m4unw")
+key_enter = ExtResource("29_0tw31")
+key_lshift = ExtResource("59_iqe81")
+key_rshift = ExtResource("59_iqe81")
+key_lctrl = ExtResource("55_4ctjo")
+key_rctrl = ExtResource("55_4ctjo")
+key_lalt = ExtResource("12_3w6xy")
+key_ralt = ExtResource("12_3w6xy")
+key_lsuper = ExtResource("57_lsdoh")
+key_rsuper = ExtResource("57_lsdoh")
+key_backslash = ExtResource("16_y5woe")
+key_forwardslash = ExtResource("46_uvhel")
+key_open_square_bracket = ExtResource("64_wselb")
+key_close_square_bracket = ExtResource("16_5b4jn")
+key_capslock = ExtResource("15_eqb1k")
+key_escape = ExtResource("19_iwc61")
+key_f1 = ExtResource("20_eueuc")
+key_f2 = ExtResource("24_p2b42")
+key_f3 = ExtResource("25_4f5pf")
+key_f4 = ExtResource("26_3qff7")
+key_f5 = ExtResource("27_cfsxa")
+key_f6 = ExtResource("28_m2acw")
+key_f7 = ExtResource("29_jeebt")
+key_f8 = ExtResource("30_oln81")
+key_f9 = ExtResource("31_rviuh")
+key_f10 = ExtResource("21_655d5")
+key_f11 = ExtResource("22_14skq")
+key_f12 = ExtResource("23_232qt")
+key_f13 = ExtResource("46_uvhel")
+key_f14 = ExtResource("46_uvhel")
+key_f15 = ExtResource("46_uvhel")
+key_f16 = ExtResource("46_uvhel")
+key_f17 = ExtResource("46_uvhel")
+key_f18 = ExtResource("46_uvhel")
+key_f19 = ExtResource("46_uvhel")
+key_f20 = ExtResource("46_uvhel")
+key_f21 = ExtResource("46_uvhel")
+key_f22 = ExtResource("46_uvhel")
+key_up_arrow = ExtResource("68_4kqhb")
+key_right_arrow = ExtResource("66_rcuxp")
+key_down_arrow = ExtResource("26_lwd6b")
+key_left_arrow = ExtResource("56_4ipw6")
+key_ins = ExtResource("49_qx4t6")
+key_home = ExtResource("50_as5t7")
+key_pgup = ExtResource("64_sfx1t")
+key_pgdn = ExtResource("63_wx61f")
+key_del = ExtResource("25_vofdd")
+key_end = ExtResource("28_cttyv")
+key_apostraphe = ExtResource("14_ajp6p")
+key_colon = ExtResource("17_m3ov1")
+key_comma = ExtResource("18_i0j5l")
+key_period = ExtResource("33_51h5q")
+key_question_mark = ExtResource("46_uvhel")
+key_print_screen = ExtResource("69_kd6xx")
+key_h_wasd = ExtResource("47_024by")
+key_v_wasd = ExtResource("69_xlvhs")
+key_l_wasd = ExtResource("53_2anbs")
+key_r_wasd = ExtResource("65_bj3rw")
+key_u_wasd = ExtResource("67_ecg8o")
+key_d_wasd = ExtResource("23_mq3po")
+key_wasd = ExtResource("70_mr1la")
+key_all_wasd = ExtResource("12_qwec2")
+key_any = ExtResource("13_80id8")
+mouse_h = ExtResource("91_lb4hd")
+mouse_v = ExtResource("94_n1cug")
+mouse = ExtResource("90_lxtn1")
+mouse_wheel = ExtResource("95_p36wb")
+mouse_wheel_up = ExtResource("97_ahc6n")
+mouse_wheel_down = ExtResource("96_isv7i")
+mouse_left_click = ExtResource("92_kpkrk")
+mouse_right_click = ExtResource("93_h4vqq")
+xbox_lstick = ExtResource("108_12i7s")
+xbox_h_lstick = ExtResource("101_u8dm1")
+xbox_v_lstick = ExtResource("122_h0sbo")
+xbox_l_lstick = ExtResource("105_vwj2d")
+xbox_r_lstick = ExtResource("112_n7a2u")
+xbox_u_lstick = ExtResource("119_6tpk3")
+xbox_d_lstick = ExtResource("96_tisxl")
+xbox_l3 = ExtResource("103_a7v10")
+xbox_rstick = ExtResource("115_em4eq")
+xbox_h_rstick = ExtResource("102_k8m7g")
+xbox_v_rstick = ExtResource("123_fv00a")
+xbox_l_rstick = ExtResource("106_svmv7")
+xbox_r_rstick = ExtResource("113_l5syt")
+xbox_u_rstick = ExtResource("120_lckbk")
+xbox_d_rstick = ExtResource("97_fvhwb")
+xbox_r3 = ExtResource("110_xmf2x")
+xbox_h_dpad = ExtResource("100_palb2")
+xbox_v_dpad = ExtResource("121_drfbn")
+xbox_l_dpad = ExtResource("104_2u3cg")
+xbox_r_dpad = ExtResource("111_out6v")
+xbox_u_dpad = ExtResource("118_28dmi")
+xbox_d_dpad = ExtResource("95_158nt")
+xbox_all_dpad = ExtResource("92_exaa6")
+xbox_dpad = ExtResource("98_dwwfy")
+xbox_a = ExtResource("91_g1s05")
+xbox_b = ExtResource("92_imb3u")
+xbox_x = ExtResource("93_qpow7")
+xbox_y = ExtResource("94_t6r4h")
+xbox_lb = ExtResource("107_8mv47")
+xbox_rb = ExtResource("114_xlkae")
+xbox_lt = ExtResource("109_05lvl")
+xbox_rt = ExtResource("116_ewull")
+xbox_back = ExtResource("94_bnyeh")
+xbox_start = ExtResource("117_15ysc")
+xbox_guide = ExtResource("99_2r5it")

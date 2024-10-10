@@ -1,0 +1,77 @@
+[gd_scene load_steps=5 format=3 uid="uid://df7uk18ixvdm8"]
+
+[ext_resource type="Script" path="res://addons/note/script/error_scene.gd" id="1_uvnmg"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_tkc70"]
+font_size = 30
+shadow_size = 3
+shadow_color = Color(0, 0, 0, 0.862745)
+shadow_offset = Vector2(0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_p2ent"]
+font_color = Color(0.637843, 0.637843, 0.637843, 1)
+shadow_color = Color(0, 0, 0, 0.854902)
+shadow_offset = Vector2(0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_ej82q"]
+font_size = 12
+font_color = Color(0.435192, 0.435192, 0.435192, 1)
+shadow_color = Color(0, 0, 0, 0.854902)
+shadow_offset = Vector2(0, 1)
+
+[node name="DefaultErrorScene" type="Node2D" node_paths=PackedStringArray("title_label", "description_label", "context_label")]
+script = ExtResource("1_uvnmg")
+title_label = NodePath("CanvasLayer/CenterContainer/VBoxContainer/Title")
+description_label = NodePath("CanvasLayer/CenterContainer/VBoxContainer/Description")
+context_label = NodePath("CanvasLayer/CenterContainer/VBoxContainer/Context")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 50
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.215567, 0.116135, 0.113355, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer"]
+texture_filter = 6
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="CanvasLayer/CenterContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+text = "Error Occured"
+label_settings = SubResource("LabelSettings_tkc70")
+horizontal_alignment = 1
+
+[node name="Description" type="Label" parent="CanvasLayer/CenterContainer/VBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Example error description"
+label_settings = SubResource("LabelSettings_p2ent")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Context" type="Label" parent="CanvasLayer/CenterContainer/VBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Player node
+#3000
+Data"
+label_settings = SubResource("LabelSettings_ej82q")
+vertical_alignment = 1
+autowrap_mode = 2

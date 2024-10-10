@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://kflbxvtevmj2"]
+
+[ext_resource type="Shader" path="res://addons/note/shader/lcd_square_transition.gdshader" id="1_5xc25"]
+
+[resource]
+shader = ExtResource("1_5xc25")
+shader_parameter/size = Vector2i(10, 10)
+shader_parameter/smoothness = 0.33
+shader_parameter/progress = 0.0

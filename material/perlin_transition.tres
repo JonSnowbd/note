@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dk5oqc43jlalx"]
+
+[ext_resource type="Shader" path="res://addons/note/shader/perlin_transition.gdshader" id="1_lwqck"]
+
+[resource]
+shader = ExtResource("1_lwqck")
+shader_parameter/seed = 10.0
+shader_parameter/progress = 0.0

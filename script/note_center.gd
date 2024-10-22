@@ -5,6 +5,11 @@ extends Node
 @export var screen_cover: TextureRect
 @export var blackout: ColorRect
 
+signal control_mode_changed
+
+var is_gamepad: bool = false
+var _mouse_track: float = 0.0
+
 var control_guide: ControlGuideManager
 var tooltip: TooltipManager
 var popup: PopupManager
@@ -30,7 +35,26 @@ var current_session: NoteSaveSession = null
 func _init() -> void:
 	util = NoteUtilities.new()
 	add_child(util)
-
+func set_gamepad_mode(should_be_gamepad: bool):
+	if !ProjectSettings.get_setting("addons/note/controller_detection", true):
+		return
+	if should_be_gamepad:
+		Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+	else:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	if is_gamepad != should_be_gamepad:
+		is_gamepad = should_be_gamepad
+		control_mode_changed.emit()
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion:
+		_mouse_track += event.relative.length()
+		if _mouse_track > 100.0:
+			_mouse_track = 0.0
+			set_gamepad_mode(false)
+	if event is InputEventKey or event is InputEventMouseButton:
+		set_gamepad_mode(false)
+	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
+		set_gamepad_mode(true)
 func _ready() -> void:
 	_pulse_interval = ProjectSettings.get_setting("addons/note/save_pulse_period", 1.0)
 	control_guide = load(ProjectSettings.get_setting("addons/note/user/control_guide_prefab", NoteEditorPlugin.default_control_guide)).instantiate()

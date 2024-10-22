@@ -155,9 +155,10 @@ func load_save(path: String, skip_animation: bool = false):
 	var dev_path = ProjectSettings.get_setting("addons/note/dev/dev_entry_point", "")
 	if note.current_session.is_dev() and dev_path != "":
 		note.info("Developer entry point in use")
-		init_path = ProjectSettings.get_setting("addons/note/user/entry_point", "")
-	else:
 		init_path = dev_path
+	else:
+		init_path =  ProjectSettings.get_setting("addons/note/user/entry_point", "")
+	
 	if init_path != "":
 		if skip_animation:
 			get_tree().call_deferred("change_scene_to_file", init_path)

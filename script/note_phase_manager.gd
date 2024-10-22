@@ -15,6 +15,10 @@ func _clear_active_tweens(identity):
 			old_t.stop()
 		active_tweens.erase(identity)
 
+func get_phase(identity) -> Variant:
+	if data.has(identity):
+		return data[identity]
+	return null
 func is_phase(identity) -> bool:
 	if !data.has(identity):
 		return false
@@ -29,6 +33,8 @@ func register_phase(identity, package: PackedScene):
 	_shelf_phase(new_phase.phase_identity)
 func switch_phase(identity, transition_data=null):
 	clear_phase()
+	if identity == null:
+		return
 	var next_phase: NotePhaseLayer = data[identity]
 	next_phase.process_mode = next_phase.get_meta("default_process_mode", PROCESS_MODE_ALWAYS)
 	next_phase.show()

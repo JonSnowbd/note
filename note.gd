@@ -34,6 +34,14 @@ func _enter_tree() -> void:
 		"name": "addons/note/transition/parameter",
 		"type": TYPE_STRING,
 	})
+	if !ProjectSettings.has_setting("addons/note/controller_detection"):
+		ProjectSettings.set_setting("addons/note/controller_detection", true)
+	ProjectSettings.set_initial_value("addons/note/controller_detection", true)
+	ProjectSettings.set_as_basic("addons/note/controller_detection", true)
+	ProjectSettings.add_property_info({
+		"name": "addons/note/controller_detection",
+		"type": TYPE_BOOL,
+	})
 	if !ProjectSettings.has_setting("addons/note/transition/loading_screen"):
 		ProjectSettings.set_setting("addons/note/transition/loading_screen", default_loading_screen)
 	ProjectSettings.set_initial_value("addons/note/transition/loading_screen", default_loading_screen)

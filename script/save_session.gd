@@ -67,7 +67,7 @@ func write_object(resource_name: String, object: Dictionary):
 ## Finds the resource inside your save folder and turns it into the resource it was.
 ## This is already relative to your save folder, and will include the appropriate file type.
 ## So use just the name, eg "misc/stats" or "profile"
-## NOTE: Using this for saves is potentially unsafe, as third party saves could include arbitrary code execution.
+## NOTE: Using this for saves is potentially unsafe, as third party saves could include arbitrary scripts.
 func read_resource(resource_name: String) -> Resource:
 	return ResourceLoader.load(save_path+"/"+resource_name+".tres")
 ## Finds the json inside your save folder and turns it into the dictionary it was.
@@ -78,13 +78,13 @@ func read_object(resource_name:String) -> Dictionary:
 	var data = JSON.parse_string(file.get_as_text())
 	file.close()
 	return data
-## Reads a file as a string. This does not include the filename, so include this in your parameter.
+## Reads a file as a string. This does not include the file type, so include this in the parameter.
 func read_file(file_name: String) -> String:
 	var file = FileAccess.open(save_path+"/"+file_name, FileAccess.READ)
 	var data = file.get_as_text()
 	file.close()
 	return data
-## File operations must include the file name. Opens a file inside the save and returns it.
+## File operations must include the file type. Opens a file inside the save and returns it.
 func open_file(file_name: String) -> FileAccess:
 	var file = FileAccess.open(save_path+"/"+file_name, FileAccess.READ)
 	return file

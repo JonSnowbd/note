@@ -201,6 +201,12 @@ func transition(time: float = 0.33):
 		screen_cover.material.set_shader_parameter(_transition_progress_name, 0.0)
 		screen_cover.material.set_shader_parameter("seed", randf()*30000.0)
 
+func unload_level():
+	info("Unloading current level")
+	var cs = get_tree().current_scene
+	cs.queue_free()
+	get_tree().root.remove_child(cs)
+	get_tree().current_scene = null
 ## Like load level, but instead of freeing the current scene, returns it.
 func swap_level(packed_scene: PackedScene, transition_time: float = 0.75) -> Node:
 	transition(transition_time)

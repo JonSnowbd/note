@@ -10,7 +10,9 @@ static func sort_fn(lhs: NoteGamepadControlEffect, rhs: NoteGamepadControlEffect
 ## Higher = ran first
 @export var priority: int = 0
 
-func _ready() -> void:
+func _enter_tree() -> void:
+	if Engine.is_editor_hint():
+		return
 	var parent = get_parent()
 	if parent is not Control:
 		push_error("Control handlers go as children of a control")
@@ -20,7 +22,16 @@ func _ready() -> void:
 		arr.sort_custom(sort_fn)
 	else:
 		parent.set_meta(MetaTag_ID, [self])
-
+func _exit_tree() -> void:
+	if Engine.is_editor_hint():
+		return
+	var parent = get_parent()
+	if parent is not Control:
+		push_error("Control handlers go as children of a control")
+	if parent.has_meta(MetaTag_ID):
+		var arr: Array = parent.get_meta(MetaTag_ID)
+		arr.erase(self)
+		arr.sort_custom(sort_fn)
 
 ## Virtual. Do your input stuff here. For good compatibility refer to context for
 ## action strings. Return true if the handler consumed the input.

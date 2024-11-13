@@ -1,3 +1,68 @@
-[gd_resource type="Theme" format=3 uid="uid://duimp1t6xhpun"]
+[gd_resource type="Theme" load_steps=22 format=3 uid="uid://duimp1t6xhpun"]
+
+[ext_resource type="Texture2D" uid="uid://2ny3rlo43df0" path="res://addons/note/texture/ui/ui_sheet.png" id="1_0l703"]
+[ext_resource type="StyleBox" uid="uid://duuorqe7iijst" path="res://addons/note/texture/ui/box/bottom_button_regular.tres" id="1_4fx1k"]
+[ext_resource type="StyleBox" uid="uid://bl3t1yn3nnxtx" path="res://addons/note/texture/ui/box/inset_panel_v.tres" id="1_7n1xp"]
+[ext_resource type="StyleBox" uid="uid://d0rqrshcwqfp1" path="res://addons/note/texture/ui/box/elevated_focus.tres" id="1_7uf5m"]
+[ext_resource type="StyleBox" uid="uid://bjbpbo36s0w83" path="res://addons/note/texture/ui/box/bottom_button_regular_hover.tres" id="1_522ba"]
+[ext_resource type="StyleBox" uid="uid://41xdx752htqw" path="res://addons/note/texture/ui/box/elevated_regular_hovered.tres" id="1_rv336"]
+[ext_resource type="StyleBox" uid="uid://cf7enui5suwqa" path="res://addons/note/texture/ui/box/inset_panel_h.tres" id="1_wimvk"]
+[ext_resource type="StyleBox" uid="uid://kcqpv4hhrxf8" path="res://addons/note/texture/ui/box/elevated_white_hovered.tres" id="2_74ggd"]
+[ext_resource type="StyleBox" uid="uid://qf5u2twl6433" path="res://addons/note/texture/ui/box/slider_line_highlight.tres" id="2_ep430"]
+[ext_resource type="FontFile" uid="uid://cdkss61eaj3ut" path="res://addons/note/resource/font/Outfit-Regular.ttf" id="2_p870e"]
+[ext_resource type="StyleBox" uid="uid://j63p2jawp2q3" path="res://addons/note/texture/ui/box/inset_panel_h_self_color.tres" id="2_uk8vs"]
+[ext_resource type="StyleBox" uid="uid://de7bw6i7wbhcg" path="res://addons/note/texture/ui/box/elevated_regular.tres" id="2_xcrd2"]
+[ext_resource type="StyleBox" uid="uid://b5wsbx884t8ub" path="res://addons/note/texture/ui/box/slider_line.tres" id="3_0mybf"]
+[ext_resource type="StyleBox" uid="uid://bn4w0a87v6gcb" path="res://addons/note/texture/ui/box/elevated_white_base.tres" id="3_6ripv"]
+[ext_resource type="StyleBox" uid="uid://dy484nyuhl0b2" path="res://addons/note/texture/ui/box/bottom_button_regular_active.tres" id="3_qvtrt"]
+[ext_resource type="StyleBox" uid="uid://chwgjsh34bwab" path="res://addons/note/texture/ui/box/elevated_regular_active.tres" id="3_rcg7x"]
+[ext_resource type="StyleBox" uid="uid://dsuhrol5i0ys4" path="res://addons/note/texture/ui/box/inset_panel_v_self_color.tres" id="4_xahx6"]
+[ext_resource type="StyleBox" uid="uid://dr86vttyqg4sw" path="res://addons/note/texture/ui/box/elevated_white_active.tres" id="4_y3ha7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oq5qf"]
+atlas = ExtResource("1_0l703")
+region = Rect2(125, 1, 2, 2)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ogaw5"]
+atlas = ExtResource("1_0l703")
+region = Rect2(3, 65, 16, 9)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yhm4c"]
+atlas = ExtResource("1_0l703")
+region = Rect2(13, 60, 1, 4)
 
 [resource]
+default_font = ExtResource("2_p870e")
+default_font_size = 18
+BottomButton/base_type = &"Button"
+BottomButton/styles/hover = ExtResource("1_522ba")
+BottomButton/styles/normal = ExtResource("1_4fx1k")
+BottomButton/styles/pressed = ExtResource("3_qvtrt")
+Button/styles/focus = ExtResource("1_7uf5m")
+Button/styles/hover = ExtResource("1_rv336")
+Button/styles/normal = ExtResource("2_xcrd2")
+Button/styles/pressed = ExtResource("3_rcg7x")
+HBoxContainer/constants/separation = 0
+HSlider/icons/grabber = SubResource("AtlasTexture_oq5qf")
+HSlider/icons/grabber_highlight = SubResource("AtlasTexture_ogaw5")
+HSlider/icons/tick = SubResource("AtlasTexture_yhm4c")
+HSlider/styles/grabber_area = ExtResource("2_ep430")
+HSlider/styles/grabber_area_highlight = ExtResource("2_ep430")
+HSlider/styles/slider = ExtResource("3_0mybf")
+InsetHPanel/base_type = &"PanelContainer"
+InsetHPanel/styles/panel = ExtResource("1_wimvk")
+InsetHPanelSelfModulate/base_type = &"PanelContainer"
+InsetHPanelSelfModulate/styles/panel = ExtResource("2_uk8vs")
+InsetVPanel/base_type = &"PanelContainer"
+InsetVPanel/styles/panel = ExtResource("1_7n1xp")
+InsetVPanelSelfModulate/base_type = &"PanelContainer"
+InsetVPanelSelfModulate/styles/panel = ExtResource("4_xahx6")
+Panel/styles/panel = ExtResource("2_xcrd2")
+PanelContainer/styles/panel = ExtResource("2_xcrd2")
+SelfModulateStylePanelContainer/base_type = &"PanelContainer"
+SelfModulateStylePanelContainer/styles/panel = ExtResource("2_74ggd")
+SelfModulatedButton/base_type = &"Button"
+SelfModulatedButton/styles/hover = ExtResource("2_74ggd")
+SelfModulatedButton/styles/normal = ExtResource("3_6ripv")
+SelfModulatedButton/styles/pressed = ExtResource("4_y3ha7")
+VBoxContainer/constants/separation = 0

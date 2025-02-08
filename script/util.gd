@@ -43,3 +43,12 @@ func cached_hash_str(obj) -> String:
 	else:
 		_hash_cache[obj] = str(hash(obj))
 		return _hash_cache[obj]
+
+func vfx(prefab: PackedScene, world_position: Vector2, data = null, parent: Node = null) -> VisualEffect2D:
+	var inst = prefab.instantiate() as VisualEffect2D
+	var target = parent if parent != null else get_tree().current_scene
+	target.add_child(inst)
+	inst.global_position = world_position
+	inst.reset_physics_interpolation()
+	inst.effect_trigger(data)
+	return inst

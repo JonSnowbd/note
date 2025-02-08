@@ -144,8 +144,11 @@ func _process(delta: float) -> void:
 		for effect in current_effects:
 			effect.effect_process(delta)
 		
-		var target_pos = focused_control.global_position
-		var target_rot = focused_control.get_global_transform().get_rotation()
+		var cam: Camera2D = focused_control.get_viewport().get_camera_2d()
+		var trans = focused_control.get_global_transform_with_canvas()
+		
+		var target_pos = trans.get_origin()
+		var target_rot = trans.get_rotation()
 		global_position = global_position.move_toward(target_pos, 2500.0*delta)
 		rotation = move_toward(rotation, target_rot, 3*PI*delta)
 		box_size = box_size.move_toward(focused_control.size, 1000.0 * delta)

@@ -109,8 +109,10 @@ func _reset(delta: float):
 		global_position -= affector_offset * affector_strength
 	_process_effects(delta)
 	var delta_position = previous_pos-(global_position+offset)
-	global_position.x = snapped(global_position.x, 1.0)
-	global_position.y = snapped(global_position.y, 1.0)
+	
+	var snap_increment = Vector2(1.0/zoom.x, 1.0/zoom.y)
+	global_position.x = snapped(global_position.x, snap_increment.x)
+	global_position.y = snapped(global_position.y, snap_increment.y)
 	
 func _process_effects(delta: float):
 	for i in range(effect_stack.size() - 1, -1, -1):
@@ -126,7 +128,6 @@ func _update_properties():
 		zoom.y = zoom.x
 	if scaling_mode == 2:
 		zoom.x = zoom.y
-	print(str(size)+" = "+str(zoom))
 
 func _ready() -> void:
 	if initial_follow_target != null:

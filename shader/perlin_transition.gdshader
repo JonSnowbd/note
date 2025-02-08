@@ -42,6 +42,11 @@ float noise (in vec2 st) {
             (d - b) * u.x * u.y;
 }
 
+vec4 bw(vec4 src) {
+	float val = (src.r+src.g+src.b)/3.0;
+	return vec4(val, val, val, src.a);
+}
+
 void fragment() {
   vec4 from = COLOR;
   vec4 to = vec4(COLOR.rgb, 0.0);
@@ -52,9 +57,11 @@ void fragment() {
   float higher = p + smoothness;
 
   float q = smoothstep(lower, higher, n);
+  
+  float f = clamp(progress*5.0, 0.0, 1.0);
 
   COLOR = mix(
-    from,
+    mix(from, bw(from), f),
     to,
     1.0 - q
   );

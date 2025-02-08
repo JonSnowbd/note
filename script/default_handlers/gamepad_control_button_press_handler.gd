@@ -3,6 +3,8 @@ class_name NoteGamepadControlHandlerButtonPress
 
 @export var on_primary: bool
 @export var on_secondary: bool
+@export var cancel_focus_on_secondary: bool = false
+@export var cancel_focus_on_primary: bool = false
 
 func handler_input(context: NoteGamepadControlManager, event: InputEvent) -> bool:
 	for confirm in context.confirm_action:

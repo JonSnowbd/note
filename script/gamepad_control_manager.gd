@@ -2,14 +2,17 @@ extends Node2D
 class_name NoteGamepadControlManager
 
 @export_category("Settings")
-@export var auto_enable: bool
+@export var auto_enable: bool = false
+@export var mkb_included: bool = false
 @export var highlight_stylebox: StyleBox
+@export var movement_speed: float = 4000.0
+@export var rotation_speed: float = 360
 
 @export_category("Setup")
-@export var first_node: Control
 @export var change_node_sound: AudioStreamPlayer
 @export var primary_sound: AudioStreamPlayer
 @export var secondary_sound: AudioStreamPlayer
+
 
 @export_category("Inputs")
 @export var up_action: Array[String] = []
@@ -33,7 +36,7 @@ var current_effects: Array[NoteGamepadControlEffect]
 
 func _ready() -> void:
 	note.control_mode_changed.connect(func():
-		if !note.is_gamepad:
+		if !mkb_included and !note.is_gamepad:
 			stop()
 			hide()
 	)
@@ -50,6 +53,10 @@ func move_into(new_control: Control):
 		handler.handler_left()
 	for fx in current_effects:
 		fx.effect_end()
+	
+	if change_node_sound != null:
+		change_node_sound.pitch_scale = randf_range(0.95,1.05)
+		change_node_sound.play()
 	
 	current_handlers.clear()
 	current_effects.clear()
@@ -73,8 +80,6 @@ func move_into(new_control: Control):
 		effect.effect_start()
 	
 func start(target: Control=null):
-	if target == null:
-		target = first_node
 	active = true
 	note.popup.send("Activating the gamepad mode for menu")
 	move_into(target)
@@ -105,7 +110,7 @@ func _input(event: InputEvent) -> void:
 		for up in up_action:
 			if event.is_action_pressed(up): 
 				var node = focused_control.get_node_or_null(focused_control.focus_neighbor_top)
-				if node != null:
+				if node != null and node.visible:
 					move_into(node)
 				if event is InputEventJoypadMotion:
 					stick_trip = true
@@ -113,7 +118,7 @@ func _input(event: InputEvent) -> void:
 		for down in down_action:
 			if event.is_action_pressed(down):
 				var node = focused_control.get_node_or_null(focused_control.focus_neighbor_bottom)
-				if node != null:
+				if node != null and node.visible:
 					move_into(node)
 				if event is InputEventJoypadMotion:
 					stick_trip = true
@@ -121,7 +126,7 @@ func _input(event: InputEvent) -> void:
 		for left in left_action:
 			if event.is_action_pressed(left):
 				var node = focused_control.get_node_or_null(focused_control.focus_neighbor_left)
-				if node != null:
+				if node != null and node.visible:
 					move_into(node)
 				if event is InputEventJoypadMotion:
 					stick_trip = true
@@ -129,7 +134,7 @@ func _input(event: InputEvent) -> void:
 		for right in right_action:
 			if event.is_action_pressed(right):
 				var node = focused_control.get_node_or_null(focused_control.focus_neighbor_right)
-				if node != null:
+				if node != null and node.visible:
 					move_into(node)
 				if event is InputEventJoypadMotion:
 					stick_trip = true
@@ -149,8 +154,8 @@ func _process(delta: float) -> void:
 		
 		var target_pos = trans.get_origin()
 		var target_rot = trans.get_rotation()
-		global_position = global_position.move_toward(target_pos, 2500.0*delta)
-		rotation = move_toward(rotation, target_rot, 3*PI*delta)
+		global_position = global_position.move_toward(target_pos, movement_speed*delta)
+		rotation = move_toward(rotation, target_rot, deg_to_rad(rotation_speed)*delta)
 		box_size = box_size.move_toward(focused_control.size, 1000.0 * delta)
 		queue_redraw()
 	

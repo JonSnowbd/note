@@ -53,8 +53,11 @@ func _input(event: InputEvent) -> void:
 			set_gamepad_mode(false)
 	if event is InputEventKey or event is InputEventMouseButton:
 		set_gamepad_mode(false)
-	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
+	if event is InputEventJoypadButton:
 		set_gamepad_mode(true)
+	if event is InputEventJoypadMotion:
+		if abs(event.axis_value) > 0.4:
+			set_gamepad_mode(true)
 func _ready() -> void:
 	_pulse_interval = ProjectSettings.get_setting("addons/note/save_pulse_period", 1.0)
 	control_guide = load(ProjectSettings.get_setting("addons/note/user/control_guide_prefab", NoteEditorPlugin.default_control_guide)).instantiate()

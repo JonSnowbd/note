@@ -204,6 +204,16 @@ func transition(time: float = 0.33):
 		screen_cover.material.set_shader_parameter(_transition_progress_name, 0.0)
 		screen_cover.material.set_shader_parameter("seed", randf()*30000.0)
 
+func temporary_blackout(fade_in: float = 0.1, duration: float = 1.0, fade_out: float = 0.1, color: Color = Color.BLACK):
+	var tween = create_tween()
+	blackout.color = color
+	note.blackout.color.a = 0.0
+	tween.tween_callback(blackout.show)
+	tween.tween_property(blackout, "color:a", 1.0, fade_in)
+	tween.tween_interval(duration)
+	tween.tween_property(blackout, "color:a", 0.0, fade_out)
+	tween.tween_callback(blackout.hide)
+
 func unload_level():
 	info("Unloading current level")
 	var cs = get_tree().current_scene

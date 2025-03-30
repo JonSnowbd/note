@@ -50,8 +50,10 @@ func move_into(new_control: Control):
 	focused_control = new_control
 	# Leave effects and handlers
 	for handler in current_handlers:
+		if !is_instance_valid(handler): continue
 		handler.handler_left()
 	for fx in current_effects:
+		if !is_instance_valid(fx): continue
 		fx.effect_end()
 	
 	if change_node_sound != null:
@@ -80,6 +82,8 @@ func move_into(new_control: Control):
 		effect.effect_start()
 	
 func start(target: Control=null):
+	if !mkb_included and !note.is_gamepad:
+		return
 	active = true
 	note.popup.send("Activating the gamepad mode for menu")
 	move_into(target)
@@ -105,6 +109,7 @@ func _input(event: InputEvent) -> void:
 					return
 		
 		for handler in current_handlers:
+			if !is_instance_valid(handler): continue
 			if handler.handler_input(self, event):
 				return
 		for up in up_action:

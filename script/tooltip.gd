@@ -15,6 +15,14 @@ var _current_priority: int = -INF
 var _current_package: PackedScene
 var _current_data
 
+func _reset_pos():
+	reset_size()
+	offset_bottom = 0.0
+	offset_left = 0.0
+	offset_right = 0.0
+	offset_top = 0.0
+	set_screen_position(0.9, 0.9)
+
 ## coordinates are given in 0-1 where they lay on the screen: eg 0.0,0.5 will give you left centered
 ## popups.
 func set_screen_position(x: float, y: float):
@@ -43,12 +51,14 @@ func _set_tooltip_package(prefab: PackedScene, data, priority: int):
 	_timer = 0.0
 	_active = true
 	show()
+	_reset_pos()
 func _clear_tooltip_package():
 	if _current_item != null:
 		_current_item.queue_free()
 		_current_data = null
 		_current_package = null
 		_current_item = null
+	_reset_pos()
 
 func request_simple(title:String = "", body:String = "", priority: int = 0):
 	request_packed(preload("res://addons/note/prefab/default_tooltips/simple_tooltip.tscn"), [title, body], priority)

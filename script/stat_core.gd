@@ -57,7 +57,7 @@ func effector_add(new_effect, priority: float = 0.0, duration: float = -1.0):
 		else:
 			new_effect.effector_lifetime = -1.0
 		effectors.append(new_effect)
-		core_recalc()
+		core_recalc(true)
 		effector_added.emit(new_effect)
 	else:
 		push_warning("Attempted to add an effector that was not derived from NoteStateCoreEffector")
@@ -84,7 +84,7 @@ func core_tick(dt: float):
 				clear_after = true
 		e.effector_tick(self, dt)
 	if clear_after:
-		core_recalc()
+		core_recalc(true)
 func core_passthrough(item):
 	for e in effectors:
 		e.effector_modify(self, item)

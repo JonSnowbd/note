@@ -2,6 +2,7 @@ extends Node
 class_name NoteUtilities
 
 var _hash_cache = {}
+var _tween_cache: Dictionary[String,Tween] = {}
 
 ## Takes time as a float, and returns a speedrun style format, `MM:SS.MS`
 ## with appropriate padding/truncating to ensure its always
@@ -19,6 +20,19 @@ func unscaled_dt() -> float:
 ## Accurate, and constant. Perfect for use in any physics process that needs to be free from timescale.
 func unscaled_physics_dt() -> float:
 	return 1.0/Engine.physics_ticks_per_second
+
+## If a tween has been started from the same id, it will be stopped and removed before returning
+## this new tween. Useful for simple tweens without handling it yourself.
+func clean_tween(id: String) -> Tween:
+	var t = create_tween()
+	if _tween_cache.has(id):
+		var prev = _tween_cache[id]
+		if prev.is_running():
+			prev.stop()
+	_tween_cache[id] = t
+	return t
+func clean_tween_free(id: String):
+	_tween_cache.erase(id)
 
 ## If true, sets the display server to fullscreen, otherwise windowed.
 func set_fullscreen(is_fullscreen: bool):

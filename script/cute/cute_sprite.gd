@@ -41,6 +41,7 @@ signal step()
 @export var preview_tool_size: float = 4.0
 
 @export_group("Scaling")
+@export var time_scale: float = 1.0
 ## Each motion will use this as an approximation of how much the sprite should move, at most.
 ## This is important for scaling the feel of small and large sprites.
 @export var approximate_motion_px: float = 4.0
@@ -130,6 +131,7 @@ func get_current_texture() -> BaseCuteTexture2D:
 	return default_texture as BaseCuteTexture2D
 
 func _process(delta):
+	delta *= time_scale
 	if Engine.is_editor_hint():
 		if preview_enabled:
 			velocity = preview_velocity
@@ -155,6 +157,7 @@ func _process(delta):
 	queue_redraw()
 
 func _physics_process(delta: float) -> void:
+	delta *= time_scale
 	if Engine.is_editor_hint() == false and automatically_pose and use_physics_process:
 		feed(delta)
 	if Engine.is_editor_hint() == false and generate_steps:

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://f4ll26okyq31"]
 
-[ext_resource type="Script" path="res://addons/note/script/default_tooltips/simple_tooltip.gd" id="1_d36n0"]
+[ext_resource type="Script" uid="uid://cyvitmvaiheth" path="res://addons/note/script/default_tooltips/simple_tooltip.gd" id="1_d36n0"]
 
 [node name="SimpleTooltip" type="VBoxContainer" node_paths=PackedStringArray("title", "body")]
 anchors_preset = 15
@@ -8,6 +8,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
 script = ExtResource("1_d36n0")
 title = NodePath("Title")
 body = NodePath("RichTextLabel")

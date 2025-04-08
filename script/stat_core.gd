@@ -1,3 +1,6 @@
+extends RefCounted
+class_name NoteStatCore
+
 ## A statcore object helps organize a complex rpg system, and maintains
 ## simplicity by simply wiping the block and bit by bit re-applying every effect.
 ## Updates are a bit slow but completely fine until you need this updating every frame
@@ -6,15 +9,14 @@
 ## A statcore has an array of Effectors, and can each be literally anything, from
 ## items equipped to debuffs.
 
-extends RefCounted
-class_name NoteStatCore
 
 signal updated()
 signal effector_added(effector)
 signal effector_expired(effector)
 signal effector_removed(effector)
 
-
+## If true the entire stack is recalculated each tick. This is necessary
+var high_priority: bool = true
 var effectors: Array[NoteStatCoreEffector] = []
 var context
 
@@ -67,11 +69,17 @@ func effector_has(effector_type: Script) -> bool:
 		if effector_type.instance_has(e):
 			return true
 	return false
-func effector_get(effector_type) -> NoteStatCoreEffector:
+func effector_get_single(effector_type) -> NoteStatCoreEffector:
 	for e in effectors:
 		if e.is_class(str(effector_type)):
 			return e
 	return null
+func effector_get_multi(effector_type) -> Array[NoteStatCoreEffector]:
+	var store: Array[NoteStatCoreEffector] = []
+	for e in effectors:
+		if is_instance_of(e, effector_type):
+			store.append(e)
+	return store
 ## ABSTRACT: IMPLEMENT
 func core_reset():
 	pass
@@ -85,6 +93,5 @@ func core_tick(dt: float):
 		e.effector_tick(self, dt)
 	if clear_after:
 		core_recalc(true)
-func core_passthrough(item):
-	for e in effectors:
-		e.effector_modify(self, item)
+	elif high_priority:
+		core_recalc(false)

@@ -11,10 +11,6 @@ class_name NoteChainSequence
 @export var requery_nodes_on_start: bool = true
 ## The cooldown between steps (after each step is done, not individual work ticks)
 @export var time_between_steps: float = 0.0
-## How long after start before iterating
-@export var padding_start: float = 0.0
-## How long after being done, before finishing
-@export var padding_end: float = 0.0
 
 var running: bool = false
 var internal_data = null
@@ -49,7 +45,6 @@ func _iterate(delta: float):
 	if current_index == -1:
 		var first_child = nodes[0]
 		first_child._start(internal_data)
-		print("Starting first: "+first_child.name)
 		current_index = 0
 	var current_child: NoteChainNode = nodes[current_index]
 	if awaiting_cooldown:
@@ -64,18 +59,11 @@ func _iterate(delta: float):
 				awaiting_cooldown = true
 				return
 			var next = nodes[current_index]
-			print("Starting next: "+next.name)
 			next._start(internal_data)
 		else:
-			if padding_end > 0.0:
-				print("Delaying end")
-				cooldown = padding_end
-				return
-			else:
-				print("Ending")
-				on_finish.emit()
-				running = false
-				return
+			on_finish.emit()
+			running = false
+			return
 
 func _start(data):
 	internal_data = data
@@ -86,7 +74,6 @@ func _start(data):
 			if c is NoteChainNode:
 				nodes.append(c)
 	running = true
-	cooldown = padding_start
 	on_start.emit()
 
 func _done() -> bool:

@@ -1,5 +1,5 @@
-extends NoteChainEffect
-class_name NoteChainEffectWait
+extends ChainFX
+class_name ChainWait
 
 ## This chain node simply waits for a bit.
 

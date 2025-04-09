@@ -2,7 +2,11 @@
 extends Node
 class_name NoteStateMachine
 
-## This is the player, or object that each state will seek to operate on.
+## This is a state machine that doesnt use a trait or interface for state updating/processing/input.
+## Instead if a state is active it is enabled by godot's process mode on the node, so each state
+## can intuitively use _unhandled_input, _process, as you'd expect, rather than virtual methods.
+
+## This is the player, or object that each state will operate on.
 @export var context: Node
 ## This state will be the starting state. It should be a child of this machine.
 @export var initial_state: NoteState
@@ -27,7 +31,6 @@ func introduce_state(state:NoteState):
 		if debug:
 			note.info(name+" state machine has added a new state: "+state.name)
 		state.machine = self
-		state.state_active = false
 		state.original_process_mode = state.process_mode
 		state.process_mode = Node.PROCESS_MODE_DISABLED
 		if state.get_parent() != self:
@@ -44,6 +47,10 @@ func introduce_state(state:NoteState):
 	else:
 		if debug:
 			note.info(name+" state machine has gone over a state that was already added: "+state.name)
+
+## Transitions to a new state by node reference. Data can be passed as transition context, for example falling -> grounded
+## can pass the velocity of the impact for the new state to handle stuff like falling damage. next_state can be null, to
+## disable the state machine.
 func transition_to(next_state: NoteState, data = null):
 	var previous_state: NoteState = current_state
 	if current_state != null:

@@ -1,5 +1,5 @@
-extends NoteChainEffect
-class_name NoteChainEffectTransitionString
+extends ChainFX
+class_name ChainTransitionLevel
 
 ## Due to the nature of changing scenes, this is the logical end of a chain.
 ## Useful for scene transitions where the level loads after the player

@@ -1,9 +1,9 @@
 @icon("res://addons/note/texture/icon/sequential_chain.svg")
-extends NoteChainNode
-class_name NoteChainSequence
+extends ChainNode
+class_name ChainNodeSequence
 
 ## This chain node will start and wait for each node in sequence,
-## each its children. Provided they are a NoteChainNode or NoteChainEffect.
+## each its children. Provided they are a ChainNode or ChainFX.
 
 ## If true, nodes are requeried on start, providing an up to date
 ## list of nodes and their order each time. Not needed if you are sure the
@@ -15,7 +15,7 @@ class_name NoteChainSequence
 var running: bool = false
 var internal_data = null
 var current_index: int = -1
-var nodes: Array[NoteChainNode] = []
+var nodes: Array[ChainNode] = []
 var cooldown: float = 0.0
 
 var awaiting_cooldown: bool = false
@@ -24,7 +24,7 @@ func _ready() -> void:
 	nodes = []
 	if !requery_nodes_on_start:
 		for c in get_children():
-			if c is NoteChainNode:
+			if c is ChainNode:
 				nodes.append(c)
 	super()
 func _process(delta: float) -> void:
@@ -46,7 +46,7 @@ func _iterate(delta: float):
 		var first_child = nodes[0]
 		first_child._start(internal_data)
 		current_index = 0
-	var current_child: NoteChainNode = nodes[current_index]
+	var current_child: ChainNode = nodes[current_index]
 	if awaiting_cooldown:
 		current_child._start(internal_data)
 		awaiting_cooldown = false
@@ -71,7 +71,7 @@ func _start(data):
 	if requery_nodes_on_start:
 		nodes.clear()
 		for c in get_children():
-			if c is NoteChainNode:
+			if c is ChainNode:
 				nodes.append(c)
 	running = true
 	on_start.emit()

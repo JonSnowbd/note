@@ -1,5 +1,5 @@
-extends NoteChainEffect
-class_name NoteChainEffectVacuum
+extends ChainFX
+class_name ChainVacuum
 
 ## If the context of the chain is a node2D of some kind, this will suck it up.
 ## Useful for zone transitions, or entering vehicles.

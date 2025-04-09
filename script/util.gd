@@ -22,7 +22,8 @@ func unscaled_physics_dt() -> float:
 	return 1.0/Engine.physics_ticks_per_second
 
 ## If a tween has been started from the same id, it will be stopped and removed before returning
-## this new tween. Useful for simple tweens without handling it yourself.
+## this new tween. Useful for avoiding overlaps with simple tweens without handling it yourself,
+## if the code path is hot enough to have potential overlaps
 func clean_tween(id: String) -> Tween:
 	var t = create_tween()
 	if _tween_cache.has(id):
@@ -57,12 +58,3 @@ func cached_hash_str(obj) -> String:
 	else:
 		_hash_cache[obj] = str(hash(obj))
 		return _hash_cache[obj]
-
-func vfx(prefab: PackedScene, world_position: Vector2, data = null, parent: Node = null) -> VisualEffect2D:
-	var inst = prefab.instantiate() as VisualEffect2D
-	var target = parent if parent != null else get_tree().current_scene
-	target.add_child(inst)
-	inst.global_position = world_position
-	inst.reset_physics_interpolation()
-	inst.effect_trigger(data)
-	return inst

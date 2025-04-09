@@ -92,9 +92,12 @@ func open_file(file_name: String) -> FileAccess:
 func is_first_time() -> bool:
 	return is_save_first_time
 
+## Abstract: implement loading here.
 func starting():
 	pass
+## Abstract: implement saving here.
 func ending():
 	pass
+## Virtual: do background pulse checks here. eg ticking up time for an autosave
 func pulse(time_since_last_pulse: float):
 	pass

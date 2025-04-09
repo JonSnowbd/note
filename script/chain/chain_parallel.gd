@@ -1,6 +1,6 @@
 @icon("res://addons/note/texture/icon/parallel_chain.svg")
-extends NoteChainNode
-class_name NoteChainParallel
+extends ChainNode
+class_name ChainNodeParallel
 
 ## This chain node will immediately(or in a staggered fashion) run every child
 ## chain node, and return done when they are all finished.
@@ -19,7 +19,7 @@ class_name NoteChainParallel
 
 var running: bool = false
 var internal_data = null
-var nodes: Array[NoteChainNode] = []
+var nodes: Array[ChainNode] = []
 var cooldown: float = 0.0
 var current_index: int = 0
 var lifetime: float = 0.0
@@ -28,7 +28,7 @@ func _ready() -> void:
 	nodes = []
 	if !requery_nodes_on_start:
 		for c in get_children():
-			if c is NoteChainNode:
+			if c is ChainNode:
 				nodes.append(c)
 	super()
 
@@ -77,7 +77,7 @@ func _start(data):
 	if requery_nodes_on_start:
 		nodes.clear()
 		for c in get_children():
-			if c is NoteChainNode:
+			if c is ChainNode:
 				nodes.append(c)
 	running = true
 	if stagger <= 0.0:

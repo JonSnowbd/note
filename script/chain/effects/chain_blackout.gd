@@ -1,5 +1,5 @@
-extends NoteChainEffect
-class_name NoteChainEffectBlackout
+extends ChainFX
+class_name ChainBlackout
 
 ## Calls into Note's default blackout canvas, useful for hiding transitions
 ## The context is not used in this effect.

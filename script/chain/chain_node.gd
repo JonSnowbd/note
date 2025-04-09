@@ -1,5 +1,5 @@
 extends Node
-class_name NoteChainNode
+class_name ChainNode
 
 signal on_start
 signal on_finish

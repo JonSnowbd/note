@@ -1,6 +1,6 @@
 @icon("res://addons/note/texture/icon/effect_chain.svg")
-extends NoteChainNode
-class_name NoteChainEffect
+extends ChainNode
+class_name ChainFX
 
 ## Virtual this is called to begin a chain node
 func _start(data):

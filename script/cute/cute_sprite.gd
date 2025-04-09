@@ -82,7 +82,7 @@ signal step()
 
 @export_group("Advanced")
 ## How fast we must be moving in auto mode for facing to be recalculated.
-@export var min_velocity_for_facing_recalc: float = 0.05
+@export var min_velocity_for_facing_recalc: float = 0.1
 ## How many frames back we look to see if we 'stepped' by going from a height, to the floor.
 @export var height_sample_frames: int = 10
 ## If we get THIS high, trigger a step if we go `step_lower_bound` low.

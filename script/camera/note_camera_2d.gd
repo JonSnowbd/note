@@ -1,6 +1,9 @@
 extends Camera2D
 class_name NoteCamera2D
 
+## A 2d camera with a system for effects, and in-world affectors that
+## snap it to view areas.
+
 class Effect extends RefCounted:
 	enum Response {
 		DONE,
@@ -124,6 +127,7 @@ func _update_properties():
 	var size = DisplayServer.window_get_size()
 	window_size = size
 	zoom = Vector2(float(size.x)/virtual_size.x, float(size.y)/virtual_size.y)
+	print("ZOOM? "+str(zoom))
 	if scaling_mode == 1:
 		zoom.y = zoom.x
 	if scaling_mode == 2:
@@ -143,7 +147,9 @@ func _physics_process(delta: float) -> void:
 		_reset(delta)
 
 func follow(target: Node2D):
+	var distance = global_position.distance_to(target.global_position)
 	following = target
-	global_position = initial_follow_target.global_position
-	reset_smoothing()
-	reset_physics_interpolation()
+	global_position = target.global_position
+	if distance > 100.0:
+		reset_smoothing()
+		reset_physics_interpolation()

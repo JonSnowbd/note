@@ -4,6 +4,7 @@ class_name ChainNode
 signal on_start
 signal on_finish
 
+## If runtime == 0, run in physics, runtime == 1 runs in process
 @export_enum("Physics Process", "Process") var runtime: int
 @export var auto_start: bool = false
 @export var auto_start_data: Node

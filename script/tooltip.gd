@@ -50,14 +50,15 @@ func _set_tooltip_package(prefab: PackedScene, data, priority: int):
 	_current_package = prefab
 	_timer = 0.0
 	_active = true
+	set_deferred("size", Vector2.ZERO)
 	show()
-	_reset_pos()
+	call_deferred("_reset_pos")
 func _clear_tooltip_package():
 	if _current_item != null:
 		_current_item.queue_free()
-		_current_data = null
-		_current_package = null
-		_current_item = null
+	_current_data = null
+	_current_package = null
+	_current_item = null
 	_reset_pos()
 
 func request_simple(title:String = "", body:String = "", priority: int = 0):
@@ -82,6 +83,7 @@ func _process(delta: float) -> void:
 		modulate.a = clamp(remap(_timer, pity_time, pity_time+fade_time, 1.0, 0.0), 0.0, 1.0)
 		_timer += delta
 		if _timer >= fade_time+pity_time:
+			_clear_tooltip_package()
 			_active = false
 			_timer = 0.0
 			hide()

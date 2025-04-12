@@ -292,3 +292,14 @@ func key_to_texture(key: Key) -> Texture:
 		KEY_PRINT: return key_print_screen
 	
 	return key_any
+
+func input_event_to_texture(input_event) -> Texture2D:
+	if input_event is InputEventKey:
+		return key_to_texture(input_event.physical_keycode)
+	if input_event is InputEventMouseButton:
+		return mouse_button_to_texture(input_event.button_index)
+	if input_event is InputEventJoypadButton:
+		return xbox_button_to_texture(input_event.button_index)
+	if input_event is InputEventJoypadMotion:
+		return xbox_axis_to_texture(input_event.axis)
+	return key_any

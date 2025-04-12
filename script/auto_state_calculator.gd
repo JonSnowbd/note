@@ -26,7 +26,7 @@ func _filter_effects(item: AutoStateEffect) -> bool:
 		effect_expired.emit(item)
 	return keep
 func _sort_effects(lhs: AutoStateEffect, rhs: AutoStateEffect) -> bool:
-	if lhs._effect_priority == rhs.effect_priority:
+	if lhs._effect_priority == rhs._effect_priority:
 		if lhs._effect_lifetime == rhs._effect_lifetime:
 			return true
 		return lhs._effect_lifetime > rhs._effect_lifetime

@@ -127,7 +127,6 @@ func _update_properties():
 	var size = DisplayServer.window_get_size()
 	window_size = size
 	zoom = Vector2(float(size.x)/virtual_size.x, float(size.y)/virtual_size.y)
-	print("ZOOM? "+str(zoom))
 	if scaling_mode == 1:
 		zoom.y = zoom.x
 	if scaling_mode == 2:

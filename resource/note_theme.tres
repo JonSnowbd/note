@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=22 format=3 uid="uid://duimp1t6xhpun"]
+[gd_resource type="Theme" load_steps=26 format=3 uid="uid://duimp1t6xhpun"]
 
 [ext_resource type="Texture2D" uid="uid://2ny3rlo43df0" path="res://addons/note/texture/ui/ui_sheet.png" id="1_0l703"]
 [ext_resource type="StyleBox" uid="uid://duuorqe7iijst" path="res://addons/note/texture/ui/box/bottom_button_regular.tres" id="1_4fx1k"]
@@ -18,6 +18,9 @@
 [ext_resource type="StyleBox" uid="uid://chwgjsh34bwab" path="res://addons/note/texture/ui/box/elevated_regular_active.tres" id="3_rcg7x"]
 [ext_resource type="StyleBox" uid="uid://dsuhrol5i0ys4" path="res://addons/note/texture/ui/box/inset_panel_v_self_color.tres" id="4_xahx6"]
 [ext_resource type="StyleBox" uid="uid://dr86vttyqg4sw" path="res://addons/note/texture/ui/box/elevated_white_active.tres" id="4_y3ha7"]
+[ext_resource type="FontFile" uid="uid://ccto4b4d644l0" path="res://addons/note/resource/font/Outfit-Bold.ttf" id="15_6vfoy"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6vfoy"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oq5qf"]
 atlas = ExtResource("1_0l703")
@@ -31,6 +34,31 @@ region = Rect2(3, 65, 16, 9)
 atlas = ExtResource("1_0l703")
 region = Rect2(13, 60, 1, 4)
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6vfoy"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+texture = ExtResource("1_0l703")
+texture_margin_left = 2.0
+texture_margin_top = 1.51086
+texture_margin_right = 2.0
+texture_margin_bottom = 1.36469
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+region_rect = Rect2(2, 55, 10, 3)
+modulate_color = Color(0.0646965, 0.0646965, 0.0646965, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1ctjn"]
+texture = ExtResource("1_0l703")
+texture_margin_left = 2.0
+texture_margin_top = 1.0
+texture_margin_right = 2.0
+texture_margin_bottom = 1.0
+region_rect = Rect2(2, 55, 10, 3)
+
 [resource]
 default_font = ExtResource("2_p870e")
 default_font_size = 18
@@ -42,6 +70,7 @@ Button/styles/focus = ExtResource("1_7uf5m")
 Button/styles/hover = ExtResource("1_rv336")
 Button/styles/normal = ExtResource("2_xcrd2")
 Button/styles/pressed = ExtResource("3_rcg7x")
+FoldableContainer/styles/panel = SubResource("StyleBoxEmpty_6vfoy")
 HBoxContainer/constants/separation = 0
 HSlider/icons/grabber = SubResource("AtlasTexture_oq5qf")
 HSlider/icons/grabber_highlight = SubResource("AtlasTexture_ogaw5")
@@ -59,6 +88,10 @@ InsetVPanelSelfModulate/base_type = &"PanelContainer"
 InsetVPanelSelfModulate/styles/panel = ExtResource("4_xahx6")
 Panel/styles/panel = ExtResource("2_xcrd2")
 PanelContainer/styles/panel = ExtResource("2_xcrd2")
+ProgressBar/styles/background = SubResource("StyleBoxTexture_6vfoy")
+ProgressBar/styles/fill = SubResource("StyleBoxTexture_1ctjn")
+RichTextLabel/fonts/bold_font = ExtResource("15_6vfoy")
+RichTextLabel/fonts/normal_font = ExtResource("2_p870e")
 SelfModulateStylePanelContainer/base_type = &"PanelContainer"
 SelfModulateStylePanelContainer/styles/panel = ExtResource("2_74ggd")
 SelfModulatedButton/base_type = &"Button"

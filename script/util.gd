@@ -1,7 +1,6 @@
 extends Node
 class_name NoteUtilities
 
-var _hash_cache = {}
 var _tween_cache: Dictionary[String,Tween] = {}
 
 ## Takes time as a float, and returns a speedrun style format, `MM:SS.MS`
@@ -16,10 +15,14 @@ func seconds_to_speedrun_stamp(time: float) -> String:
 ## Not at all accurate enough for precise requirements, but otherwise perfect for
 ## UI animations and other visual effects that need to be free from timescale.
 func unscaled_dt() -> float:
-	return 1.0/Engine.get_frames_per_second()
+	return 1.0/Engine.max_fps
 ## Accurate, and constant. Perfect for use in any physics process that needs to be free from timescale.
 func unscaled_physics_dt() -> float:
 	return 1.0/Engine.physics_ticks_per_second
+
+func smooth_move_towards_speed(from: Vector2, to: Vector2, speed: float) -> float:
+	var dist = from.distance_to(to)
+	return speed + (sqrt(speed*dist))
 
 ## If a tween has been started from the same id, it will be stopped and removed before returning
 ## this new tween. Useful for avoiding overlaps with simple tweens without handling it yourself,
@@ -52,9 +55,13 @@ func set_volume(bus_name: String, linear_volume: float):
 func mute_volume(bus_name: String):
 	set_volume(bus_name, 0.0)
 
-func cached_hash_str(obj) -> String:
-	if _hash_cache.has(obj):
-		return _hash_cache[obj]
+func profiler_start() -> int:
+	return Time.get_ticks_msec()
+## pass in the result of [code]note.util.profiler_start()[/code] for a String
+## representation of the time it took.
+func profiler_end(val: int) -> String:
+	var time = float(Time.get_ticks_msec() - val)
+	if time > 1000.0:
+		return "%.2fs"%(time*1000.0)
 	else:
-		_hash_cache[obj] = str(hash(obj))
-		return _hash_cache[obj]
+		return "%.2fms"%time

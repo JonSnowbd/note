@@ -1,6 +1,6 @@
 extends Node
 
-func _ready():
+func _enter_tree() -> void:
 	var SessionType = load(ProjectSettings.get_setting("addons/note/save_session_type", NoteEditorPlugin.default_save_session))
 	if !DirAccess.dir_exists_absolute("user://simple_profile"):
 		DirAccess.make_dir_absolute("user://simple_profile")

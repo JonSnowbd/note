@@ -1,13 +1,13 @@
 extends RefCounted
 class_name AutoStateCalculator
 
-## A statcore object helps organize a complex rpg system, and maintains
+## An AutoStateCalculator object helps organize a complex rpg system, and maintains
 ## simplicity by simply wiping the block and bit by bit re-applying every effect.
 ## Updates are a bit slow but completely fine until you need this updating every frame
 ## on thousands of units.
 ##
 ## A statcore has an array of Effectors, and can each be literally anything, from
-## items equipped to debuffs.
+## items equipped, to de/buffs, to character stat definitions.
 
 
 signal updated()
@@ -21,14 +21,14 @@ var effects: Array[AutoStateEffect] = []
 var context
 
 func _filter_effects(item: AutoStateEffect) -> bool:
-	var keep =  item._effect_duration < 0.0 or item._effect_lifetime < item._effect_duration
+	var keep = item._effect_duration < 0.0 or item._effect_lifetime < item._effect_duration
 	if !keep:
 		effect_expired.emit(item)
 	return keep
 func _sort_effects(lhs: AutoStateEffect, rhs: AutoStateEffect) -> bool:
 	if lhs._effect_priority == rhs._effect_priority:
 		if lhs._effect_lifetime == rhs._effect_lifetime:
-			return true
+			return false
 		return lhs._effect_lifetime > rhs._effect_lifetime
 	return lhs._effect_priority > rhs._effect_priority
 
@@ -37,7 +37,7 @@ func core_recalc(deep_clean: bool = false):
 	if deep_clean:
 		effects = effects.filter(_filter_effects)
 		effects.sort_custom(_sort_effects)
-	for e in effects:
+	for e: AutoStateEffect in effects:
 		e.apply(self)
 	updated.emit()
 
@@ -63,7 +63,7 @@ func add_effect(new_effect, priority: float = 0.0, duration: float = -1.0):
 		core_recalc(true)
 		effect_added.emit(new_effect)
 	else:
-		push_warning("Attempted to add an effector that was not derived from NoteStateCoreEffector")
+		push_warning("Attempted to add an effector that was not derived from AutoStateEffect")
 
 ## Returns true if the calculator is under the influence of any effect of this type.
 func has_effect_type(effector_type: Script) -> bool:

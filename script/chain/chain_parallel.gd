@@ -39,7 +39,6 @@ func _advance(delta: float):
 			cooldown -= delta
 			if cooldown <= 0.0:
 				if current_index < len(nodes):
-					print("- another")
 					nodes[current_index]._start(internal_data)
 				current_index += 1
 				cooldown = stagger
@@ -57,7 +56,6 @@ func _check_done():
 	for i in nodes:
 		if !i._done():
 			return
-	print("Finished")
 	running = false
 
 func _process(delta: float) -> void:
@@ -71,7 +69,6 @@ func _physics_process(delta: float) -> void:
 
 func _start(data):
 	lifetime = 0.0
-	print("Parallel started")
 	internal_data = data
 	current_index = 0
 	if requery_nodes_on_start:
@@ -84,7 +81,6 @@ func _start(data):
 		for c in nodes:
 			c._start(internal_data)
 	else:
-		print("- another")
 		nodes[0]._start(internal_data)
 		current_index = 1
 		cooldown = stagger

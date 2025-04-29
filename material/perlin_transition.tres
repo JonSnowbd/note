@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dk5oqc43jlalx"]
 
-[ext_resource type="Shader" path="res://addons/note/shader/perlin_transition.gdshader" id="1_lwqck"]
+[ext_resource type="Shader" uid="uid://kw0o0owddd7e" path="res://addons/note/shader/perlin_transition.gdshader" id="1_lwqck"]
 
 [resource]
 shader = ExtResource("1_lwqck")

@@ -5,6 +5,7 @@ extends Node
 @export var screen_cover: TextureRect
 @export var blackout: ColorRect
 
+signal save_changed
 signal control_mode_changed
 
 var is_gamepad: bool = false
@@ -30,21 +31,16 @@ var _transition_progress_name: String = ""
 var _pulse_interval: float = 0.0
 var _pulse_timer: float = 0.0
 
-var current_session: NoteSaveSession = null
+var current_session: NoteSaveSession = null : 
+	set(val):
+		if current_session != val:
+			current_session = val
+			save_changed.emit()
 
 func _init() -> void:
 	util = NoteUtilities.new()
 	add_child(util)
-func set_gamepad_mode(should_be_gamepad: bool):
-	if !ProjectSettings.get_setting("addons/note/controller_detection", true):
-		return
-	if should_be_gamepad:
-		Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
-	else:
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	if is_gamepad != should_be_gamepad:
-		is_gamepad = should_be_gamepad
-		control_mode_changed.emit()
+
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		_mouse_track += event.relative.length()
@@ -79,6 +75,19 @@ func _enter_tree() -> void:
 	loading_screen = screen
 	loading_screen.hide()
 	loading_screen.process_mode = Node.PROCESS_MODE_DISABLED
+func _process(delta: float) -> void:
+	_pulse_timer += delta
+	while _pulse_timer >= _pulse_interval:
+		if current_session != null:
+			current_session.pulse(_pulse_interval)
+		_pulse_timer -= _pulse_interval
+	if _transition_time >= 0.0:
+		_transition_time -= util.unscaled_dt()
+		if _transition_time < 0.0:
+			screen_cover.call_deferred("hide")
+		var mat: ShaderMaterial = screen_cover.material as ShaderMaterial
+		if mat != null:
+			mat.set_shader_parameter(_transition_progress_name, 1.0-clamp(_transition_time/_transition_cap, 0.0, 1.0))
 
 func _message(header: String, separator: String = " >> ", message: String = ""):
 	var time: float = float(Time.get_ticks_msec()) / 1000.0
@@ -87,8 +96,8 @@ func info(message: String, header: String = "Note"):
 	_message(header, " >> ", message)
 func warn(message: String, header: String = "Note"):
 	_message("[color=yellow]"+header, " !! ", message)
-func error(message: String, data=null, header: String = "Error"):
-	_message("[color=red]"+header, " !! ", message)
+func error(message: String):
+	_message("[color=red]Error", " !! ", message)
 	var error_packed: PackedScene = load(ProjectSettings.get_setting("addons/note/user/error_screen", NoteEditorPlugin.default_error_screen))
 	var err_scene: NoteErrorScene = error_packed.instantiate() as NoteErrorScene
 	err_scene.set_error(header, message, "\n".join(get_stack().map(str)))
@@ -98,6 +107,30 @@ func error(message: String, data=null, header: String = "Error"):
 	get_tree().root.add_child(err_scene)
 	get_tree().current_scene = err_scene
 
+## Note features a robust gamepad ui control scheme. If you disable
+## note's automatic controller detection, this is how you toggle it.
+## Not needed if you are letting note automatically detect changes.
+func set_gamepad_mode(should_be_gamepad: bool):
+	if !ProjectSettings.get_setting("addons/note/controller_detection", true):
+		return
+	if should_be_gamepad:
+		Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+	else:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	if is_gamepad != should_be_gamepad:
+		is_gamepad = should_be_gamepad
+		control_mode_changed.emit()
+
+## Takes a script and runs through the virtual method. You
+## can pass in variadic parameters through the second argument,
+## as an array.
+## If script is a string, it is loaded and ran.
+## If script is a class name, it is instanced and ran.
+## If script is a direct reference to the script of type GDScript,
+## it is instanced and ran.
+func run_script(script, parameters: Array = []):
+	pass
+
 ## Changes the transition material and progression uniform name used in note transitions.
 func set_transition(t: ShaderMaterial, t_prog_name: String = "progress"):
 	screen_cover.material = t
@@ -105,12 +138,12 @@ func set_transition(t: ShaderMaterial, t_prog_name: String = "progress"):
 
 ## Subscribes to the event which can be anything you want.
 ## I recommend using the event class itself.
-## Subscriber must have an `_event(notification, data)` function.
+## Subscriber must have an `_event(event, data)` function.
 func listen(event, subscriber: Object):
 	if !subscriber.has_method("_event"):
 		note.error(str(subscriber)+" has no _event function, but attempted to listen to event.")
 		return
-	var hashed: String = util.cached_hash_str(event)
+	var hashed: String = str(hash(event))
 	if !has_user_signal(hashed):
 		add_user_signal(hashed, [
 			{"name" = "event_type", "type" = TYPE_OBJECT},
@@ -166,20 +199,6 @@ func return_to_save_select():
 	unstick_save()
 	unload_save()
 	load_level(load(ProjectSettings.get_setting("application/run/main_scene", "res://addons/note/ENTRY_SCENE.tscn")))
-
-func _process(delta: float) -> void:
-	_pulse_timer += delta
-	while _pulse_timer >= _pulse_interval:
-		if current_session != null:
-			current_session.pulse(_pulse_interval)
-		_pulse_timer -= _pulse_interval
-	if _transition_time >= 0.0:
-		_transition_time -= util.unscaled_dt()
-		if _transition_time < 0.0:
-			screen_cover.call_deferred("hide")
-		var mat: ShaderMaterial = screen_cover.material as ShaderMaterial
-		if mat != null:
-			mat.set_shader_parameter(_transition_progress_name, 1.0-clamp(_transition_time/_transition_cap, 0.0, 1.0))
 
 ## Not recommended to call this yourself unless you know what you want from it.
 func unload_save():

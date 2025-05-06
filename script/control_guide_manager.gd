@@ -5,6 +5,13 @@ class_name ControlGuideManager
 @export var guidelet_prefab: PackedScene
 @export var container: Container
 
+## If this is true, every icon will be based on note.is_gamepad
+var adaptive_icons: bool = false
+## If this is true, KBM icons are always visible in input guides
+var prefer_kbm_icons: bool = false
+## If this is true, Gamepad Icons are always visible in input guides
+var prefer_gamepad_icons: bool = false
+
 
 func clear_controls():
 	for c in container.get_children():

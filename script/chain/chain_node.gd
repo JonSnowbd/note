@@ -14,6 +14,7 @@ func _ready() -> void:
 	if auto_start:
 		begin_chain(auto_start_data)
 
+## Starts the chain node
 func begin_chain(data):
 	_start(data)
 func end_chain():

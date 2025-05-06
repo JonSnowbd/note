@@ -7,8 +7,6 @@ class_name ControlGuidelet
 @export_category("Icon Settings")
 @export var icon_size: float = 32.0
 
-func _wasd_check(actions: Array[InputEvent]) -> bool:
-	return false
 
 func clear_icons():
 	for c in icon_container.get_children():

@@ -100,7 +100,7 @@ func error(message: String):
 	_message("[color=red]Error", " !! ", message)
 	var error_packed: PackedScene = load(ProjectSettings.get_setting("addons/note/user/error_screen", NoteEditorPlugin.default_error_screen))
 	var err_scene: NoteErrorScene = error_packed.instantiate() as NoteErrorScene
-	err_scene.set_error(header, message, "\n".join(get_stack().map(str)))
+	err_scene.set_error("Error", message, "\n".join(get_stack().map(str)))
 	transition(0.5)
 	await get_tree().process_frame
 	get_tree().root.remove_child(get_tree().current_scene)
@@ -129,7 +129,21 @@ func set_gamepad_mode(should_be_gamepad: bool):
 ## If script is a direct reference to the script of type GDScript,
 ## it is instanced and ran.
 func run_script(script, parameters: Array = []):
-	pass
+	var tree = get_tree()
+	if script is String:
+		var real_script = load(script) as GDScript
+		var game_script = real_script.new() as NoteGameScript
+		game_script.tree = tree
+		game_script.execute(parameters)
+		return
+	if script is GDScript:
+		var game_script = script.new() as NoteGameScript
+		game_script.tree = tree
+		game_script.execute(parameters)
+		return
+	var game_script = script.new() as NoteGameScript
+	game_script.tree = tree
+	game_script.execute(parameters)
 
 ## Changes the transition material and progression uniform name used in note transitions.
 func set_transition(t: ShaderMaterial, t_prog_name: String = "progress"):

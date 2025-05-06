@@ -73,15 +73,17 @@ the current sticky save, and then begin your game.
 ## Broad API
 
 An overview of the most common note interactions you can take.
+You can typically call these functions wherever you want.
 
 ```gdscript
 # If you're using multi-save entry point, place
-# this in the main menu for your users. Returns to
-# save select
+# this in the main menu for your users. Returns to save selection.
 note.return_to_save_select()
 
 # If you're using multi-save entry point, and sticky
-# saves then this will unstick 
+# saves, then this will unstick the currently sticky save.
+# The user will be prompted with the save selection
+# next start.
 note.unstick_save()
 
 # Calls in a temporary ColorRect that covers the entire screen
@@ -119,7 +121,6 @@ note.designate_service(identifier, object: Object)
 note.destroy_service(identifier, object: Object)
 # Retrieves the most recent service under identifier.
 note.locate_service(identifier) -> Object
-
 
 # Adds a subscriber to any event that goes through note
 # where the first parameter is equal to the first parameter of send.
@@ -238,7 +239,7 @@ func _ready():
 
 func transfer(other):
 	# The current scene is removed, the loading screen is
-	# 
+	# shown while the next level loads.
 	note.load_level_with_loading_screen(destination)
 
 	# See also:
@@ -252,7 +253,7 @@ func transfer(other):
 Note has a service function to designate services that can be found anywhere
 even if it exists outside of the tree.
 
-```gdscriptwd
+```gdscript
 extends Node
 class_name MechanicService
 
@@ -301,6 +302,9 @@ func core_reset():
 ## moment.
 func is_dead() -> bool:
 	return current_health <= 0
+
+func is_hurt() -> bool:
+	return has_effect_type(DamageEffect)
 ```
 
 #### Example Effector
@@ -317,8 +321,6 @@ var source: Node
 var amount: int = 0
 var timestamp: int = 0
 
-var powerful: bool = false
-
 func _init(perpetrator: Node, damage: int) -> void:
 	source = perpetrator
 	amount = damage
@@ -329,6 +331,15 @@ func _init(perpetrator: Node, damage: int) -> void:
 ## in realtime becomes extremely simple to maintain.
 func apply(obj: AutoStateCalculator):
 	if obj is StatCore:
-		# Simply mutate the core, this will be applied each time the 
+		# Simply mutate the core, this will be applied each time the calculator
+		# recalculates the correct state.
 		obj.current_health -= amount
+		# If your effect mutates over time you can use the
+		# effect_get_completion() -> float method like so
+		var completion = effect_get_completion()
+		obj.current_health -= lerp(amount, 0.0, completion)
+		# In this case your effect will start having done full damage
+		# and slowly fade to having done no damage as it is
+		# removed(due to timing out).
+		# If an effect is permanent this will return 0.0 always.
 ```

@@ -166,13 +166,13 @@ func listen(event, subscriber: Object):
 	connect(hashed, subscriber._event)
 ## Stops listening to an event. You should do this when freeing a node.
 func unlisten(event, subscriber: Object):
-	var hashed: String = util.cached_hash_str(event)
+	var hashed: String = str(hash(event))
 	if has_user_signal(hashed):
 		disconnect(hashed, subscriber._event)
 
 ## Sends an event to every subscriber under the value of event
 func send(event, data = null):
-	var hashed: String = util.cached_hash_str(event)
+	var hashed: String = str(hash(event))
 	if has_user_signal(hashed):
 		emit_signal(hashed, event, data)
 

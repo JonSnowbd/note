@@ -43,9 +43,9 @@ func _restart():
 
 @export_group("General Pose")
 @export var hands_facing_offset: float
-@export var hands_distance: float = 0.5
-@export var hands_spread: float = 0.2
-@export var hands_raise: float = 2.0
+@export var hands_distance: float = 6.0
+@export var hands_spread: float = 1.3
+@export var hands_raise: float = 4.75
 
 @export_group("Left Hand")
 @export var left_hand_facing_offset: float = 0.0
@@ -62,8 +62,6 @@ func _restart():
 @export var item_facing_offset: float = 0.0
 @export var item_raise: float = 0.0
 
-
-
 var i_rid: RID
 var i_root_rid: RID
 var l_hand_rid: RID
@@ -72,6 +70,9 @@ var r_hand_rid: RID
 var r_root_rid: RID
 
 var _last_valid_look: Vector2 = Vector2.RIGHT
+var _cached_l_hand_pos: Vector2
+var _cached_r_hand_pos: Vector2
+var _cached_item_pos: Vector2
 
 func _find_cute_sprite() -> CuteSprite2D:
 	var parent = get_parent() 
@@ -185,8 +186,11 @@ func _work(delta: float):
 		# Set hands raised position above root.
 		var hand_transform = Transform2D.IDENTITY\
 		.rotated(lhand_angle+left_hand_sprite_rotation)\
-		.translated(Vector2(0, -lraise))
-		RenderingServer.canvas_item_set_transform(l_hand_rid, hand_transform.scaled(Vector2.ONE/hand_shadow_scale))
+		.translated(Vector2(0, -lraise))\
+		.scaled(Vector2.ONE/hand_shadow_scale)
+		
+		_cached_l_hand_pos = owner_override.to_global(hand_transform.origin)
+		RenderingServer.canvas_item_set_transform(l_hand_rid, hand_transform)
 		# Do the right hand thing.
 	var rraise = hands_raise+right_hand_raise+(cute_sprite_target.framedata.height*inherit_raise)
 	var rhand_angle = forward+right_hand_facing_offset+halfspread
@@ -207,8 +211,11 @@ func _work(delta: float):
 		# Set hands raised position above root.
 		var hand_transform = Transform2D.IDENTITY\
 		.rotated(rhand_angle+right_hand_sprite_rotation)\
-		.translated(Vector2(0, -rraise))
-		RenderingServer.canvas_item_set_transform(r_hand_rid, hand_transform.scaled(Vector2.ONE/hand_shadow_scale))
+		.translated(Vector2(0, -rraise))\
+		.scaled(Vector2.ONE/hand_shadow_scale)
+		
+		_cached_r_hand_pos = owner_override.to_global(hand_transform.origin)
+		RenderingServer.canvas_item_set_transform(r_hand_rid, hand_transform)
 	if item_sprite != null:
 		#Organize root node
 		var raise = lerp(lraise, rraise, item_handedness)+item_raise
@@ -229,8 +236,10 @@ func _work(delta: float):
 		# Set hands raised position above root.
 		var item_transform = Transform2D.IDENTITY\
 		.rotated(angle+item_sprite_rotation+item_spin)\
-		.translated(Vector2(0, -raise))
-		RenderingServer.canvas_item_set_transform(i_rid, item_transform.scaled(Vector2.ONE/item_shadow_scale))
+		.translated(Vector2(0, -raise))\
+		.scaled(Vector2.ONE/item_shadow_scale)
+		_cached_item_pos = owner_override.to_global(item_transform.origin)
+		RenderingServer.canvas_item_set_transform(i_rid, item_transform)
 	_last_valid_look = lookat
 func _process(delta: float) -> void:
 	if !work_in_physics_process:
@@ -238,3 +247,29 @@ func _process(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	if work_in_physics_process:
 		_work(delta)
+
+func get_left_hand_position() -> Vector2:
+	return _cached_l_hand_pos
+func get_right_hand_position() -> Vector2:
+	return _cached_r_hand_pos
+func get_item_position() -> Vector2:
+	return _cached_item_pos
+func reset_pose():
+	inherit_rotation = 1.0
+	inherit_position = 1.0
+	inherit_raise = 1.0
+	hands_facing_offset = 0.0
+	hands_distance = 4.0
+	hands_spread = 1.3
+	hands_raise = 4.75
+	left_hand_facing_offset = 0.0
+	left_hand_raise = 0.0
+	left_hand_distance = 0.0
+	right_hand_facing_offset = 0.0
+	right_hand_raise = 0.0
+	right_hand_distance = 0.0
+	item_handedness = 0.5
+	item_distance = 0.0
+	item_spin = 0.0
+	item_facing_offset = 0.0
+	item_raise = 0.0

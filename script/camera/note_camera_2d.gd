@@ -42,7 +42,7 @@ class NoteCameraEffectShake extends Effect:
 		_update_properties()
 ## Scale = no aspect ratio managing, Preserve Width = Height will be changed to match ratio,
 ## Preserve Height = Width will be changed to match ratio
-@export_enum("Scale", "Preserve Width", "Preserve Height") var scaling_mode: int :
+@export_enum("Scale", "Preserve Width", "Preserve Height", "Unscaled") var scaling_mode: int :
 	set(val):
 		scaling_mode = val
 		_update_properties()
@@ -131,6 +131,8 @@ func _update_properties():
 		zoom.y = zoom.x
 	if scaling_mode == 2:
 		zoom.x = zoom.y
+	if scaling_mode == 3:
+		zoom = Vector2(1.0, 1.0)
 
 func _ready() -> void:
 	if initial_follow_target != null:

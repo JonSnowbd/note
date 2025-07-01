@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cxxkjsfvgskia"]
 
-[ext_resource type="Script" path="res://addons/note/script/opening_scene_ui.gd" id="1_ibujb"]
+[ext_resource type="Script" uid="uid://drusn6jql6e16" path="res://addons/note/script/opening_scene_ui.gd" id="1_ibujb"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ayoru"]
 font_size = 20

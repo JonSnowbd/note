@@ -20,11 +20,12 @@ func begin_chain(data):
 func end_chain():
 	_clean()
 
-## Virtual this is called to begin a chain node
+## Virtual: this is called to begin a chain node
 func _start(data):
 	pass
+## Virtual: This is called to interrupt and stop.
 func _clean():
 	pass
-## Virtual
+## Virtual: This is called to ask if this chain node is done its work.
 func _done() -> bool:
 	return true

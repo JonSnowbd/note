@@ -4,6 +4,8 @@ class_name NotePhaseManager
 @export var transition_time: float = 0.2
 @export var phase_root: Control
 
+var previous_phase_identity = null
+var current_phase_identity = null
 var current_phase: NotePhaseLayer = null
 var data: Dictionary[Variant, NotePhaseLayer] = {}
 var active_tweens: Dictionary[Variant, Tween] = {}
@@ -15,6 +17,8 @@ func _clear_active_tweens(identity):
 			old_t.stop()
 		active_tweens.erase(identity)
 
+func is_phase_initialized(identity) -> bool:
+	return data.has(identity)
 func get_phase(identity) -> Variant:
 	if data.has(identity):
 		return data[identity]
@@ -33,6 +37,7 @@ func register_phase(identity, package: PackedScene):
 	_shelf_phase(new_phase.phase_identity)
 func switch_phase(identity, transition_data=null):
 	clear_phase()
+	current_phase_identity = identity
 	if identity == null:
 		return
 	var next_phase: NotePhaseLayer = data[identity]
@@ -46,6 +51,8 @@ func switch_phase(identity, transition_data=null):
 	t.tween_property(next_phase, "modulate", Color(1.0, 1.0, 1.0, 1.0), transition_time)
 	active_tweens[next_phase.phase_identity] = t
 func clear_phase():
+	previous_phase_identity = current_phase_identity
+	current_phase_identity = null
 	if current_phase != null:
 		_clear_active_tweens(current_phase.phase_identity)
 		current_phase.phase_end()

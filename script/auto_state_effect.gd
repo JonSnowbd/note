@@ -5,6 +5,7 @@ class_name AutoStateEffect
 var _effect_priority: float = 0.0
 var _effect_duration: float = -1.0
 var _effect_lifetime: float = -1.0
+var _effect_ephemeral: bool = false
 
 func effect_get_completion() -> float:
 	if _effect_duration < 0.0:

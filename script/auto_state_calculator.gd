@@ -29,6 +29,10 @@ func _filter_effects(item: AutoStateEffect) -> bool:
 	if !keep:
 		effect_expired.emit(item)
 	return keep
+func _filter_ephemeral(item: AutoStateEffect) -> bool:
+	if item._effect_ephemeral:
+		effect_removed.emit(item)
+	return !item._effect_ephemeral
 func _sort_effects(lhs: AutoStateEffect, rhs: AutoStateEffect) -> bool:
 	if lhs._effect_priority == rhs._effect_priority:
 		if lhs._effect_lifetime == rhs._effect_lifetime:
@@ -40,7 +44,7 @@ func _sort_effects(lhs: AutoStateEffect, rhs: AutoStateEffect) -> bool:
 ## This happens each time update is called, and on operations
 ## where this makes sense, so there shouldn't be 
 ## a need to use this manually.
-func recalculate(deep_clean: bool = false):
+func recalculate(deep_clean: bool = false) -> void:
 	core_reset()
 	if deep_clean:
 		effects = effects.filter(_filter_effects)
@@ -48,8 +52,12 @@ func recalculate(deep_clean: bool = false):
 	for e: AutoStateEffect in effects:
 		e.apply(self)
 
+func remove_ephemeral_effects() -> void:
+	pass
+func remove_all_effects() -> void:
+	pass
 ## Removes all effects of the given type, and recalculates.
-func remove_effects_of_type(type):
+func remove_effects_of_type(type) -> void:
 	effects = effects.filter(func(item):
 		var keep = !is_instance_of(item, type)
 		if !keep:

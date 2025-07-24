@@ -40,6 +40,10 @@ class NoteCameraEffectShake extends Effect:
 	set(val):
 		virtual_size = val
 		_update_properties()
+@export var virtual_zoom: float = 1.0 :
+	set(val):
+		virtual_zoom = val
+		_update_properties()
 ## Scale = no aspect ratio managing, Preserve Width = Height will be changed to match ratio,
 ## Preserve Height = Width will be changed to match ratio
 @export_enum("Scale", "Preserve Width", "Preserve Height", "Unscaled") var scaling_mode: int :
@@ -74,9 +78,17 @@ class NoteCameraEffectShake extends Effect:
 ## set this to 0.
 @export var affector_strength: float = 1.0
 
+## If this is not empty, the camera will automatically pan by the mouse if held.
+@export var pan_input_event: StringName
+@export var break_follow_on_pan: bool = true
+
 var effect_stack: Array[Effect] = []
 var following: Node2D
 var window_size: Vector2
+var panning: bool = false
+var tilt: float = 0.0
+## In global space.
+var previous_position: Vector2
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_SIZE_CHANGED:
@@ -102,7 +114,6 @@ func _get_affectors(world_position: Vector2) -> Array[NoteCameraAffector]:
 	return affectors
 
 func _reset(delta: float):
-	var previous_pos = global_position+offset
 	if following != null:
 		global_position = following.global_position
 	offset = Vector2.ZERO
@@ -111,12 +122,23 @@ func _reset(delta: float):
 		var affector_offset = aff.get_offset(global_position)
 		global_position -= affector_offset * affector_strength
 	_process_effects(delta)
-	var delta_position = previous_pos-(global_position+offset)
+	var delta_position = previous_position-global_position
+	
+	tilt = clamp(tilt+(delta_position.x * tilt_into_velocity), -max_tilt, max_tilt)
+	
+	if tilt_into_velocity == 0.0:
+		tilt = 0.0
+	
+	global_rotation_degrees = tilt
+	
+	tilt = lerp(tilt, 0.0, 9.9 * delta)
 	
 	var snap_increment = Vector2(1.0/zoom.x, 1.0/zoom.y)
-	global_position.x = snapped(global_position.x, snap_increment.x)
-	global_position.y = snapped(global_position.y, snap_increment.y)
-	
+	#global_position.x = snapped(global_position.x, snap_increment.x)
+	#global_position.y = snapped(global_position.y, snap_increment.y)
+	previous_position = global_position
+func add_effect(new_effect: Effect):
+	effect_stack.append(new_effect)
 func _process_effects(delta: float):
 	for i in range(effect_stack.size() - 1, -1, -1):
 		var state = effect_stack[i].apply(delta, self)
@@ -124,9 +146,12 @@ func _process_effects(delta: float):
 			effect_stack.remove_at(i)
 
 func _update_properties():
-	var size = DisplayServer.window_get_size()
+	if !is_inside_tree(): 
+		zoom = Vector2(virtual_zoom, virtual_zoom)
+		return
+	var size = get_viewport_rect().size
 	window_size = size
-	zoom = Vector2(float(size.x)/virtual_size.x, float(size.y)/virtual_size.y)
+	zoom = Vector2(float(size.x)/virtual_size.x, float(size.y)/virtual_size.y) * virtual_zoom
 	if scaling_mode == 1:
 		zoom.y = zoom.x
 	if scaling_mode == 2:
@@ -135,6 +160,7 @@ func _update_properties():
 		zoom = Vector2(1.0, 1.0)
 
 func _ready() -> void:
+	previous_position = global_position
 	if initial_follow_target != null:
 		follow(initial_follow_target)
 	ignore_rotation = false
@@ -147,7 +173,22 @@ func _physics_process(delta: float) -> void:
 	if process_effects_in_physics:
 		_reset(delta)
 
+func _input(event: InputEvent) -> void:
+	if panning:
+		if event is InputEventMouseMotion:
+			global_position -= event.relative / zoom
+	if pan_input_event == "":
+		return
+	if event.is_action_pressed(pan_input_event):
+		follow(null)
+		panning = true
+	if event.is_action_released(pan_input_event):
+		panning = false
+
 func follow(target: Node2D):
+	if target == null:
+		following = null
+		return
 	var distance = global_position.distance_to(target.global_position)
 	following = target
 	global_position = target.global_position

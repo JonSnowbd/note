@@ -64,6 +64,17 @@ func write_object(resource_name: String, object: Dictionary):
 	var file = FileAccess.open(save_path+"/"+resource_name+".json", FileAccess.WRITE)
 	file.store_string(JSON.stringify(object))
 	file.close()
+## Writes a texture to the save folder, do not include the file type. Saves the texture to
+## png if quality >= 1.0 and jpg when < 1.0 with the jpg quality set to quality.
+func write_texture(texture_name: String, texture: Texture2D, quality: float = 1.0):
+	var img = texture.get_image()
+	if quality < 1.0:
+		img.save_jpg(save_path+"/"+texture_name+".jpg", quality)
+	else:
+		img.save_png(save_path+"/"+texture_name+".png")
+## Reads a texture from the save folder, do not include the file type.
+func read_texture(texture_name) -> Texture2D:
+	return null
 ## Finds the resource inside your save folder and turns it into the resource it was.
 ## This is already relative to your save folder, and will include the appropriate file type.
 ## So use just the name, eg "misc/stats" or "profile"

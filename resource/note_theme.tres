@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=26 format=3 uid="uid://duimp1t6xhpun"]
+[gd_resource type="Theme" load_steps=28 format=3 uid="uid://duimp1t6xhpun"]
 
 [ext_resource type="Texture2D" uid="uid://2ny3rlo43df0" path="res://addons/note/texture/ui/ui_sheet.png" id="1_0l703"]
 [ext_resource type="StyleBox" uid="uid://duuorqe7iijst" path="res://addons/note/texture/ui/box/bottom_button_regular.tres" id="1_4fx1k"]
@@ -16,9 +16,11 @@
 [ext_resource type="StyleBox" uid="uid://bn4w0a87v6gcb" path="res://addons/note/texture/ui/box/elevated_white_base.tres" id="3_6ripv"]
 [ext_resource type="StyleBox" uid="uid://dy484nyuhl0b2" path="res://addons/note/texture/ui/box/bottom_button_regular_active.tres" id="3_qvtrt"]
 [ext_resource type="StyleBox" uid="uid://chwgjsh34bwab" path="res://addons/note/texture/ui/box/elevated_regular_active.tres" id="3_rcg7x"]
+[ext_resource type="FontFile" uid="uid://bby6hrqvh6502" path="res://addons/note/resource/font/theme/Inter-SemiBold.ttf" id="4_n761n"]
 [ext_resource type="StyleBox" uid="uid://dsuhrol5i0ys4" path="res://addons/note/texture/ui/box/inset_panel_v_self_color.tres" id="4_xahx6"]
 [ext_resource type="StyleBox" uid="uid://dr86vttyqg4sw" path="res://addons/note/texture/ui/box/elevated_white_active.tres" id="4_y3ha7"]
 [ext_resource type="FontFile" uid="uid://ccto4b4d644l0" path="res://addons/note/resource/font/Outfit-Bold.ttf" id="15_6vfoy"]
+[ext_resource type="FontFile" uid="uid://dckopb2ltteit" path="res://addons/note/resource/font/theme/Inter-Regular.ttf" id="21_4cfrg"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6vfoy"]
 
@@ -60,12 +62,13 @@ texture_margin_bottom = 1.0
 region_rect = Rect2(2, 55, 10, 3)
 
 [resource]
-default_font = ExtResource("2_p870e")
+default_font = ExtResource("21_4cfrg")
 default_font_size = 18
 BottomButton/base_type = &"Button"
 BottomButton/styles/hover = ExtResource("1_522ba")
 BottomButton/styles/normal = ExtResource("1_4fx1k")
 BottomButton/styles/pressed = ExtResource("3_qvtrt")
+Button/fonts/font = ExtResource("4_n761n")
 Button/styles/focus = ExtResource("1_7uf5m")
 Button/styles/hover = ExtResource("1_rv336")
 Button/styles/normal = ExtResource("2_xcrd2")

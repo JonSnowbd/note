@@ -1,7 +1,7 @@
 extends Node
 
 func _enter_tree() -> void:
-	var SessionType = load(ProjectSettings.get_setting("addons/note/save_session_type", NoteEditorPlugin.default_save_session))
+	var SessionType = load(ProjectSettings.get_setting("addons/note/save_session_type", note.default_save_session))
 	if !DirAccess.dir_exists_absolute("user://simple_profile"):
 		DirAccess.make_dir_absolute("user://simple_profile")
 	var new_session: NoteSaveSession = SessionType.new("user://simple_profile", false) as NoteSaveSession

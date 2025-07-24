@@ -1,5 +1,15 @@
 extends Node
 
+const default_transition: String = "res://addons/note/material/perlin_transition.tres"
+const default_transition_parameter: String = "progress"
+const default_loading_screen: String = "res://addons/note/prefab/default_load.tscn"
+const default_error_screen: String = "res://addons/note/prefab/default_error.tscn"
+const default_control_guide: String = "res://addons/note/prefab/control_guide.tscn"
+const default_popup_system: String = "res://addons/note/prefab/popup_manager.tscn"
+const default_tooltip: String = "res://addons/note/prefab/tooltip.tscn"
+const default_save_session: String = "res://addons/note/script/save_session.gd"
+const default_phaser_manager: String = "res://addons/note/prefab/phaser_manager.tscn"
+
 @export_category("References")
 @export var container: CanvasLayer
 @export var screen_cover: TextureRect
@@ -56,20 +66,20 @@ func _input(event: InputEvent) -> void:
 			set_gamepad_mode(true)
 func _enter_tree() -> void:
 	_pulse_interval = ProjectSettings.get_setting("addons/note/save_pulse_period", 1.0)
-	control_guide = load(ProjectSettings.get_setting("addons/note/user/control_guide_prefab", NoteEditorPlugin.default_control_guide)).instantiate()
+	control_guide = load(ProjectSettings.get_setting("addons/note/user/control_guide_prefab", default_control_guide)).instantiate()
 	container.add_child(control_guide)
-	tooltip = load(ProjectSettings.get_setting("addons/note/user/tooltip_prefab", NoteEditorPlugin.default_tooltip)).instantiate()
+	tooltip = load(ProjectSettings.get_setting("addons/note/user/tooltip_prefab", default_tooltip)).instantiate()
 	container.add_child(tooltip)
-	popup = load(ProjectSettings.get_setting("addons/note/user/popup_manager_prefab", NoteEditorPlugin.default_popup_system)).instantiate()
+	popup = load(ProjectSettings.get_setting("addons/note/user/popup_manager_prefab", default_popup_system)).instantiate()
 	container.add_child(popup)
-	phaser = load(ProjectSettings.get_setting("addons/note/user/phaser_manager_prefab", NoteEditorPlugin.default_phaser_manager)).instantiate()
+	phaser = load(ProjectSettings.get_setting("addons/note/user/phaser_manager_prefab", default_phaser_manager)).instantiate()
 	add_child(phaser)
 	
-	var screen_material = load(ProjectSettings.get_setting("addons/note/transition/material", NoteEditorPlugin.default_transition))
+	var screen_material = load(ProjectSettings.get_setting("addons/note/transition/material", default_transition))
 	screen_cover.material = screen_material as ShaderMaterial
-	_transition_progress_name = ProjectSettings.get_setting("addons/note/transition/parameter", NoteEditorPlugin.default_transition_parameter)
+	_transition_progress_name = ProjectSettings.get_setting("addons/note/transition/parameter", default_transition_parameter)
 	
-	var loading_prefab: PackedScene = load(ProjectSettings.get_setting("addons/note/transition/loading_screen", NoteEditorPlugin.default_loading_screen))
+	var loading_prefab: PackedScene = load(ProjectSettings.get_setting("addons/note/transition/loading_screen", default_loading_screen))
 	var screen = loading_prefab.instantiate()
 	add_child(screen)
 	loading_screen = screen
@@ -98,7 +108,7 @@ func warn(message: String, header: String = "Note"):
 	_message("[color=yellow]"+header, " !! ", message)
 func error(message: String):
 	_message("[color=red]Error", " !! ", message)
-	var error_packed: PackedScene = load(ProjectSettings.get_setting("addons/note/user/error_screen", NoteEditorPlugin.default_error_screen))
+	var error_packed: PackedScene = load(ProjectSettings.get_setting("addons/note/user/error_screen", default_error_screen))
 	var err_scene: NoteErrorScene = error_packed.instantiate() as NoteErrorScene
 	err_scene.set_error("Error", message, "\n".join(get_stack().map(str)))
 	transition(0.5)

@@ -41,14 +41,17 @@ func _physics_process(delta: float) -> void:
 		_iterate(delta)
 
 func _iterate(delta: float):
+	var data = internal_data
+	if data_override != null:
+		data = data_override
 	## If -1, then we need to initialize the first child
 	if current_index == -1:
 		var first_child = nodes[0]
-		first_child._start(internal_data)
+		first_child._start(data)
 		current_index = 0
 	var current_child: ChainNode = nodes[current_index]
 	if awaiting_cooldown:
-		current_child._start(internal_data)
+		current_child._start(data)
 		awaiting_cooldown = false
 	var next_exists: bool = current_index+1 < len(nodes)
 	if current_child._done():
@@ -59,7 +62,7 @@ func _iterate(delta: float):
 				awaiting_cooldown = true
 				return
 			var next = nodes[current_index]
-			next._start(internal_data)
+			next._start(data)
 		else:
 			on_finish.emit()
 			running = false

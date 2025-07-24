@@ -9,6 +9,7 @@ signal on_finish
 @export var auto_start: bool = false
 @export var auto_start_data: Node
 @export var time_scale: float = 1.0
+@export var data_override: Node
 
 func _ready() -> void:
 	if auto_start:

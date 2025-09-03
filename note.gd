@@ -1,11 +1,13 @@
 @tool
 extends EditorPlugin
 
+
 func _enter_tree() -> void:
 	add_autoload_singleton("note", "res://addons/note/prefab/note_center.tscn")
+	const cls = preload("res://addons/note/script/note_center.gd")
 	if !ProjectSettings.has_setting("addons/note/transition/material"):
-		ProjectSettings.set_setting("addons/note/transition/material", note.default_transition)
-	ProjectSettings.set_initial_value("addons/note/transition/material", note.default_transition)
+		ProjectSettings.set_setting("addons/note/transition/material", cls.default_transition)
+	ProjectSettings.set_initial_value("addons/note/transition/material", cls.default_transition)
 	ProjectSettings.set_as_basic("addons/note/transition/material", true)
 	ProjectSettings.add_property_info({
 		"name": "addons/note/transition/material",
@@ -16,8 +18,8 @@ func _enter_tree() -> void:
 		"hint_string": "*.res,*.tres" 
 	})
 	if !ProjectSettings.has_setting("addons/note/transition/parameter"):
-		ProjectSettings.set_setting("addons/note/transition/parameter", note.default_transition_parameter)
-	ProjectSettings.set_initial_value("addons/note/transition/parameter", note.default_transition_parameter)
+		ProjectSettings.set_setting("addons/note/transition/parameter", cls.default_transition_parameter)
+	ProjectSettings.set_initial_value("addons/note/transition/parameter", cls.default_transition_parameter)
 	ProjectSettings.set_as_basic("addons/note/transition/parameter", true)
 	ProjectSettings.add_property_info({
 		"name": "addons/note/transition/parameter",
@@ -32,8 +34,8 @@ func _enter_tree() -> void:
 		"type": TYPE_BOOL,
 	})
 	if !ProjectSettings.has_setting("addons/note/transition/loading_screen"):
-		ProjectSettings.set_setting("addons/note/transition/loading_screen", note.default_loading_screen)
-	ProjectSettings.set_initial_value("addons/note/transition/loading_screen", note.default_loading_screen)
+		ProjectSettings.set_setting("addons/note/transition/loading_screen", cls.default_loading_screen)
+	ProjectSettings.set_initial_value("addons/note/transition/loading_screen", cls.default_loading_screen)
 	ProjectSettings.set_as_basic("addons/note/transition/loading_screen", true)
 	ProjectSettings.add_property_info({
 		"name": "addons/note/transition/loading_screen",
@@ -43,8 +45,8 @@ func _enter_tree() -> void:
 		"hint_string": "*.scn,*.tscn" 
 	})
 	if !ProjectSettings.has_setting("addons/note/user/error_screen"):
-		ProjectSettings.set_setting("addons/note/user/error_screen", note.default_error_screen)
-	ProjectSettings.set_initial_value("addons/note/user/error_screen", note.default_error_screen)
+		ProjectSettings.set_setting("addons/note/user/error_screen", cls.default_error_screen)
+	ProjectSettings.set_initial_value("addons/note/user/error_screen", cls.default_error_screen)
 	ProjectSettings.set_as_basic("addons/note/user/error_screen", true)
 	ProjectSettings.add_property_info({
 		"name": "addons/note/user/error_screen",
@@ -54,8 +56,8 @@ func _enter_tree() -> void:
 		"hint_string": "*.scn,*.tscn" 
 	})
 	if !ProjectSettings.has_setting("addons/note/user/control_guide_prefab"):
-		ProjectSettings.set_setting("addons/note/user/control_guide_prefab", note.default_control_guide)
-	ProjectSettings.set_initial_value("addons/note/user/control_guide_prefab", note.default_control_guide)
+		ProjectSettings.set_setting("addons/note/user/control_guide_prefab", cls.default_control_guide)
+	ProjectSettings.set_initial_value("addons/note/user/control_guide_prefab", cls.default_control_guide)
 	ProjectSettings.set_as_basic("addons/note/user/control_guide_prefab", true)
 	ProjectSettings.add_property_info({
 		"name": "addons/note/user/control_guide_prefab",
@@ -65,8 +67,8 @@ func _enter_tree() -> void:
 		"hint_string": "*.scn,*.tscn" 
 	})
 	if !ProjectSettings.has_setting("addons/note/user/popup_manager_prefab"):
-		ProjectSettings.set_setting("addons/note/user/popup_manager_prefab", note.default_popup_system)
-	ProjectSettings.set_initial_value("addons/note/user/popup_manager_prefab", note.default_popup_system)
+		ProjectSettings.set_setting("addons/note/user/popup_manager_prefab", cls.default_popup_system)
+	ProjectSettings.set_initial_value("addons/note/user/popup_manager_prefab", cls.default_popup_system)
 	ProjectSettings.set_as_basic("addons/note/user/popup_manager_prefab", true)
 	ProjectSettings.add_property_info({
 		"name": "addons/note/user/popup_manager_prefab",
@@ -76,8 +78,8 @@ func _enter_tree() -> void:
 		"hint_string": "*.scn,*.tscn" 
 	})
 	if !ProjectSettings.has_setting("addons/note/user/tooltip_prefab"):
-		ProjectSettings.set_setting("addons/note/user/tooltip_prefab", note.default_tooltip)
-	ProjectSettings.set_initial_value("addons/note/user/tooltip_prefab", note.default_tooltip)
+		ProjectSettings.set_setting("addons/note/user/tooltip_prefab", cls.default_tooltip)
+	ProjectSettings.set_initial_value("addons/note/user/tooltip_prefab", cls.default_tooltip)
 	ProjectSettings.set_as_basic("addons/note/user/tooltip_prefab", true)
 	ProjectSettings.add_property_info({
 		"name": "addons/note/user/tooltip_prefab",
@@ -87,8 +89,8 @@ func _enter_tree() -> void:
 		"hint_string": "*.scn,*.tscn" 
 	})
 	if !ProjectSettings.has_setting("addons/note/user/phaser_manager_prefab"):
-		ProjectSettings.set_setting("addons/note/user/phaser_manager_prefab", note.default_phaser_manager)
-	ProjectSettings.set_initial_value("addons/note/user/phaser_manager_prefab", note.default_phaser_manager)
+		ProjectSettings.set_setting("addons/note/user/phaser_manager_prefab", cls.default_phaser_manager)
+	ProjectSettings.set_initial_value("addons/note/user/phaser_manager_prefab", cls.default_phaser_manager)
 	ProjectSettings.set_as_basic("addons/note/user/phaser_manager_prefab", true)
 	ProjectSettings.add_property_info({
 		"name": "addons/note/user/phaser_manager_prefab",
@@ -98,8 +100,8 @@ func _enter_tree() -> void:
 		"hint_string": "*.scn,*.tscn" 
 	})
 	if !ProjectSettings.has_setting("addons/note/save_session_type"):
-		ProjectSettings.set_setting("addons/note/save_session_type", note.default_save_session)
-	ProjectSettings.set_initial_value("addons/note/save_session_type", note.default_save_session)
+		ProjectSettings.set_setting("addons/note/save_session_type", cls.default_save_session)
+	ProjectSettings.set_initial_value("addons/note/save_session_type", cls.default_save_session)
 	ProjectSettings.set_as_basic("addons/note/save_session_type", true)
 	ProjectSettings.add_property_info({
 		"name": "addons/note/save_session_type",

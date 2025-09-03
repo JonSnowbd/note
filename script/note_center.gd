@@ -165,7 +165,7 @@ func set_transition(t: ShaderMaterial, t_prog_name: String = "progress"):
 ## Subscriber must have an `_event(event, data)` function.
 func listen(event, subscriber: Object):
 	if !subscriber.has_method("_event"):
-		note.error(str(subscriber)+" has no _event function, but attempted to listen to event.")
+		error(str(subscriber)+" has no _event function, but attempted to listen to event.")
 		return
 	var hashed: String = str(hash(event))
 	if !has_user_signal(hashed):
@@ -250,7 +250,7 @@ func transition(time: float = 0.33):
 func temporary_blackout(fade_in: float = 0.1, duration: float = 1.0, fade_out: float = 0.1, color: Color = Color.BLACK):
 	var tween = create_tween()
 	blackout.color = color
-	note.blackout.color.a = 0.0
+	blackout.color.a = 0.0
 	tween.tween_callback(blackout.show)
 	tween.tween_property(blackout, "color:a", 1.0, fade_in)
 	tween.tween_interval(duration)

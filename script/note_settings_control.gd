@@ -8,10 +8,13 @@ class_name NoteSettingsControl
 
 signal updated_save
 
+## The name of the variable in your Save Session Type, for example
+## "fullscreen" or "volume"
 @export var save_setting: StringName = &""
+## Optional, the name of a method that gets called with the new value,
+## for side effects such as actually changing the fullscreen state or
+## audio bus volume.
 @export var side_effect: StringName = &""
-
-var parent
 
 func _get_value_from_save() -> Variant:
 	var save = note.current_session
@@ -21,7 +24,8 @@ func _get_value_from_save() -> Variant:
 func _set_value(new_value):
 	var save = note.current_session
 	if save != null:
-		save.set(save_setting, new_value)
+		if save_setting != &"":
+			save.set(save_setting, new_value)
 		if side_effect != &"":
 			var count = save.get_method_argument_count(side_effect)
 			if count == 0:
@@ -30,7 +34,7 @@ func _set_value(new_value):
 				save.call(side_effect, new_value)
 
 func _ready() -> void:
-	parent = get_parent()
+	var parent = get_parent()
 	var val = _get_value_from_save()
 	if val == null:
 		note.warn("Failed to get the value %s from the save file" % save_setting)

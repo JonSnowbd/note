@@ -40,10 +40,12 @@ func clean_tween_free(id: String):
 
 ## If true, sets the display server to fullscreen, otherwise windowed.
 func set_fullscreen(is_fullscreen: bool):
+	var is_already_fullscreen = DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN
 	if is_fullscreen:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 	else:
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		if is_already_fullscreen:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 ## Takes a number from 0.0 -> 1.0 and sets that buses volume. Converts to DB for you
 func set_volume(bus_name: String, linear_volume: float):
 	var vol_db = linear_to_db(linear_volume)

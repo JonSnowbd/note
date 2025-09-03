@@ -138,7 +138,7 @@ func load_save(path: String, skip_animation: bool = false):
 		var real_save_name = paths[-1].substr(5)
 		is_dev = real_save_name.begins_with(ProjectSettings.get_setting("addons/note/dev/prefix", "__"))
 	
-	var SessionType = load(ProjectSettings.get_setting("addons/note/save_session_type", NoteEditorPlugin.default_save_session))
+	var SessionType = load(ProjectSettings.get_setting("addons/note/save_session_type", note.default_save_session))
 	var new_session: NoteSaveSession = SessionType.new(path, is_dev) as NoteSaveSession
 	if new_session == null:
 		push_error("Failed to load session type, is your `Addons/Note/Save Session Type` a descendant of NoteSaveSession?")

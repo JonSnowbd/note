@@ -1,167 +1,68 @@
 @tool
 extends EditorPlugin
 
+const welcome_text: String = """[br][b]Thank you for choosing Note[/b] as your game's manager![br]Create a resource of type\
+ [code]NoteDeveloperSettings[/code] and [br] assign it in your Project Settings: [code]Addons/Note/Settings[/code][br]\
+ and don't forget to set your game's Main Scene to [code]res://addons/note/ENTRY.tscn[/code] in [code]Run/Main Scene[/code]
+"""
+
+var editor_plugin
+var main_panel_inst: Control
+
+func _enable_plugin() -> void:
+	add_autoload_singleton("note", "res://addons/note/scene/note_center.tscn")
+	
+	var label = Label.new()
+	label.text = "Woweeee!!"
+
+func _disable_plugin() -> void:
+	remove_autoload_singleton("note")
+
+func _resource_saved(res: Resource):
+	if res is NoteSystemDevSettings:
+		var current_settings = ProjectSettings.get_setting("addons/note/settings", "")
+		if current_settings == "":
+			var path = res.resource_path
+			
+			print_rich("Note automatically loaded your new developer settings: '%s'[br]If this was not\
+ desired, please correct this in Project Settings Addons/Note/Settings" % path)
+			
+			ProjectSettings.set_setting("addons/note/settings", path)
 
 func _enter_tree() -> void:
-	add_autoload_singleton("note", "res://addons/note/prefab/note_center.tscn")
-	const cls = preload("res://addons/note/script/note_center.gd")
-	if !ProjectSettings.has_setting("addons/note/transition/material"):
-		ProjectSettings.set_setting("addons/note/transition/material", cls.default_transition)
-	ProjectSettings.set_initial_value("addons/note/transition/material", cls.default_transition)
-	ProjectSettings.set_as_basic("addons/note/transition/material", true)
+	resource_saved.connect(_resource_saved)
+	
+	if not ProjectSettings.has_setting("addons/note/settings"):
+		ProjectSettings.set_setting("addons/note/settings", "")
+		ProjectSettings.set_initial_value("addons/note/settings", "")
+		print_rich(welcome_text)
+	ProjectSettings.set_as_basic("addons/note/settings", true)
 	ProjectSettings.add_property_info({
-		"name": "addons/note/transition/material",
+		"name": "addons/note/settings",
 		"type": TYPE_STRING,
-		"editor_description": "The [c]ShaderMaterial[/c] used to hide scene transitions. It should have\
-  a shader parameter that can be scaled from 0 to 1 that fades to transparency.",
+		"editor_description": "Developer settings for note. Should be a resource that extends\
+		[code]NoteDeveloperSettings[/code]",
 		"hint": PROPERTY_HINT_FILE,
 		"hint_string": "*.res,*.tres" 
 	})
-	if !ProjectSettings.has_setting("addons/note/transition/parameter"):
-		ProjectSettings.set_setting("addons/note/transition/parameter", cls.default_transition_parameter)
-	ProjectSettings.set_initial_value("addons/note/transition/parameter", cls.default_transition_parameter)
-	ProjectSettings.set_as_basic("addons/note/transition/parameter", true)
-	ProjectSettings.add_property_info({
-		"name": "addons/note/transition/parameter",
-		"type": TYPE_STRING,
-	})
-	if !ProjectSettings.has_setting("addons/note/controller_detection"):
-		ProjectSettings.set_setting("addons/note/controller_detection", true)
-	ProjectSettings.set_initial_value("addons/note/controller_detection", true)
-	ProjectSettings.set_as_basic("addons/note/controller_detection", true)
-	ProjectSettings.add_property_info({
-		"name": "addons/note/controller_detection",
-		"type": TYPE_BOOL,
-	})
-	if !ProjectSettings.has_setting("addons/note/transition/loading_screen"):
-		ProjectSettings.set_setting("addons/note/transition/loading_screen", cls.default_loading_screen)
-	ProjectSettings.set_initial_value("addons/note/transition/loading_screen", cls.default_loading_screen)
-	ProjectSettings.set_as_basic("addons/note/transition/loading_screen", true)
-	ProjectSettings.add_property_info({
-		"name": "addons/note/transition/loading_screen",
-		"type": TYPE_STRING,
-		"tooltip": "The prefab for loading screens.",
-		"hint": PROPERTY_HINT_FILE,
-		"hint_string": "*.scn,*.tscn" 
-	})
-	if !ProjectSettings.has_setting("addons/note/user/error_screen"):
-		ProjectSettings.set_setting("addons/note/user/error_screen", cls.default_error_screen)
-	ProjectSettings.set_initial_value("addons/note/user/error_screen", cls.default_error_screen)
-	ProjectSettings.set_as_basic("addons/note/user/error_screen", true)
-	ProjectSettings.add_property_info({
-		"name": "addons/note/user/error_screen",
-		"type": TYPE_STRING,
-		"tooltip": "The prefab for errors.",
-		"hint": PROPERTY_HINT_FILE,
-		"hint_string": "*.scn,*.tscn" 
-	})
-	if !ProjectSettings.has_setting("addons/note/user/control_guide_prefab"):
-		ProjectSettings.set_setting("addons/note/user/control_guide_prefab", cls.default_control_guide)
-	ProjectSettings.set_initial_value("addons/note/user/control_guide_prefab", cls.default_control_guide)
-	ProjectSettings.set_as_basic("addons/note/user/control_guide_prefab", true)
-	ProjectSettings.add_property_info({
-		"name": "addons/note/user/control_guide_prefab",
-		"type": TYPE_STRING,
-		"tooltip": "The prefab for the control guide system.",
-		"hint": PROPERTY_HINT_FILE,
-		"hint_string": "*.scn,*.tscn" 
-	})
-	if !ProjectSettings.has_setting("addons/note/user/popup_manager_prefab"):
-		ProjectSettings.set_setting("addons/note/user/popup_manager_prefab", cls.default_popup_system)
-	ProjectSettings.set_initial_value("addons/note/user/popup_manager_prefab", cls.default_popup_system)
-	ProjectSettings.set_as_basic("addons/note/user/popup_manager_prefab", true)
-	ProjectSettings.add_property_info({
-		"name": "addons/note/user/popup_manager_prefab",
-		"type": TYPE_STRING,
-		"tooltip": "The prefab for the popup message guide system.",
-		"hint": PROPERTY_HINT_FILE,
-		"hint_string": "*.scn,*.tscn" 
-	})
-	if !ProjectSettings.has_setting("addons/note/user/tooltip_prefab"):
-		ProjectSettings.set_setting("addons/note/user/tooltip_prefab", cls.default_tooltip)
-	ProjectSettings.set_initial_value("addons/note/user/tooltip_prefab", cls.default_tooltip)
-	ProjectSettings.set_as_basic("addons/note/user/tooltip_prefab", true)
-	ProjectSettings.add_property_info({
-		"name": "addons/note/user/tooltip_prefab",
-		"type": TYPE_STRING,
-		"tooltip": "The prefab for the tooltip system.",
-		"hint": PROPERTY_HINT_FILE,
-		"hint_string": "*.scn,*.tscn" 
-	})
-	if !ProjectSettings.has_setting("addons/note/user/phaser_manager_prefab"):
-		ProjectSettings.set_setting("addons/note/user/phaser_manager_prefab", cls.default_phaser_manager)
-	ProjectSettings.set_initial_value("addons/note/user/phaser_manager_prefab", cls.default_phaser_manager)
-	ProjectSettings.set_as_basic("addons/note/user/phaser_manager_prefab", true)
-	ProjectSettings.add_property_info({
-		"name": "addons/note/user/phaser_manager_prefab",
-		"type": TYPE_STRING,
-		"tooltip": "The prefab for the phaser system.",
-		"hint": PROPERTY_HINT_FILE,
-		"hint_string": "*.scn,*.tscn" 
-	})
-	if !ProjectSettings.has_setting("addons/note/save_session_type"):
-		ProjectSettings.set_setting("addons/note/save_session_type", cls.default_save_session)
-	ProjectSettings.set_initial_value("addons/note/save_session_type", cls.default_save_session)
-	ProjectSettings.set_as_basic("addons/note/save_session_type", true)
-	ProjectSettings.add_property_info({
-		"name": "addons/note/save_session_type",
-		"type": TYPE_STRING,
-		"tooltip": "Your type for a note save session.",
-		"hint": PROPERTY_HINT_FILE,
-		"hint_string": "*.gd,*.tscn,*.scn" 
-	})
-	if !ProjectSettings.has_setting("addons/note/user/entry_point"):
-		push_warning("The Note plugin needs an entry point for your game. Please assign it in Project Settings -> Addons -> Note -> Entry Point")
-		ProjectSettings.set_setting("addons/note/user/entry_point", "")
-	ProjectSettings.set_initial_value("addons/note/user/entry_point", "")
-	ProjectSettings.set_as_basic("addons/note/user/entry_point", true)
-	ProjectSettings.add_property_info({
-		"name": "addons/note/user/entry_point",
-		"type": TYPE_STRING,
-		"tooltip": "The prefab for loading the game.",
-		"hint": PROPERTY_HINT_FILE,
-		"hint_string": "*.tscn,*.scn" 
-	})
-	if !ProjectSettings.has_setting("addons/note/dev/prefix"):
-		ProjectSettings.set_setting("addons/note/dev/prefix", "__")
-	ProjectSettings.set_initial_value("addons/note/dev/prefix", "__")
-	ProjectSettings.set_as_basic("addons/note/dev/prefix", true)
-	ProjectSettings.add_property_info({
-		"name": "addons/note/dev/prefix",
-		"description": "If a save file starts with this string, it is marked as a dev save, and will use the dev init.",
-		"type": TYPE_STRING,
-	})
-	if !ProjectSettings.has_setting("addons/note/dev/dev_entry_point"):
-		ProjectSettings.set_setting("addons/note/dev/dev_entry_point", "")
-	ProjectSettings.set_initial_value("addons/note/dev/dev_entry_point", "")
-	ProjectSettings.set_as_basic("addons/note/dev/dev_entry_point", true)
-	ProjectSettings.add_property_info({
-		"name": "addons/note/dev/dev_entry_point",
-		"type": TYPE_STRING,
-		"tooltip": "If a save file starts with this string, it is marked as a dev save, and will use the dev init.",
-		"hint": PROPERTY_HINT_FILE,
-		"hint_string": "*.tscn,*.scn" 
-	})
-	if !ProjectSettings.has_setting("addons/note/sticky_save"):
-		ProjectSettings.set_setting("addons/note/sticky_save", true)
-	ProjectSettings.set_initial_value("addons/note/sticky_save", true)
-	ProjectSettings.set_as_basic("addons/note/sticky_save", true)
-	ProjectSettings.add_property_info({
-		"name": "addons/note/sticky_save",
-		"type": TYPE_BOOL,
-		"tooltip": "If true, the user will be stuck on the chosen save on boot until they manually return to save select.",
-	})
-	if !ProjectSettings.has_setting("addons/note/save_pulse_period"):
-		ProjectSettings.set_setting("addons/note/save_pulse_period", 1.0)
-	ProjectSettings.set_initial_value("addons/note/save_pulse_period", 1.0)
-	ProjectSettings.set_as_basic("addons/note/save_pulse_period", true)
-	ProjectSettings.add_property_info({
-		"name": "addons/note/save_pulse_period",
-		"type": TYPE_FLOAT,
-		"tooltip": "The time between each 'pulse' sent to the save session. Defaults to every second.",
-	})
-	ProjectSettings.save()
-
+	editor_plugin = preload("uid://duvuj8wjqpcci").new()
+	add_inspector_plugin(editor_plugin)
+	
+	main_panel_inst = preload("uid://1baqu2co3orh").instantiate()
+	main_panel_inst.hide()
+	EditorInterface.get_editor_main_screen().add_child(main_panel_inst)
 
 func _exit_tree() -> void:
-	remove_autoload_singleton("note")
+	remove_inspector_plugin(editor_plugin)
+	if main_panel_inst != null:
+		main_panel_inst.queue_free()
+
+func _make_visible(visible: bool) -> void:
+	if main_panel_inst != null:
+		main_panel_inst.visible = visible
+func _get_plugin_name() -> String:
+	return "Note"
+func _has_main_screen() -> bool:
+	return true
+func _get_plugin_icon() -> Texture2D:
+	return EditorInterface.get_editor_theme().get_icon("Node", "EditorIcons")

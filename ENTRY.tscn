@@ -1,0 +1,208 @@
+[gd_scene load_steps=9 format=3 uid="uid://k7kf706i87f8"]
+
+[ext_resource type="Script" uid="uid://cisngsrm6qppo" path="res://addons/note/script/meta/entry_script.gd" id="1_j2ojt"]
+[ext_resource type="PackedScene" uid="uid://b0aww2yb021su" path="res://addons/note/prefab/save_pill.tscn" id="2_lpsy7"]
+[ext_resource type="Texture2D" uid="uid://meapm56a1x7" path="res://icon.svg" id="3_pksbd"]
+
+[sub_resource type="Animation" id="Animation_85dmm"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Imagery:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("LogoContainer/Logo:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_lpsy7"]
+resource_name = "intro"
+length = 2.0
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Imagery:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.73333335, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("LogoContainer/Logo:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1.2666667, 1.7333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("LogoContainer")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"hide"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Imagery")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"hide"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_pksbd"]
+resource_name = "outro"
+step = 0.0333333
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_85dmm"]
+_data = {
+&"RESET": SubResource("Animation_85dmm"),
+&"intro": SubResource("Animation_lpsy7"),
+&"outro": SubResource("Animation_pksbd")
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_lpsy7"]
+font_size = 24
+
+[node name="Entry" type="CanvasLayer" unique_id=1179327049 node_paths=PackedStringArray("pills", "animation")]
+layer = 4
+script = ExtResource("1_j2ojt")
+pills = [NodePath("MainContainer/ProfileOutercase/Profiles/Scroll/Padding/ProfileList/Profile1"), NodePath("MainContainer/ProfileOutercase/Profiles/Scroll/Padding/ProfileList/Profile2"), NodePath("MainContainer/ProfileOutercase/Profiles/Scroll/Padding/ProfileList/Profile3"), NodePath("MainContainer/ProfileOutercase/Profiles/Scroll/Padding/ProfileList/Profile4"), NodePath("MainContainer/ProfileOutercase/Profiles/Scroll/Padding/ProfileList/Profile5"), NodePath("MainContainer/ProfileOutercase/Profiles/Scroll/Padding/ProfileList/Profile6")]
+animation = NodePath("AnimationPlayer")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=585129108]
+libraries = {
+&"": SubResource("AnimationLibrary_85dmm")
+}
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=755334811]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackgroundColor" type="ColorRect" parent="." unique_id=823908215]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.047058824, 0.047058824, 0.047058824, 0.64705884)
+
+[node name="MainContainer" type="CenterContainer" parent="." unique_id=1870087285]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ProfileOutercase" type="VBoxContainer" parent="MainContainer" unique_id=1107208996]
+layout_mode = 2
+
+[node name="SelectYourSave" type="Label" parent="MainContainer/ProfileOutercase" unique_id=926096682]
+layout_mode = 2
+text = "Select your Save"
+label_settings = SubResource("LabelSettings_lpsy7")
+horizontal_alignment = 1
+
+[node name="Profiles" type="PanelContainer" parent="MainContainer/ProfileOutercase" unique_id=1153701796]
+self_modulate = Color(1, 1, 1, 0.3529412)
+layout_mode = 2
+
+[node name="Scroll" type="ScrollContainer" parent="MainContainer/ProfileOutercase/Profiles" unique_id=150198664]
+custom_minimum_size = Vector2(350, 400)
+layout_mode = 2
+
+[node name="Padding" type="MarginContainer" parent="MainContainer/ProfileOutercase/Profiles/Scroll" unique_id=2131864345]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="ProfileList" type="VBoxContainer" parent="MainContainer/ProfileOutercase/Profiles/Scroll/Padding" unique_id=439337588]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Profile1" parent="MainContainer/ProfileOutercase/Profiles/Scroll/Padding/ProfileList" unique_id=1959022160 instance=ExtResource("2_lpsy7")]
+layout_mode = 2
+
+[node name="Profile2" parent="MainContainer/ProfileOutercase/Profiles/Scroll/Padding/ProfileList" unique_id=1648663803 instance=ExtResource("2_lpsy7")]
+layout_mode = 2
+
+[node name="Profile3" parent="MainContainer/ProfileOutercase/Profiles/Scroll/Padding/ProfileList" unique_id=297359145 instance=ExtResource("2_lpsy7")]
+layout_mode = 2
+
+[node name="Profile4" parent="MainContainer/ProfileOutercase/Profiles/Scroll/Padding/ProfileList" unique_id=210213927 instance=ExtResource("2_lpsy7")]
+layout_mode = 2
+
+[node name="Profile5" parent="MainContainer/ProfileOutercase/Profiles/Scroll/Padding/ProfileList" unique_id=1215840183 instance=ExtResource("2_lpsy7")]
+layout_mode = 2
+
+[node name="Profile6" parent="MainContainer/ProfileOutercase/Profiles/Scroll/Padding/ProfileList" unique_id=286007267 instance=ExtResource("2_lpsy7")]
+layout_mode = 2
+
+[node name="Imagery" type="ColorRect" parent="." unique_id=1789492331]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.12955844, 0.12955847, 0.12955844, 1)
+
+[node name="LogoContainer" type="CenterContainer" parent="." unique_id=734596321]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Logo" type="TextureRect" parent="LogoContainer" unique_id=857242052]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("3_pksbd")
+expand_mode = 3

@@ -1,0 +1,17 @@
+[gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://41xdx752htqw"]
+
+[ext_resource type="Texture2D" uid="uid://2ny3rlo43df0" path="res://addons/note/resource/ui/ui_sheet.png" id="1_vjsnh"]
+
+
+[resource]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+texture = ExtResource("1_vjsnh")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(1, 0, 32, 32)
+modulate_color = Color(0.201255, 0.20554, 0.212433, 1)

@@ -1,0 +1,7 @@
+[gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://cn6mbfhcx2b7o"]
+
+[ext_resource type="Texture2D" uid="uid://2ny3rlo43df0" path="res://addons/note/resource/ui/ui_sheet.png" id="1_uniyo"]
+
+[resource]
+atlas = ExtResource("1_uniyo")
+region = Rect2(112, 32, 16, 16)

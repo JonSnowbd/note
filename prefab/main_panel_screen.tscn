@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://1baqu2co3orh"]
+
+[ext_resource type="PackedScene" uid="uid://dthkt8pfqui48" path="res://addons/note/prefab/panel_screens/lab.tscn" id="1_ynbih"]
+[ext_resource type="PackedScene" uid="uid://cshopuvfrlqae" path="res://addons/note/prefab/panel_screens/help.tscn" id="2_o66sy"]
+
+[node name="MainPanelScreen" type="TabContainer" unique_id=1003540411]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+current_tab = 0
+
+[node name="GDScript Lab" parent="." unique_id=1339672251 instance=ExtResource("1_ynbih")]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="Help" parent="." unique_id=719916253 instance=ExtResource("2_o66sy")]
+visible = false
+layout_mode = 2

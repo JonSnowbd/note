@@ -1,0 +1,40 @@
+[gd_scene load_steps=3 format=3 uid="uid://dthkt8pfqui48"]
+
+[ext_resource type="Script" uid="uid://c16iagl3fqh0k" path="res://addons/note/prefab/panel_screens/lab.gd" id="1_8iqhi"]
+
+[sub_resource type="GDScriptSyntaxHighlighter" id="GDScriptSyntaxHighlighter_308xs"]
+
+[node name="GDLab" type="PanelContainer" unique_id=1339672251 node_paths=PackedStringArray("code", "run_button", "clear_button")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_8iqhi")
+code = NodePath("VBoxContainer2/CodeEdit")
+run_button = NodePath("VBoxContainer2/HBoxContainer/Button")
+clear_button = NodePath("VBoxContainer2/HBoxContainer/Button2")
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="." unique_id=699060365]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CodeEdit" type="CodeEdit" parent="VBoxContainer2" unique_id=569521688]
+layout_mode = 2
+size_flags_vertical = 3
+syntax_highlighter = SubResource("GDScriptSyntaxHighlighter_308xs")
+gutters_draw_line_numbers = true
+code_completion_enabled = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2" unique_id=583857655]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer2/HBoxContainer" unique_id=1790847009]
+layout_mode = 2
+text = "Run"
+
+[node name="Button2" type="Button" parent="VBoxContainer2/HBoxContainer" unique_id=454989937]
+layout_mode = 2
+text = "Clear"

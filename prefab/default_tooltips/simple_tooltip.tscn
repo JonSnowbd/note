@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://f4ll26okyq31"]
 
-[ext_resource type="Script" uid="uid://cyvitmvaiheth" path="res://addons/note/script/default_tooltips/simple_tooltip.gd" id="1_d36n0"]
+[ext_resource type="Script" uid="uid://dluqljome6kb" path="res://addons/note/prefab/default_tooltips/simple_tooltip.gd" id="1_d36n0"]
 
 [node name="SimpleTooltip" type="VBoxContainer" node_paths=PackedStringArray("title", "body")]
 anchors_preset = 15

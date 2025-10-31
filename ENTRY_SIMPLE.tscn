@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://oiyu6x3ws0x7"]
-
-[ext_resource type="Script" uid="uid://bbe5j15103c5y" path="res://addons/note/script/opening_scene_simple.gd" id="1_pdmic"]
-
-[node name="EntrySimple" type="Node"]
-script = ExtResource("1_pdmic")

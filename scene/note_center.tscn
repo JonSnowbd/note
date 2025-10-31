@@ -1,0 +1,225 @@
+[gd_scene load_steps=25 format=3 uid="uid://b6rrb216vfjay"]
+
+[ext_resource type="Script" uid="uid://ow7brajv5vuq" path="res://addons/note/scene/note_center.gd" id="1_fmhej"]
+[ext_resource type="Script" uid="uid://dsuqhn7s348wn" path="res://addons/note/script/controls.gd" id="1_jhty6"]
+[ext_resource type="Script" uid="uid://bqvtnaowd8lta" path="res://addons/note/script/util.gd" id="2_yjr4s"]
+[ext_resource type="Script" uid="uid://b53sh8bwtjj8g" path="res://addons/note/script/transition_panel.gd" id="3_vdx63"]
+[ext_resource type="Script" uid="uid://d1ghq77fsfx07" path="res://addons/note/script/level_manager.gd" id="4_alyyo"]
+[ext_resource type="Material" uid="uid://dk5oqc43jlalx" path="res://addons/note/material/perlin_transition.tres" id="5_cqyws"]
+[ext_resource type="Script" uid="uid://caty0hb5uijx2" path="res://addons/note/script/phase/phase_manager.gd" id="5_k0cor"]
+[ext_resource type="Script" uid="uid://dj5ae4svel0vv" path="res://addons/note/script/loading_screen.gd" id="6_sv8pk"]
+[ext_resource type="AudioStream" uid="uid://cjkq5qho04woa" path="res://addons/note/audio/move.ogg" id="7_p0kr4"]
+[ext_resource type="Script" uid="uid://ej2vfmjw2dkq" path="res://addons/note/script/tooltip_manager.gd" id="8_2dhwh"]
+[ext_resource type="AudioStream" uid="uid://bk1fgovjsn1l8" path="res://addons/note/audio/activate.ogg" id="8_wn61t"]
+[ext_resource type="AudioStream" uid="uid://m5mkm0lykjvl" path="res://addons/note/audio/up.ogg" id="9_p5oq1"]
+[ext_resource type="Texture2D" uid="uid://2ny3rlo43df0" path="res://addons/note/resource/ui/ui_sheet.png" id="10_3s5ow"]
+[ext_resource type="Script" uid="uid://b5urykf5xl2tp" path="res://addons/note/script/control_guide/control_guide_manager.gd" id="10_arint"]
+[ext_resource type="AudioStream" uid="uid://bnjja41oa15mo" path="res://addons/note/audio/down.ogg" id="10_jlad3"]
+[ext_resource type="AudioStream" uid="uid://d647xcga8ayn" path="res://addons/note/audio/charge_click.ogg" id="10_joe7i"]
+[ext_resource type="Resource" uid="uid://dvj8sljw217df" path="res://addons/note/resource/filled.tres" id="11_1rlsk"]
+[ext_resource type="AudioStream" uid="uid://bmgstvn7rmu0n" path="res://addons/note/audio/press.ogg" id="11_nmt5t"]
+[ext_resource type="AudioStream" uid="uid://ddpgtvjs717hg" path="res://addons/note/audio/long_press.ogg" id="12_p5oq1"]
+[ext_resource type="PackedScene" uid="uid://b8vpfmxrxetcf" path="res://addons/note/prefab/control_guide/basic_guidelet.tscn" id="12_rsod3"]
+[ext_resource type="Script" uid="uid://4iwdim3cbvkf" path="res://addons/note/script/focus_system/focus_root.gd" id="14_iouvy"]
+[ext_resource type="PackedScene" uid="uid://pjkhoomtso4a" path="res://addons/note/prefab/faux_keyboard.tscn" id="22_jlad3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icukk"]
+bg_color = Color(1, 1, 1, 0.6039216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arint"]
+atlas = ExtResource("10_3s5ow")
+region = Rect2(64, 64, 64, 64)
+
+[node name="NoteCenter" type="Node2D" unique_id=2080868149 node_paths=PackedStringArray("level", "controls", "loading_screen", "transition", "control_guide", "tooltip", "phase", "focus", "util")]
+script = ExtResource("1_fmhej")
+level = NodePath("LevelManager")
+controls = NodePath("Controls")
+loading_screen = NodePath("NoteUISpace/LoadingScreen")
+transition = NodePath("NoteUISpace/Transition")
+control_guide = NodePath("NoteUISpace/ControlGuide")
+tooltip = NodePath("NoteUISpace/Tooltip")
+phase = NodePath("PhaseSpace")
+focus = NodePath("NoteUISpace/Focus")
+util = NodePath("Utils")
+
+[node name="Utils" type="Node" parent="." unique_id=1998701117]
+script = ExtResource("2_yjr4s")
+metadata/_custom_type_script = "uid://bqvtnaowd8lta"
+
+[node name="Controls" type="Node" parent="." unique_id=219723937]
+script = ExtResource("1_jhty6")
+metadata/_custom_type_script = "uid://dsuqhn7s348wn"
+
+[node name="LevelManager" type="Node" parent="." unique_id=1731578158]
+script = ExtResource("4_alyyo")
+
+[node name="PhaseSpace" type="CanvasLayer" parent="." unique_id=265783555]
+layer = 64
+script = ExtResource("5_k0cor")
+
+[node name="NoteUISpace" type="CanvasLayer" parent="." unique_id=1102055093]
+layer = 120
+
+[node name="Focus" type="Control" parent="NoteUISpace" unique_id=2029769993 node_paths=PackedStringArray("sfx_move", "sfx_activate", "sfx_charge", "sfx_long_press", "sfx_up", "sfx_down")]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("14_iouvy")
+regular_box = SubResource("StyleBoxFlat_icukk")
+sfx_pitch_variance = 0.075
+sfx_move = NodePath("Move")
+sfx_activate = NodePath("Activate")
+sfx_charge = NodePath("Charge")
+sfx_long_press = NodePath("LongPress")
+sfx_up = NodePath("Up")
+sfx_down = NodePath("Down")
+
+[node name="Move" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=1254488439]
+stream = ExtResource("7_p0kr4")
+volume_db = -25.0
+
+[node name="Activate" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=1803988019]
+stream = ExtResource("8_wn61t")
+volume_db = -23.0
+
+[node name="Up" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=391614181]
+stream = ExtResource("9_p5oq1")
+volume_db = -23.0
+
+[node name="Down" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=1862456944]
+stream = ExtResource("10_jlad3")
+volume_db = -23.0
+
+[node name="Charge" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=1862946961]
+stream = ExtResource("10_joe7i")
+volume_db = -23.0
+
+[node name="Press" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=746006432]
+stream = ExtResource("11_nmt5t")
+volume_db = -23.0
+
+[node name="LongPress" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=722230450]
+stream = ExtResource("12_p5oq1")
+volume_db = -23.0
+
+[node name="Blackout" type="ColorRect" parent="NoteUISpace" unique_id=1752373185]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.4745098)
+
+[node name="FauxKeyboard" parent="NoteUISpace" unique_id=429783762 instance=ExtResource("22_jlad3")]
+visible = false
+
+[node name="LoadingScreen" type="MarginContainer" parent="NoteUISpace" unique_id=1278017651 node_paths=PackedStringArray("spinner", "progress")]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+script = ExtResource("6_sv8pk")
+spinner = NodePath("CenterContainer/VBoxContainer/TextureRect")
+progress = NodePath("CenterContainer/VBoxContainer/ProgressBar")
+
+[node name="ColorRect" type="ColorRect" parent="NoteUISpace/LoadingScreen" unique_id=895536869]
+layout_mode = 2
+color = Color(0.11, 0.11, 0.11, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="NoteUISpace/LoadingScreen" unique_id=926628799]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NoteUISpace/LoadingScreen/CenterContainer" unique_id=408177472]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="TextureRect" type="TextureRect" parent="NoteUISpace/LoadingScreen/CenterContainer/VBoxContainer" unique_id=1507452020]
+texture_filter = 1
+layout_mode = 2
+texture = SubResource("AtlasTexture_arint")
+stretch_mode = 5
+
+[node name="ProgressBar" type="ProgressBar" parent="NoteUISpace/LoadingScreen/CenterContainer/VBoxContainer" unique_id=473806785]
+visible = false
+custom_minimum_size = Vector2(200, 10)
+layout_mode = 2
+step = 0.001
+show_percentage = false
+
+[node name="Tooltip" type="MarginContainer" parent="NoteUISpace" unique_id=745445436 node_paths=PackedStringArray("tip_container")]
+visible = false
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+script = ExtResource("8_2dhwh")
+tip_container = NodePath("PanelContainer")
+
+[node name="PanelContainer" type="PanelContainer" parent="NoteUISpace/Tooltip" unique_id=1732081680]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ControlGuide" type="MarginContainer" parent="NoteUISpace" unique_id=901242925 node_paths=PackedStringArray("container")]
+visible = false
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+script = ExtResource("10_arint")
+input_icon_theme = ExtResource("11_1rlsk")
+guidelet_prefab = ExtResource("12_rsod3")
+container = NodePath("PanelContainer/MarginContainer/VBoxContainer")
+
+[node name="PanelContainer" type="PanelContainer" parent="NoteUISpace/ControlGuide" unique_id=1204775590]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="NoteUISpace/ControlGuide/PanelContainer" unique_id=399212283]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NoteUISpace/ControlGuide/PanelContainer/MarginContainer" unique_id=1360276928]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Transition" type="TextureRect" parent="NoteUISpace" unique_id=1380330631]
+visible = false
+material = ExtResource("5_cqyws")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("3_vdx63")
+metadata/_custom_type_script = "uid://b53sh8bwtjj8g"

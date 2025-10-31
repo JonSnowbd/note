@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="InputTextureMap" load_steps=134 format=3 uid="uid://dvj8sljw217df"]
 
-[ext_resource type="Script" path="res://addons/note/script/input_texture_map.gd" id="1_1yek8"]
+[ext_resource type="Script" uid="uid://ck74sgos5k7ye" path="res://addons/note/resource_type/input_texture_map.gd" id="1_1yek8"]
 [ext_resource type="Texture2D" uid="uid://cpdhqnbhihr4q" path="res://addons/note/texture/keyboard/keyboard_0.png" id="1_vaojr"]
 [ext_resource type="Texture2D" uid="uid://c07s3rk1ri5rt" path="res://addons/note/texture/keyboard/keyboard_1.png" id="2_yyyu0"]
 [ext_resource type="Texture2D" uid="uid://dhvttprb1mjj0" path="res://addons/note/texture/keyboard/keyboard_2.png" id="3_bqe1w"]

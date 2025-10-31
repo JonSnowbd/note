@@ -1,4 +1,5 @@
 https://kenney.nl/assets/input-prompts
+https://kenney.nl/assets/ui-audio
 https://gl-transitions.com
 https://www.svgrepo.com/collection/denali-solid-interface-icons
 https://fonts.google.com/specimen/Outfit

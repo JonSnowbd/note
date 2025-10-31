@@ -1,0 +1,251 @@
+[gd_scene format=3 uid="uid://pjkhoomtso4a"]
+
+[node name="FauxKeyboard" type="CenterContainer" unique_id=429783762]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1609515991]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=476087831]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=116533630]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=215670339]
+layout_mode = 2
+editable = false
+
+[node name="en-us" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=620342158]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="PanelContainer/MarginContainer/VBoxContainer/en-us" unique_id=1619036020]
+layout_mode = 2
+columns = 10
+
+[node name="Button" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=1329150750]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "1"
+
+[node name="Button2" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=1379334556]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "2"
+
+[node name="Button3" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=1804083025]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "3"
+
+[node name="Button4" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=1952682912]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "4"
+
+[node name="Button5" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=427946435]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "5"
+
+[node name="Button6" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=374226537]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "6"
+
+[node name="Button7" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=1383198815]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "7"
+
+[node name="Button8" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=434915476]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "8"
+
+[node name="Button9" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=987470554]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "9"
+
+[node name="Button10" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=320015591]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "0"
+
+[node name="ButtonA" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=1081232117]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "A"
+
+[node name="ButtonB" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=191682809]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "B"
+
+[node name="ButtonC" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=998434522]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "C"
+
+[node name="ButtonD" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=1033032185]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "D"
+
+[node name="ButtonE" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=874096081]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "E"
+
+[node name="ButtonF" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=1494274338]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "F"
+
+[node name="ButtonG" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=442150382]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "G"
+
+[node name="ButtonH" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=91213592]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "H"
+
+[node name="ButtonI" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=1563368673]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "I"
+
+[node name="ButtonJ" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=2043773764]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "J"
+
+[node name="ButtonK" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=1727163760]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "K"
+
+[node name="ButtonL" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=803107071]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "L"
+
+[node name="ButtonM" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=924734645]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "M"
+
+[node name="ButtonN" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=911048346]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "N"
+
+[node name="ButtonO" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=304646606]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "O"
+
+[node name="ButtonP" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=774179767]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "P"
+
+[node name="ButtonQ" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=834827279]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "Q"
+
+[node name="ButtonR" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=1044736143]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "R"
+
+[node name="ButtonS" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=183978351]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "S"
+
+[node name="ButtonT" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=365286707]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "T"
+
+[node name="ButtonU" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=57046562]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "U"
+
+[node name="ButtonV" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=386287694]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "V"
+
+[node name="ButtonW" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=893092613]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "W"
+
+[node name="ButtonX" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=1917232201]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "X"
+
+[node name="ButtonY" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=1304341233]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "Y"
+
+[node name="ButtonZ" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=48070578]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "Z"
+
+[node name="ButtonComma" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=981636479]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = ","
+
+[node name="ButtonPeriod" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=2146193700]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "."
+
+[node name="ButtonQuestion" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=961202911]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "?"
+
+[node name="ButtonExclaim" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/GridContainer" unique_id=987503116]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "!"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/en-us" unique_id=2095220779]
+layout_mode = 2
+
+[node name="Space" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/HBoxContainer" unique_id=1721816042]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+text = " "
+
+[node name="Backspace" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/HBoxContainer" unique_id=397658294]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+text = "Del"
+
+[node name="Done" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/en-us/HBoxContainer" unique_id=442569373]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+text = "Done"

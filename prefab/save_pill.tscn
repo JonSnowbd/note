@@ -1,0 +1,49 @@
+[gd_scene load_steps=2 format=3 uid="uid://b0aww2yb021su"]
+
+[ext_resource type="Script" uid="uid://pufbtr67lcto" path="res://addons/note/prefab/save_pill.gd" id="1_bta0g"]
+
+[node name="SavePill" type="PanelContainer" unique_id=1215840183 node_paths=PackedStringArray("label", "primary_button", "menu_button")]
+offset_right = 208.0
+offset_bottom = 74.0
+size_flags_horizontal = 3
+theme_type_variation = &"InsetVPanel"
+script = ExtResource("1_bta0g")
+label = NodePath("MarginContainer/VBoxContainer/Label")
+primary_button = NodePath("MarginContainer/VBoxContainer/HBoxContainer/Button")
+menu_button = NodePath("MarginContainer/VBoxContainer/HBoxContainer/MenuButton")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=888290163]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=941133845]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=116880616]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+text = "Empty Save Slot"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1021485128]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1819961950]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "Create"
+
+[node name="MenuButton" type="MenuButton" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1729889443]
+self_modulate = Color(0.6789437, 0.6789437, 0.6789437, 1)
+layout_mode = 2
+focus_mode = 0
+text = "Actions"
+item_count = 1
+popup/item_0/text = "Delete"
+popup/item_0/id = 0

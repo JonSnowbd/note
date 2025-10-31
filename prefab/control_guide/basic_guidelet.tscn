@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://b8vpfmxrxetcf"]
+
+[ext_resource type="Script" uid="uid://dautr48g47wu3" path="res://addons/note/script/control_guide/control_guidelet.gd" id="1_2hiqv"]
+
+[node name="BasicGuidelet" type="PanelContainer" unique_id=1054365333 node_paths=PackedStringArray("icon_container", "label")]
+custom_minimum_size = Vector2(165, 0)
+offset_right = 200.0
+script = ExtResource("1_2hiqv")
+icon_container = NodePath("MarginContainer/Layout/Icons")
+label = NodePath("MarginContainer/Layout/Label")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=2140224911]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_right = 6
+
+[node name="Layout" type="HBoxContainer" parent="MarginContainer" unique_id=1145553525]
+layout_mode = 2
+
+[node name="Icons" type="HBoxContainer" parent="MarginContainer/Layout" unique_id=1300832160]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="MarginContainer/Layout" unique_id=1310429023]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/Layout" unique_id=719565181]
+layout_mode = 2
+text = "Action"

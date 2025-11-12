@@ -1,5 +1,7 @@
 extends Node
 
+signal fullscreen_changed
+
 var _tween_cache: Dictionary[String,Tween] = {}
 
 ## Takes time as a float, and returns a speedrun style format, `HH:MM:SS.MS`
@@ -50,6 +52,7 @@ func set_fullscreen(is_fullscreen: bool):
 	else:
 		if is_already_fullscreen:
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+	fullscreen_changed.emit()
 
 ## Gets the linear volume of the bus requested, from 0.0 to 2.0 (to account for users
 ## who wish to overclock audio volume. 0.0 to 1.0 is the normal expectation.)

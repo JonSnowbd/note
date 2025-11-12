@@ -23,7 +23,7 @@ func _ready() -> void:
 	pivot_offset = size*0.5
 
 func _physics_process(delta: float) -> void:
-	if _nt.controls.is_mouse_and_keyboard():
+	if _nt.controls.is_mouse_and_keyboard() and menu_button.disabled:
 		var distance = get_local_mouse_position().distance_to(size*0.5)
 		modulate.a = 1.0-clamp(distance/350.0, 0.0, 0.5)
 	else:
@@ -37,3 +37,4 @@ func set_state_waiting_for(save_alias: String):
 	label.text = tr("Empty Save Slot", "A save file name used to show an empty save slot")
 	primary_button.text = tr("Create", "'Create a save', used on a button on the save profile")
 	menu_button.disabled = true
+	menu_button.hide()

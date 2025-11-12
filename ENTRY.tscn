@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cisngsrm6qppo" path="res://addons/note/script/meta/entry_script.gd" id="1_j2ojt"]
 [ext_resource type="PackedScene" uid="uid://b0aww2yb021su" path="res://addons/note/prefab/save_pill.tscn" id="2_lpsy7"]
-[ext_resource type="Texture2D" uid="uid://meapm56a1x7" path="res://icon.svg" id="3_pksbd"]
+[ext_resource type="Texture2D" uid="uid://fl7yaybo81e2" path="res://icon.svg" id="3_pksbd"]
 
 [sub_resource type="Animation" id="Animation_85dmm"]
 length = 0.001

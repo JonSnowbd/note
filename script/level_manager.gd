@@ -38,7 +38,7 @@ func _internal_swap_logic(new_scene, with_loading_screen: bool) -> Node:
 			_nt.loading_screen.push_item(new_scene)
 			_nt.loading_screen.begin_loading()
 			await async_load_finished
-			var packed: PackedScene = _nt.loading_screen.fetch(new_scene)
+			var packed: PackedScene = _nt.loading_screen.force_fetch(new_scene)
 			if packed == null:
 				_nt.error("Note failed to load path %s."%new_scene)
 				return
@@ -76,7 +76,8 @@ func _internal_swap_logic(new_scene, with_loading_screen: bool) -> Node:
 ## - If new scene is a node, it is placed into the tree and resumed.[br]
 func change_to(new_scene, with_loading_screen: bool = false):
 	var old_scene = await _internal_swap_logic(new_scene, with_loading_screen)
-	old_scene.queue_free()
+	if old_scene != null:
+		old_scene.queue_free()
 	_nt.info("Finished transition to new level %s" % get_tree().current_scene.name)
 
 ## Changes to the new scene with an optional load screen.[br]

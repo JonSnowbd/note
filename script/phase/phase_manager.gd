@@ -14,7 +14,7 @@ var lookup: Dictionary = {}
 var loads_remaining: PackedStringArray = []
 
 func _register(path: String):
-	var packed_scene = note.loading_screen.force_fetch(path)
+	var packed_scene = _nt.loading_screen.force_fetch(path)
 	var instance = packed_scene.instantiate()
 	lookup[instance.name] = packed_scene
 	lookup[packed_scene] = packed_scene
@@ -28,7 +28,7 @@ func _is_all_loaded() -> bool:
 
 
 func _ready() -> void:
-	note.loading_screen.loading_shadow_file_finished.connect(func(path):
+	_nt.loading_screen.loading_shadow_file_finished.connect(func(path):
 		if loads_remaining.is_empty(): return
 		if loads_remaining.has(path):
 			_register(path)

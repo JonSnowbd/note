@@ -35,15 +35,18 @@ func load_save(profile_name: String):
 
 ## Finishes the load, moves onto the user's defined entry point.
 func post_load_action(skip_animation: bool = false):
+	if _nt.loading_screen.is_cached(_nt.settings.initial_scene):
+		_nt.level.change_to(_nt.settings.initial_scene)
+		return
 	if skip_animation:
-		note.loading_screen.show()
+		_nt.loading_screen.show()
 		await get_tree().process_frame
 		_nt.level.change_to(_nt.settings.initial_scene, true)
 	else:
 		_nt.level.change_to(_nt.settings.initial_scene, true)
 
 func _ready() -> void:
-	var is_simple = _nt.settings.save_strategy == NoteSystemDevSettings.NoteEntrySceneType.SIMPLE
+	var is_simple = _nt.settings.save_strategy == NoteDeveloperSettings.NoteEntrySceneType.SIMPLE
 	var uses_stuck_save = _nt.settings.save_sticky
 	
 	## Restore soft settings if they are available.
@@ -95,6 +98,6 @@ func _ready() -> void:
 				if _nt.settings.save_sticky:
 					_nt.info("'Sticking' save profile <%s>" % profile_name)
 					_nt.meta.stuck_save = profile_name
-					_nt.meta.persist()
+					_nt.meta.persist(_nt)
 				call_deferred("post_load_action")
 			)

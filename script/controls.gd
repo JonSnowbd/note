@@ -34,11 +34,11 @@ func set_mode(new_mode: Type):
 		input_method_changed.emit(new_mode)
 		match new_mode:
 			Type.MouseKeyboard:
-				note.info("Changed input mode to Mouse & Keyboard")
+				_nt.info("Changed input mode to Mouse & Keyboard")
 			Type.Gamepad:
-				note.info("Changed input mode to Gamepad")
+				_nt.info("Changed input mode to Gamepad")
 			Type.Mobile:
-				note.info("Changed input mode to Mobile Input")
+				_nt.info("Changed input mode to Mobile Input")
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		__mouse_track += event.relative.length()

@@ -29,7 +29,7 @@ const TypeFocusGroup = preload("uid://4iwdim3cbvkf")
 
 ## This is the Note Dev Settings that you provide via your project settings.
 ## Do not edit this during runtime with the intention of it being saved!
-var settings: NoteSystemDevSettings
+var settings: NoteDeveloperSettings
 ## This is the currently loaded save, it can be null before a load.
 var save: NoteSaveSession = null
 
@@ -69,8 +69,21 @@ func info(message: String, header: String = "Note"):
 	_message(header, " >> ", message)
 func warn(message: String, header: String = "Note"):
 	_message("[color=yellow]"+header, " !! ", message)
+func stack_trace(message: String):
+	_message("[color=cyan]STCK", " !! ", message)
+	var stack = get_stack()
+	var count = 1
+	for line in stack:
+		if line == stack[0]: continue # The first is always this function, so skip it
+		var msg = "%s:%d -> %s()" % [line["source"], line["line"], line["function"]]
+		_message("[color=cyan]#%4d" % count, " >> ", msg)
+		count += 1
 func error(message: String):
-	_message("[color=red]Error", " !! ", message)
+	_message("[color=red]ERR ", " !! ", message)
+	var stack = get_stack()
+	for line in stack:
+		var msg = "%s:%d -> %s()" % [line["source"], line["line"], line["function"]]
+		_message("[color=red]STACK", " >> ", msg)
 
 ## Use this to time a function or portion of your app, call once with a string parameter
 ## to name what you're timing, and call again with no parameters to end the timer and log.
@@ -126,7 +139,8 @@ func unstick_save():
 func return_to_save_select():
 	unstick_save()
 	end_session()
-	level.load_level(load(ProjectSettings.get_setting("application/run/main_scene", "res://addons/note/ENTRY_SCENE.tscn")))
+	var main_scene_prefab = load(ProjectSettings.get_setting("application/run/main_scene", "res://addons/note/ENTRY_SCENE.tscn"))
+	level.change_to(main_scene_prefab)
 
 ## Called internally to start saves, let note handle this unless you
 ## know what you want from this! If you are intending to change saves,

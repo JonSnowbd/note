@@ -1,5 +1,5 @@
 extends Resource
-class_name NoteSystemDevSettings
+class_name NoteDeveloperSettings
 
 enum NoteEntrySceneType {
 	## If this is selected, there will be a sticky, default profile and no choice

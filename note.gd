@@ -19,7 +19,7 @@ func _disable_plugin() -> void:
 	remove_autoload_singleton("note")
 
 func _resource_saved(res: Resource):
-	if res is NoteSystemDevSettings:
+	if res is NoteDeveloperSettings:
 		var current_settings = ProjectSettings.get_setting("addons/note/settings", "")
 		if current_settings == "":
 			var path = res.resource_path

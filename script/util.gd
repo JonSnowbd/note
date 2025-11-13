@@ -2,6 +2,13 @@ extends Node
 
 signal fullscreen_changed
 
+enum FullscreenState {
+	Unknown,
+	Windowed,
+	BorderlessFullscreen,
+	Fullscreen,
+}
+
 var _tween_cache: Dictionary[String,Tween] = {}
 
 ## Takes time as a float, and returns a speedrun style format, `HH:MM:SS.MS`
@@ -43,16 +50,32 @@ func clean_tween(id: String) -> Tween:
 func clean_tween_free(id: String):
 	_tween_cache.erase(id)
 
+func get_fullscreen() -> FullscreenState:
+	var current_mode = DisplayServer.window_get_mode()
+	match current_mode:
+		DisplayServer.WindowMode.WINDOW_MODE_FULLSCREEN:
+			return FullscreenState.BorderlessFullscreen
+		DisplayServer.WindowMode.WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
+			return FullscreenState.Fullscreen
+		DisplayServer.WindowMode.WINDOW_MODE_WINDOWED:
+			return FullscreenState.Windowed
+	return FullscreenState.Unknown
 ## If true, sets the display server to fullscreen, otherwise windowed.
-func set_fullscreen(is_fullscreen: bool):
-	var is_already_fullscreen = DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN
-	if is_fullscreen:
-		if !is_already_fullscreen:
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
-	else:
-		if is_already_fullscreen:
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-	fullscreen_changed.emit()
+func set_fullscreen(state: FullscreenState):
+	var current_mode = DisplayServer.window_get_mode()
+	var current_state = get_fullscreen()
+	if current_state == FullscreenState.Unknown:
+		return
+	
+	if current_state != state:
+		match state:
+			FullscreenState.Windowed:
+				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+			FullscreenState.BorderlessFullscreen:
+				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+			FullscreenState.Fullscreen:
+				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
+		fullscreen_changed.emit()
 
 ## Gets the linear volume of the bus requested, from 0.0 to 2.0 (to account for users
 ## who wish to overclock audio volume. 0.0 to 1.0 is the normal expectation.)

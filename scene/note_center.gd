@@ -70,13 +70,13 @@ func info(message: String, header: String = "Note"):
 func warn(message: String, header: String = "Note"):
 	_message("[color=yellow]"+header, " !! ", message)
 func stack_trace(message: String):
-	_message("[color=cyan]STCK", " !! ", message)
+	_message("[color=cyan]STCK", " >> ", message)
 	var stack = get_stack()
 	var count = 1
 	for line in stack:
 		if line == stack[0]: continue # The first is always this function, so skip it
 		var msg = "%s:%d -> %s()" % [line["source"], line["line"], line["function"]]
-		_message("[color=cyan]#%4d" % count, " >> ", msg)
+		_message("[color=cyan]#%3d" % count, " >> ", msg)
 		count += 1
 func error(message: String):
 	_message("[color=red]ERR ", " !! ", message)

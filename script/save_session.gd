@@ -101,7 +101,7 @@ func read_file(file_name: String) -> String:
 	return data
 ## File operations must include the file type. Opens a file inside the save and returns it.
 func open_file(file_name: String) -> FileAccess:
-	var file = FileAccess.open(current_path+file_name, FileAccess.READ)
+	var file = FileAccess.open(current_path+file_name, FileAccess.READ_WRITE)
 	return file
 ## File operations must include the file type. Deletes a file inside the save.
 func delete_file(file_name: String):

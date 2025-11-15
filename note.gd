@@ -11,9 +11,6 @@ var main_panel_inst: Control
 
 func _enable_plugin() -> void:
 	add_autoload_singleton("note", "res://addons/note/scene/note_center.tscn")
-	
-	var label = Label.new()
-	label.text = "Woweeee!!"
 
 func _disable_plugin() -> void:
 	remove_autoload_singleton("note")

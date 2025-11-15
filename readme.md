@@ -3,8 +3,6 @@
 </p>
 <h1 align="center"> Note</h1>
 
----
-
 Note is a simple shim. By loading the Note entry scene first, and defining
 a settings file you get a buttload of dev QoL features and nodes at the cost
 of slight freedom in the initialization of your app.
@@ -28,6 +26,8 @@ control guides and tooltips.
 Realizing I could do this in Note and never have to make a EditorInspectorPlugin again was really fun.
 8) And lots of standalone node types and utility functions that cover, and much more.
 
+---
+
 ## Project Status
 
 > [!CAUTION]
@@ -43,19 +43,21 @@ With that said, I will be doing my best to maintain documentation going forward 
 lost while using Note. It's also worth mentioning that after you make your save file and settings file,
 Note gets out of your way real quick so you should not be blocked by Note breaking changes often.
 
+---
+
 ## Install
 
-(If you are experienced with installing Godot plugins, you can skip to the end of this
+> [!NOTE]
+> If you are experienced with installing Godot plugins, you can skip to the end of this
 category and read the last few steps! It's nothing new besides the use of a settings
-file in your project settings.)
-
+file in your project settings.
 
 <details>
 
 <summary>
-In your Godot project use `git submodule add https://github.com/JonSnowbd/note addons/note` 
-(If this fails make sure your project is a git repo with `git init`) OR clone this repo and
-place it in your `YOURPROJECT/addons/` folder.
+In your Godot project use <pre><code>git submodule add https://github.com/JonSnowbd/note addons/note</code></pre>
+(If this fails make sure your project is a git repo with <pre><code>git init</pre></code>) OR clone this repo and
+place it in your <pre><code>YOUR_PROJECT/addons/</pre></code> folder.
 </summary>
 
 ![Screenshot of your godot folder after the above commands](/documentation/post_install.png)
@@ -75,7 +77,7 @@ place it in your `YOURPROJECT/addons/` folder.
 <summary>
 And then create a Note Developer Settings file in your project. Note will automatically
 find it and set the settings file to be the default one. If you want to change the settings
-file that note uses, you can change or set it manually in `ProjectSettings/Addons/Note`
+file that note uses, you can change or set it manually in <pre><code>ProjectSettings/Addons/Note</pre></code>
 </summary>
 
 ![Creating your Note developer file](/documentation/creating_settings.png)
@@ -92,6 +94,17 @@ and your games main scene to the settings file initial scene. You're done!
 ![Setting the entry scenes up.](/documentation/setting_entry_points.png)
 
 </details>
+
+## Your Integration Checklist
+
+- [ ] Add the `note` folder to `YOUR_PROJECT/addons/`
+- [ ] Enable `note` in Project Settings
+- [ ] Create a `NoteDeveloperSettings` resource in your project for Note to automatically
+detect(or set it manually in `ProjectSettings/Addons/Note`)
+- [ ] Set your Entry Scene to `res://addons/note/ENTRY.tscn`
+- [ ] Set your real game's entry scene in your `NoteDeveloperSettings` file.
+- [ ] **(Optional)** Create a custom Save Script and set it in your Developer Settings
+- [ ] **(Optional)** ... Enjoy!
 
 ## Setup
 
@@ -154,19 +167,36 @@ func get_fancy_pill() -> Control:
 
 Here is a really simple example of a save type.
 
-## Your Integration Checklist
+It may look like a lot at first, but its way simpler than it looks.
+Basically in `starting` you check if things `exists`, and `read_*` them to fill up your settings,
+being wary that they might not exist and providing safe default.
 
-- [ ] Add the `note` folder to `YOUR_PROJECT/addons/`
-- [ ] Enable `note` in Project Settings
-- [ ] Create a `NoteDeveloperSettings` resource in your project for Note to automatically
-detect(or set it manually in `ProjectSettings/Addons/Note`)
-- [ ] Set your Entry Scene to `res://addons/note/ENTRY.tscn`
-- [ ] Set your real game's entry scene in your `NoteDeveloperSettings` file.
-- [ ] **(Optional)**
+In `ending` you `write_*` things to disk.
 
-## Overview
+in `get_fancy_pill` you create a control that represents your save files profile plate.
 
-Here is a general overview of the juicy functions you want to use
+Here is a list of save file qol methods you can use, these methods already adapt file paths
+to be relative to the save file folder, so you don't even need to think about that. 
+
+```gdscript
+# checks if "file" exists, no matter the filetype.
+exists("file") -> bool
+
+# Don't include filetype. looks for "file.json" and reads/writes it into a dictionary.
+read_object("file") -> Dictionary
+write_object("file", {"data" = 10.0})
+
+# Include filetype. looks for "file.txt" and reads it into a String, and opens
+# a FileAccess session when opening one.
+read_file("file.txt") -> String
+open_file("file.txt") -> FileAccess
+delete_file("file.txt")
+```
+
+
+## Tidbits
+
+Here is a general overview for some of the juicy functions you might want to use
 in your game from anywhere. Note has many features that are more indepth,
 and this list only includes method calls, so peek at the docs below for the standalone
 nodes and traits.
@@ -189,6 +219,9 @@ note.phase.begin(id) -> Variant # ID Can be the script, name, path, uid, or clas
 note.phase.begin_instant(id) -> Variant # Like above but without a fade-in animation
 note.phase.end(id) # Fades out the current phase, leaving nothing
 note.phase.end_instant(id)
+
+note.level.change_to(path_or_packed_scene, with_load_screen: bool = false)
+note.level.swap(path_or_packed_scene, with_load_screen: bool = false) -> Variant # Returns the old level rather than deleting it.
 
 ```
 

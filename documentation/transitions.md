@@ -12,3 +12,15 @@ func teleport_player(new_location: Vector2):
 	player.global_position = new_location
 	camera.global_position = new_location
 ```
+
+![A demonstration of the above function](/documentation/transition_demo.gif)
+
+## How it works
+
+When trigger is called:
+
+- A snapshot of the viewport is taken, and uploaded to the transition Texture Rect that
+is on the Note autoload canvas layer, well above everything else.
+- The Texture Rect is then shown
+- A Tween smoothly transitions the `completion` uniform of the shader from 0.0 to 1.0
+- After this is done, the Texture Rect is hidden

@@ -55,9 +55,9 @@ file in your project settings.
 <details>
 
 <summary>
-In your Godot project use <pre><code>git submodule add https://github.com/JonSnowbd/note addons/note</code></pre>
-(If this fails make sure your project is a git repo with <pre><code>git init</pre></code>) OR clone this repo and
-place it in your <pre><code>YOUR_PROJECT/addons/</pre></code> folder.
+In your Godot project use <code>git submodule add https://github.com/JonSnowbd/note addons/note</code>
+(If this fails make sure your project is a git repo with <code>git init</code>) OR clone this repo and
+place it in your <code>YOUR_PROJECT/addons/</code> folder.
 </summary>
 
 ![Screenshot of your godot folder after the above commands](/documentation/post_install.png)
@@ -77,7 +77,7 @@ place it in your <pre><code>YOUR_PROJECT/addons/</pre></code> folder.
 <summary>
 And then create a Note Developer Settings file in your project. Note will automatically
 find it and set the settings file to be the default one. If you want to change the settings
-file that note uses, you can change or set it manually in <pre><code>ProjectSettings/Addons/Note</pre></code>
+file that note uses, you can change or set it manually in <code>ProjectSettings/Addons/Note</code>
 </summary>
 
 ![Creating your Note developer file](/documentation/creating_settings.png)

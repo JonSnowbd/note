@@ -49,48 +49,45 @@ Note gets out of your way real quick so you should not be blocked by Note breaki
 category and read the last few steps! It's nothing new besides the use of a settings
 file in your project settings.)
 
-- In your Godot project use `git submodule add https://github.com/JonSnowbd/note addons/note` 
-(If this fails make sure your project is a git repo with `git init`)
-- OR clone this repo and place it in your `YOURPROJECT/addons/` folder. But really I recommend
-using git above
-- So your Godot project now has `addons/note` like so:
 
 <details>
 
-<summary>How that looks in your folder.</summary>
+<summary>
+In your Godot project use `git submodule add https://github.com/JonSnowbd/note addons/note` 
+(If this fails make sure your project is a git repo with `git init`) OR clone this repo and
+place it in your `YOURPROJECT/addons/` folder.
+</summary>
 
 ![Screenshot of your godot folder after the above commands](/documentation/post_install.png)
 
 </details>
 
-- In your project settings enable Note
-
 <details>
 
-<summary>How that looks in Godot.</summary>
+<summary>In your project settings enable Note</summary>
 
 ![Enabling note in your project settings](/documentation/enabling_note.png)
 
 </details>
 
-- And then create a Note Developer Settings file in your project. Note will automatically
-find it and set the settings file to be the default one. If you want to change the settings
-file that note uses, you can change or set it manually in `ProjectSettings/Addons/Note`
-
 <details>
 
-<summary>How that looks in Godot.</summary>
+<summary>
+And then create a Note Developer Settings file in your project. Note will automatically
+find it and set the settings file to be the default one. If you want to change the settings
+file that note uses, you can change or set it manually in `ProjectSettings/Addons/Note`
+</summary>
 
 ![Creating your Note developer file](/documentation/creating_settings.png)
 
 </details>
 
-- Finally in your Project Settings set the main scene to Note's entry,
-and your games main scene to the settings file initial scene. You're done!
-
 <details>
 
-<summary>How that looks in Godot.</summary>
+<summary>
+Finally in your Project Settings set the main scene to Note's entry,
+and your games main scene to the settings file initial scene. You're done!
+</summary>
 
 ![Setting the entry scenes up.](/documentation/setting_entry_points.png)
 

@@ -1,4 +1,9 @@
-# <span><img src="documentation/logo.png"/> Note.gd</span>
+<p align="center">
+  <img src="/documentation/logo.png" />
+</p>
+<h1 align="center"> Note</h1>
+
+---
 
 Note is a simple shim. By loading the Note entry scene first, and defining
 a settings file you get a buttload of dev QoL features and nodes at the cost
@@ -25,13 +30,14 @@ Realizing I could do this in Note and never have to make a EditorInspectorPlugin
 
 ## Project Status
 
+> [!CAUTION]
+> Note tracks with **Godot 4.6 Dev** cycle, awaiting Traits before settling on Stable.
+Traits will be used extensively for some Note features and as such will be in flux prior to,
+and during the Traits dev release.
+
 I'm using Note right now to develop a game, and I'm adding new features and fixing bugs
 as I go, and as such I don't recommend using it just yet unless you're cool with breaking
 changes happening quite often as I distill Note into something even more ergonomic.
-
-Note tracks with **Godot 4.6 Dev** cycle, awaiting Traits before settling on Stable.
-Traits will be used extensively for some Note features and as such will be in flux prior to,
-and during the Traits dev release.
 
 With that said, I will be doing my best to maintain documentation going forward so you're never
 lost while using Note. It's also worth mentioning that after you make your save file and settings file,
@@ -48,19 +54,47 @@ file in your project settings.)
 - OR clone this repo and place it in your `YOURPROJECT/addons/` folder. But really I recommend
 using git above
 - So your Godot project now has `addons/note` like so:
+
+<details>
+
+<summary>How that looks in your folder.</summary>
+
 ![Screenshot of your godot folder after the above commands](/documentation/post_install.png)
 
+</details>
+
 - In your project settings enable Note
+
+<details>
+
+<summary>How that looks in Godot.</summary>
+
 ![Enabling note in your project settings](/documentation/enabling_note.png)
+
+</details>
 
 - And then create a Note Developer Settings file in your project. Note will automatically
 find it and set the settings file to be the default one. If you want to change the settings
 file that note uses, you can change or set it manually in `ProjectSettings/Addons/Note`
+
+<details>
+
+<summary>How that looks in Godot.</summary>
+
 ![Creating your Note developer file](/documentation/creating_settings.png)
+
+</details>
 
 - Finally in your Project Settings set the main scene to Note's entry,
 and your games main scene to the settings file initial scene. You're done!
+
+<details>
+
+<summary>How that looks in Godot.</summary>
+
 ![Setting the entry scenes up.](/documentation/setting_entry_points.png)
+
+</details>
 
 ## Setup
 
@@ -158,8 +192,6 @@ note.phase.begin(id) -> Variant # ID Can be the script, name, path, uid, or clas
 note.phase.begin_instant(id) -> Variant # Like above but without a fade-in animation
 note.phase.end(id) # Fades out the current phase, leaving nothing
 note.phase.end_instant(id)
-
-
 
 ```
 

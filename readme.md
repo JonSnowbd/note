@@ -111,11 +111,12 @@ detect(or set it manually in `ProjectSettings/Addons/Note`)
 After doing all that, theres a few things you can do to customize your
 Note experience. By default note uses the simple profile approach to saves,
 which means `save_simple` profile is created and instantly loaded on game start.
-You can opt to instead offer a profile selector in your note settings file, so
-you can let the user swap between many save files.
+You can opt to instead offer a profile selector in your note settings file, labelled 
+`Save Strategy`, so you can let the user swap between many save files.
 
 After choosing Simple vs Selector strategy, you just need to create a save script
-to 'finish' your setup.
+to 'finish' your setup. It is optional but highly recommended if you want your game
+to have saving and loading persistent data.
 
 In your save script all you need to do is handle loading and saving that specific data,
 and optionally exposing a control to use in the profile selector's face plate.
@@ -202,6 +203,13 @@ and this list only includes method calls, so peek at the docs below for the stan
 nodes and traits.
 
 ```gdscript
+note.save as YourSaveType
+# VERY HANDY! I recommend interacting with your save like this
+# to do things such as read unlocked items for your UIs, or
+# figure out which level to resume at, or even expose
+# settings changing methods in your save type. Such as update_fullscreen_mode
+
+
 note.util.set_fullscreen(flag: note.util.FullscreenState)
 note.util.set_volume(linear_volume: float) # 0.0-1.0 expected, but below and above are valid.
 
@@ -222,7 +230,6 @@ note.phase.end_instant(id)
 
 note.level.change_to(path_or_packed_scene, with_load_screen: bool = false)
 note.level.swap(path_or_packed_scene, with_load_screen: bool = false) -> Variant # Returns the old level rather than deleting it.
-
 ```
 
 ## Doc Guides
@@ -232,6 +239,8 @@ want into your project. Give each doc a small read over to understand what each 
 could do for you and keep them in mind, odds are if you remember Note could do it for you, you end
 up saving hours from writing your own systems.
 
+- [Phases](/documentation/phases.md) RECOMMENDED! These don't get mentioned here but its a very beneficial
+design pattern, which I added due to missing something similar from Unreal Engine.
 - [Save files in depth](/documentation/saves.md) RECOMMENDED
 - [Transitions](/documentation/transitions.md)
 

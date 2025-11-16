@@ -30,6 +30,8 @@ var errors: Dictionary[String,String] = {}
 
 @onready var _nt = get_tree().root.get_node("note")
 
+var _warn_trip: bool = false
+
 ## Pushes a path on the stack of things that should be loaded.
 func push_item(path: String):
 	if is_loading:
@@ -65,8 +67,14 @@ func force_fetch(path: String) -> Variant:
 	if results.has(path):
 		return results[path]
 	else:
-		_nt.warn("A cache fetch was forced. Stutters may result from forcing a fetch.")
-		var result = ResourceLoader.load_threaded_get(path)
+		if !_warn_trip:
+			_nt.warn("A cache fetch was forced. Stutters may result from forcing a fetch.")
+			_warn_trip = true
+		var result
+		if !statuses.has(path) and !statuses_shadows.has(path):
+			result = load(path)
+		else:
+			result = ResourceLoader.load_threaded_get(path)
 		results[path] = result
 		if statuses.has(path):
 			statuses.erase(path)

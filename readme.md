@@ -187,6 +187,11 @@ exists("file") -> bool
 read_object("file") -> Dictionary
 write_object("file", {"data" = 10.0})
 
+# Don't include filetype. looks for "file.tres" and reads/writes it into a dictionary.
+# Note this can be a security issue if you use these in your saves.
+read_resource("file") -> Resource
+write_resource("file", resource)
+
 # Include filetype. looks for "file.txt" and reads it into a String, and opens
 # a FileAccess session when opening one.
 read_file("file.txt") -> String

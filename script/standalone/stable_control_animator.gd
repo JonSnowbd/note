@@ -15,7 +15,6 @@ var origin: Vector2 = Vector2(0.5, 0.5) :
 		if origin != val:
 			origin = val
 			target.pivot_offset = target.size * origin
-			print("Offset: %.2f %.2f" % [target.pivot_offset.x, target.pivot_offset.y])
 var offset: Vector2 = Vector2.ZERO :
 	set(val):
 		if offset != val:

@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://b462c8r1fefc6"]
+
+[ext_resource type="Script" uid="uid://dhlhfgqm8lt2v" path="res://addons/note/prefab/panel_screens/journal.gd" id="1_l6bad"]
+
+[node name="Journal" type="MarginContainer" unique_id=144243765]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_l6bad")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1299023353]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer" unique_id=873519175]
+layout_mode = 2
+
+[node name="Tree" type="Tree" parent="HBoxContainer/PanelContainer" unique_id=1226379467]
+layout_mode = 2

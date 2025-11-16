@@ -10,21 +10,21 @@ of slight freedom in the initialization of your app.
 For trading off some installation time and learning how to structure a save file(it's
 easy, I promise!) you get:
 
-1) Very flexible and customizable transition system that lets you trigger
+- Very flexible and customizable transition system that lets you trigger
 a transition anywhere anytime, even outside of loading a new level or changing view.
-2) Simple Mouse+Keyboard and Gamepad coexistance with logic nodes to help organize
+- Simple Mouse+Keyboard and Gamepad coexistance with logic nodes to help organize
 very clean gamepad UI interactions.
-3) Automatic loading behaviours including loading screen and level changer, that all
+- Automatic loading behaviours including loading screen and level changer, that all
 work together to make your game seamless, and handle better practices for you, such as
 asynchronous loading screens, and background pre-loading.
-4) A new Godot tab with goodies such as a GDScript playground, a Note help page, and more
+- A new Godot tab with goodies such as a GDScript playground, a Note help page, and more
 to come.
-5) An organized logic chain system for orchestrating your game interactions.
-6) A collection of very commonplace UI Elements ready to use out of the box, such as
+- An organized logic chain system for orchestrating your game interactions.
+- A collection of very commonplace UI Elements ready to use out of the box, such as
 control guides and tooltips.
-7) Oh, and an extremely easy and convenient way to modify your types to have custom editors.
+- Oh, and an extremely easy and convenient way to modify your types to have custom editors.
 Realizing I could do this in Note and never have to make a EditorInspectorPlugin again was really fun.
-8) And lots of standalone node types and utility functions that cover, and much more.
+- And lots of standalone node types and utility functions that cover, and much more.
 
 ---
 

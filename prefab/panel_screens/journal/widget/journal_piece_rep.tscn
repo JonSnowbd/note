@@ -1,0 +1,120 @@
+[gd_scene load_steps=3 format=3 uid="uid://c12t5bm70xgkb"]
+
+[ext_resource type="Script" uid="uid://c61suun3gwlta" path="res://addons/note/prefab/panel_screens/journal/widget/journal_piece_rep.gd" id="1_nllul"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_p070c"]
+font_size = 10
+
+[node name="JournalPieceRep" type="MarginContainer" unique_id=2059364346 node_paths=PackedStringArray("root", "edit_button", "title_label", "popup", "editor_root", "done_button", "delete_button", "up_add", "down_add", "alpha_root", "title_edit")]
+offset_right = 408.0
+offset_bottom = 60.0
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+script = ExtResource("1_nllul")
+root = NodePath("HBoxContainer/VBoxContainer/Root")
+edit_button = NodePath("HBoxContainer/MarginContainer/VBoxContainer/Button")
+title_label = NodePath("HBoxContainer/VBoxContainer/MarginContainer/Title")
+popup = NodePath("PopupPanel")
+editor_root = NodePath("PopupPanel/MarginContainer/VBoxContainer/MarginContainer")
+done_button = NodePath("PopupPanel/MarginContainer/VBoxContainer/HBoxContainer/Done")
+delete_button = NodePath("PopupPanel/MarginContainer/VBoxContainer/HBoxContainer/Delete")
+up_add = NodePath("HBoxContainer/MarginContainer/VBoxContainer/Button2")
+down_add = NodePath("HBoxContainer/MarginContainer/VBoxContainer/Button3")
+alpha_root = NodePath("HBoxContainer/MarginContainer")
+title_edit = NodePath("PopupPanel/MarginContainer/VBoxContainer/LineEdit")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1878719288]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer" unique_id=259319515]
+modulate = Color(1, 1, 1, 0.15)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_constants/margin_left = -128
+
+[node name="VBoxContainer" type="HBoxContainer" parent="HBoxContainer/MarginContainer" unique_id=827308704]
+layout_mode = 2
+alignment = 1
+
+[node name="Button2" type="Button" parent="HBoxContainer/MarginContainer/VBoxContainer" unique_id=78066780]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "^"
+
+[node name="Button3" type="Button" parent="HBoxContainer/MarginContainer/VBoxContainer" unique_id=1394599088]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "v"
+
+[node name="Button" type="Button" parent="HBoxContainer/MarginContainer/VBoxContainer" unique_id=2026976854]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Edit"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1429416246]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer" unique_id=2133414840]
+layout_mode = 2
+theme_override_constants/margin_top = -4
+theme_override_constants/margin_bottom = -4
+
+[node name="Title" type="Label" parent="HBoxContainer/VBoxContainer/MarginContainer" unique_id=2056553408]
+modulate = Color(1, 1, 1, 0.5764706)
+layout_mode = 2
+text = "Piece Title"
+label_settings = SubResource("LabelSettings_p070c")
+
+[node name="Root" type="MarginContainer" parent="HBoxContainer/VBoxContainer" unique_id=1585880704]
+layout_mode = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Root" unique_id=801595198]
+layout_mode = 2
+text = "Hello :)))"
+
+[node name="PopupPanel" type="PopupPanel" parent="." unique_id=1375566815]
+oversampling_override = 1.0
+position = Vector2i(0, 113)
+size = Vector2i(334, 375)
+
+[node name="MarginContainer" type="MarginContainer" parent="PopupPanel" unique_id=646857416]
+offset_left = 9.0
+offset_top = 9.0
+offset_right = 325.0
+offset_bottom = 366.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PopupPanel/MarginContainer" unique_id=1337069949]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="PopupPanel/MarginContainer/VBoxContainer" unique_id=88538990]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PopupPanel/MarginContainer/VBoxContainer" unique_id=1861455809]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PopupPanel/MarginContainer/VBoxContainer" unique_id=1523380010]
+layout_mode = 2
+
+[node name="Done" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1528380381]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Done"
+
+[node name="Delete" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1870409742]
+layout_mode = 2
+text = "Delete"

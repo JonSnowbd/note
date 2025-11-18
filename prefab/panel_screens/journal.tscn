@@ -1,20 +1,126 @@
-[gd_scene load_steps=2 format=3 uid="uid://b462c8r1fefc6"]
+[gd_scene load_steps=4 format=3 uid="uid://b462c8r1fefc6"]
 
 [ext_resource type="Script" uid="uid://dhlhfgqm8lt2v" path="res://addons/note/prefab/panel_screens/journal.gd" id="1_l6bad"]
+[ext_resource type="StyleBox" uid="uid://ry6d4ehefa45" path="res://addons/note/resource/journal/side_panel.tres" id="2_5m01r"]
+[ext_resource type="StyleBox" uid="uid://c8ijl2ti0ma4c" path="res://addons/note/resource/journal/document_ui_panel.tres" id="2_lvjbj"]
 
-[node name="Journal" type="MarginContainer" unique_id=144243765]
+[node name="Journal" type="MarginContainer" unique_id=144243765 node_paths=PackedStringArray("tree", "create_button", "save_button", "delete_button", "widget_palette", "widget_popup", "current_document_root")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_l6bad")
+piece_prefabs = Array[String](["uid://btvdvje538ery"])
+tree = NodePath("HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/Tree")
+create_button = NodePath("HBoxContainer/PanelContainer/VBoxContainer/MarginContainer/HBoxContainer/Button")
+save_button = NodePath("HBoxContainer/PanelContainer/VBoxContainer/MarginContainer/HBoxContainer/Button3")
+delete_button = NodePath("HBoxContainer/PanelContainer/VBoxContainer/MarginContainer/HBoxContainer/Button2")
+widget_palette = NodePath("AddPiece/ScrollContainer/VBoxContainer")
+widget_popup = NodePath("AddPiece")
+current_document_root = NodePath("HBoxContainer/MainScreen/ScrollContainer/MarginContainer/PanelContainer")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1299023353]
+[node name="HBoxContainer" type="HSplitContainer" parent="." unique_id=2140247524]
 layout_mode = 2
+theme_override_constants/separation = 0
+split_offset = 180
 
 [node name="PanelContainer" type="PanelContainer" parent="HBoxContainer" unique_id=873519175]
 layout_mode = 2
+theme_override_styles/panel = ExtResource("2_5m01r")
 
-[node name="Tree" type="Tree" parent="HBoxContainer/PanelContainer" unique_id=1226379467]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/PanelContainer" unique_id=1916546760]
 layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer/PanelContainer/VBoxContainer" unique_id=501427066]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2" unique_id=1577530397]
+layout_mode = 2
+
+[node name="Tree" type="Tree" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=1226379467]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/PanelContainer/VBoxContainer" unique_id=443871935]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer" unique_id=238379724]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=1913436664]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "Create"
+
+[node name="Button3" type="Button" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=1695097384]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "Save"
+
+[node name="Button2" type="Button" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=597493267]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "Delete"
+
+[node name="MainScreen" type="MarginContainer" parent="HBoxContainer" unique_id=1799303417]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/MainScreen" unique_id=903641233]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MainScreen/ScrollContainer" unique_id=1976952357]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/MainScreen/ScrollContainer/MarginContainer" unique_id=249523105]
+custom_minimum_size = Vector2(450, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = ExtResource("2_lvjbj")
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MainScreen/ScrollContainer/MarginContainer/PanelContainer" unique_id=790982409]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="AddPiece" type="PopupPanel" parent="." unique_id=1731411541]
+oversampling_override = 1.0
+title = "Add a new piece"
+size = Vector2i(300, 100)
+
+[node name="ScrollContainer" type="ScrollContainer" parent="AddPiece" unique_id=1837424158]
+offset_left = 9.0
+offset_top = 9.0
+offset_right = 291.0
+offset_bottom = 91.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="AddPiece/ScrollContainer" unique_id=1762135881]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3

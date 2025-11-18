@@ -12,16 +12,19 @@ func _serialize() -> Dictionary:
 		"title" = title,
 		"text" = text,
 	}
-func _initial_data():
+func _first_time_setup():
 	title = tr("New Paragraph")
+	text = tr("Double Click to Edit")
 func _deserialize(data: Dictionary):
 	uuid = data["_uuid"]
 	text = data.get_or_add("text", "")
 	title = data.get_or_add("title", tr("New Paragraph"))
-func _make_entry() -> Button:
-	var btn = Button.new()
-	btn.text = tr("Paragraph")
-	return btn
+func _make_entry() -> Control:
+	var panel = PanelContainer.new()
+	var panel_label = Label.new()
+	panel_label.text = tr("Paragraph")
+	panel.add_child(panel_label)
+	return panel
 func _make_rep() -> Control:
 	label = RichTextLabel.new()
 	label.text = text

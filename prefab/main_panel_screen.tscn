@@ -1,6 +1,5 @@
-[gd_scene load_steps=4 format=3 uid="uid://1baqu2co3orh"]
+[gd_scene load_steps=3 format=3 uid="uid://1baqu2co3orh"]
 
-[ext_resource type="PackedScene" uid="uid://b462c8r1fefc6" path="res://addons/note/prefab/panel_screens/journal.tscn" id="1_fg274"]
 [ext_resource type="PackedScene" uid="uid://dthkt8pfqui48" path="res://addons/note/prefab/panel_screens/lab.tscn" id="1_ynbih"]
 [ext_resource type="PackedScene" uid="uid://cshopuvfrlqae" path="res://addons/note/prefab/panel_screens/help.tscn" id="2_o66sy"]
 
@@ -14,16 +13,10 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 current_tab = 0
 
-[node name="Journal" parent="." unique_id=144243765 instance=ExtResource("1_fg274")]
+[node name="GDScript Lab" parent="." unique_id=1339672251 instance=ExtResource("1_ynbih")]
 layout_mode = 2
 metadata/_tab_index = 0
-
-[node name="GDScript Lab" parent="." unique_id=1339672251 instance=ExtResource("1_ynbih")]
-visible = false
-layout_mode = 2
-metadata/_tab_index = 1
 
 [node name="Help" parent="." unique_id=719916253 instance=ExtResource("2_o66sy")]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 2

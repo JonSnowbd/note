@@ -1,0 +1,128 @@
+[gd_scene load_steps=7 format=3 uid="uid://b06cv7xb1pnpj"]
+
+[ext_resource type="Script" uid="uid://dhlhfgqm8lt2v" path="res://addons/note/prefab/panel_screens/journal/widget/journal_viewer.gd" id="1_swfht"]
+[ext_resource type="Script" uid="uid://ccoqbmnhankcb" path="res://addons/note/prefab/panel_screens/journal/journal_document.gd" id="2_ory86"]
+[ext_resource type="Script" uid="uid://pujdv5md856a" path="res://addons/note/prefab/panel_screens/journal/journal_resource.gd" id="3_d5hwy"]
+[ext_resource type="Script" uid="uid://de3kfjdah75f0" path="res://addons/note/prefab/panel_screens/journal/widget/journal_dropper.gd" id="4_v78mr"]
+
+[sub_resource type="Resource" id="Resource_h7ung"]
+script = ExtResource("2_ory86")
+uuid = "efjkqwjfewfjwejk"
+piece_data = Array[Dictionary]([{
+"_script": "uid://btvdvje538ery",
+"_uuid": "dfejkfqjeklfqjk",
+"text": "Wow, it worked!",
+"title": "Intro"
+}])
+metadata/_custom_type_script = "uid://ccoqbmnhankcb"
+
+[sub_resource type="Resource" id="Resource_u4l70"]
+script = ExtResource("3_d5hwy")
+documents = Array[ExtResource("2_ory86")]([SubResource("Resource_h7ung")])
+metadata/_custom_type_script = "uid://pujdv5md856a"
+
+[node name="JournalViewer" type="PanelContainer" unique_id=1163786821 node_paths=PackedStringArray("document_viewing_root", "show_on_open_document", "document_tree", "create_document_button", "save_document_button", "delete_document_button", "widget_palette_root", "widget_palette")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_swfht")
+initial_journal = SubResource("Resource_u4l70")
+list_of_widgets = Array[String](["uid://tkfiwacw0387", "uid://btvdvje538ery"])
+document_viewing_root = NodePath("HBoxContainer/HSplitContainer/Viewer/SpaceDown/PagePanel/Padding/Pieces")
+show_on_open_document = NodePath("HBoxContainer/HSplitContainer/Viewer/SpaceDown/PagePanel")
+document_tree = NodePath("HBoxContainer/HSplitContainer/PanelContainer/VBoxContainer/Tree")
+create_document_button = NodePath("HBoxContainer/HSplitContainer/PanelContainer/VBoxContainer/HBoxContainer/Create")
+save_document_button = NodePath("HBoxContainer/HSplitContainer/PanelContainer/VBoxContainer/Save")
+delete_document_button = NodePath("HBoxContainer/HSplitContainer/PanelContainer/VBoxContainer/HBoxContainer/Delete")
+widget_palette_root = NodePath("WidgetPalette")
+widget_palette = NodePath("WidgetPalette/VBoxContainer")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=621436682]
+layout_mode = 2
+
+[node name="HSplitContainer" type="HSplitContainer" parent="HBoxContainer" unique_id=1589487217]
+layout_mode = 2
+size_flags_horizontal = 3
+drag_area_highlight_in_editor = true
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/HSplitContainer" unique_id=1056629386]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/HSplitContainer/PanelContainer" unique_id=2006979096]
+layout_mode = 2
+
+[node name="Save" type="Button" parent="HBoxContainer/HSplitContainer/PanelContainer/VBoxContainer" unique_id=1951068448]
+visible = false
+layout_mode = 2
+text = "Force Save"
+
+[node name="Tree" type="Tree" parent="HBoxContainer/HSplitContainer/PanelContainer/VBoxContainer" unique_id=1456884570]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 3
+enable_recursive_folding = false
+hide_root = true
+select_mode = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/HSplitContainer/PanelContainer/VBoxContainer" unique_id=838358583]
+layout_mode = 2
+
+[node name="Create" type="Button" parent="HBoxContainer/HSplitContainer/PanelContainer/VBoxContainer/HBoxContainer" unique_id=1803539498]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Create"
+
+[node name="Delete" type="Button" parent="HBoxContainer/HSplitContainer/PanelContainer/VBoxContainer/HBoxContainer" unique_id=667689263]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Delete"
+
+[node name="Viewer" type="ScrollContainer" parent="HBoxContainer/HSplitContainer" unique_id=405397409]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 4
+
+[node name="SpaceDown" type="MarginContainer" parent="HBoxContainer/HSplitContainer/Viewer" unique_id=1520180388]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_bottom = 400
+
+[node name="PagePanel" type="PanelContainer" parent="HBoxContainer/HSplitContainer/Viewer/SpaceDown" unique_id=435647194]
+visible = false
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+mouse_filter = 2
+
+[node name="Padding" type="MarginContainer" parent="HBoxContainer/HSplitContainer/Viewer/SpaceDown/PagePanel" unique_id=669147389]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="Pieces" type="VBoxContainer" parent="HBoxContainer/HSplitContainer/Viewer/SpaceDown/PagePanel/Padding" unique_id=1748019851]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="WidgetPalette" type="PanelContainer" parent="." unique_id=509435816]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WidgetPalette" unique_id=1857197467]
+layout_mode = 2
+
+[node name="Dropper" type="MarginContainer" parent="." unique_id=312380946 node_paths=PackedStringArray("container")]
+visible = false
+layout_mode = 2
+script = ExtResource("4_v78mr")
+container = NodePath("../HBoxContainer/HSplitContainer/Viewer/SpaceDown/PagePanel/Padding/Pieces")
+
+[connection signal="piece_request" from="Dropper" to="." method="_new_piece_request"]

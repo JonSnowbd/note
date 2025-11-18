@@ -1,0 +1,97 @@
+[gd_scene load_steps=3 format=3 uid="uid://ckof76baydwrj"]
+
+[ext_resource type="Script" uid="uid://cwfd3k4c5ishh" path="res://addons/note/prefab/panel_screens/journal/widget/chunk_editor.gd" id="1_3wq0a"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_uaucb"]
+font_size = 10
+
+[node name="ChunkEditor" type="MarginContainer" unique_id=232507002 node_paths=PackedStringArray("viewer_slot", "editor_slot", "chunk_label", "edit_button", "background_panel", "chunk_content_root", "chunk_editor_root", "chunk_editor_title_edit", "chunk_editor_done_button", "chunk_editor_delete_button")]
+custom_minimum_size = Vector2(175, 0)
+offset_right = 450.0
+offset_bottom = 185.0
+size_flags_horizontal = 3
+script = ExtResource("1_3wq0a")
+viewer_slot = NodePath("Background/InnerPadding/HBoxContainer/VBoxContainer/ChunkViewerPanel")
+editor_slot = NodePath("Background/InnerPadding/HBoxContainer/VBoxContainer/ChunkEditorTools/PanelContainer/MarginContainer/VBoxContainer/EditorSlot")
+chunk_label = NodePath("Background/InnerPadding/HBoxContainer/VBoxContainer/ChunkLabel")
+edit_button = NodePath("Background/InnerPadding/HBoxContainer/Button")
+background_panel = NodePath("Background")
+chunk_content_root = NodePath("Background/InnerPadding/HBoxContainer/VBoxContainer/ChunkViewerPanel")
+chunk_editor_root = NodePath("Background/InnerPadding/HBoxContainer/VBoxContainer/ChunkEditorTools")
+chunk_editor_title_edit = NodePath("Background/InnerPadding/HBoxContainer/VBoxContainer/ChunkEditorTools/PanelContainer/MarginContainer/VBoxContainer/TitleEdit")
+chunk_editor_done_button = NodePath("Background/InnerPadding/HBoxContainer/VBoxContainer/ChunkEditorTools/PanelContainer/MarginContainer/VBoxContainer/Actions/Done")
+chunk_editor_delete_button = NodePath("Background/InnerPadding/HBoxContainer/VBoxContainer/ChunkEditorTools/PanelContainer/MarginContainer/VBoxContainer/Actions/Delete")
+
+[node name="Background" type="PanelContainer" parent="." unique_id=45723801]
+layout_mode = 2
+
+[node name="InnerPadding" type="MarginContainer" parent="Background" unique_id=1707709430]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Background/InnerPadding" unique_id=1764277992]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/InnerPadding/HBoxContainer" unique_id=1473150896]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ChunkLabel" type="Label" parent="Background/InnerPadding/HBoxContainer/VBoxContainer" unique_id=874493671]
+self_modulate = Color(1, 1, 1, 0.5019608)
+layout_mode = 2
+text = "Label of the Chunk"
+label_settings = SubResource("LabelSettings_uaucb")
+
+[node name="ChunkViewerPanel" type="MarginContainer" parent="Background/InnerPadding/HBoxContainer/VBoxContainer" unique_id=1168059441]
+visible = false
+layout_mode = 2
+
+[node name="ChunkEditorTools" type="MarginContainer" parent="Background/InnerPadding/HBoxContainer/VBoxContainer" unique_id=1449057743]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="PanelContainer" type="PanelContainer" parent="Background/InnerPadding/HBoxContainer/VBoxContainer/ChunkEditorTools" unique_id=110948148]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Background/InnerPadding/HBoxContainer/VBoxContainer/ChunkEditorTools/PanelContainer" unique_id=1731736040]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/InnerPadding/HBoxContainer/VBoxContainer/ChunkEditorTools/PanelContainer/MarginContainer" unique_id=1242534823]
+layout_mode = 2
+
+[node name="TitleEdit" type="LineEdit" parent="Background/InnerPadding/HBoxContainer/VBoxContainer/ChunkEditorTools/PanelContainer/MarginContainer/VBoxContainer" unique_id=1933135842]
+layout_mode = 2
+
+[node name="EditorSlot" type="MarginContainer" parent="Background/InnerPadding/HBoxContainer/VBoxContainer/ChunkEditorTools/PanelContainer/MarginContainer/VBoxContainer" unique_id=1565834791]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Actions" type="HBoxContainer" parent="Background/InnerPadding/HBoxContainer/VBoxContainer/ChunkEditorTools/PanelContainer/MarginContainer/VBoxContainer" unique_id=1933149410]
+layout_mode = 2
+
+[node name="Done" type="Button" parent="Background/InnerPadding/HBoxContainer/VBoxContainer/ChunkEditorTools/PanelContainer/MarginContainer/VBoxContainer/Actions" unique_id=498040461]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Done"
+
+[node name="Delete" type="Button" parent="Background/InnerPadding/HBoxContainer/VBoxContainer/ChunkEditorTools/PanelContainer/MarginContainer/VBoxContainer/Actions" unique_id=2034937648]
+layout_mode = 2
+text = "Delete"
+
+[node name="Button" type="Button" parent="Background/InnerPadding/HBoxContainer" unique_id=1290660117]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "E"

@@ -3,25 +3,28 @@ extends NoteJournalResource.Piece
 
 var text: String
 var label: RichTextLabel
-var edit: CodeEdit
+var edit: LineEdit
 
 func _serialize() -> Dictionary:
 	return {
 		"_uuid" = uuid,
-		"_type" = "uid://btvdvje538ery",
+		"_type" = "uid://tkfiwacw0387",
 		"title" = title,
 		"text" = text,
 	}
-func _initial_data():
-	title = tr("New Paragraph")
+func _first_time_setup():
+	title = tr("New Title")
+	text = tr("Edit me")
 func _deserialize(data: Dictionary):
 	uuid = data["_uuid"]
 	text = data.get_or_add("text", "")
-	title = data.get_or_add("title", tr("New Paragraph"))
-func _make_entry() -> Button:
-	var btn = Button.new()
-	btn.text = tr("Paragraph")
-	return btn
+	title = data.get_or_add("title", tr("New Title"))
+func _make_entry() -> Control:
+	var panel = PanelContainer.new()
+	var panel_label = Label.new()
+	panel_label.text = tr("Title")
+	panel.add_child(panel_label)
+	return panel
 func _make_rep() -> Control:
 	label = RichTextLabel.new()
 	label.text = text
@@ -29,13 +32,11 @@ func _make_rep() -> Control:
 	label.bbcode_enabled = true
 	return label
 func _make_editor() -> Control:
-	edit = CodeEdit.new()
+	edit = LineEdit.new()
 	edit.text = text
 	edit.text_changed.connect(update_value)
-	edit.gutters_draw_line_numbers = true
 	return edit
-func _update():
-	label.text = text
 
-func update_value():
-	label.text = edit.text
+func update_value(new_string: String):
+	text = new_string
+	label.text = new_string

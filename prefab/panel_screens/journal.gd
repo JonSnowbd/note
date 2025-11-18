@@ -81,6 +81,7 @@ func show_all_editors_but(choice: PieceWidgetType):
 func _process(delta: float) -> void:
 	if delete_timeout >= 0.0:
 		delete_timeout -= delta
+func _physics_process(delta: float) -> void:
 	if widget_popup.visible:
 		if !is_instance_valid(anchor_node):
 			anchor_node = null
@@ -89,6 +90,7 @@ func _process(delta: float) -> void:
 		if Engine.is_editor_hint():
 			var vp = get_window().position
 			widget_popup.position += vp
+	
 func update_widget_palette():
 	for item in widget_palette.get_children():
 		item.queue_free()
@@ -184,10 +186,7 @@ func sync_data_back_to_document():
 	if current_document == null:
 		return
 	for c: PieceWidgetType in current_representations:
-		var data = c.reference._serialize()
-		for i in range(len(current_document.pieces)):
-			if current_document.pieces[i]["_uuid"] == data["_uuid"]:
-				current_document.pieces[i] = data
+		c.reference.forward_changes_to_document()
 		
 func refresh_document():
 	sync_data_back_to_document()
@@ -227,6 +226,7 @@ func open_document(doc: NoteJournalDocument):
 		new_piece.set_script(piece_script)
 		if new_piece is NoteJournalResource.Piece:
 			new_piece.root = journal
+			new_piece.document = doc
 			new_piece._deserialize(p)
 		var rep: PieceWidgetType = PieceWidget.instantiate()
 		rep.reference = new_piece as NoteJournalResource.Piece

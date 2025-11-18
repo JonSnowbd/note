@@ -5,7 +5,7 @@
 [sub_resource type="LabelSettings" id="LabelSettings_p070c"]
 font_size = 10
 
-[node name="JournalPieceRep" type="MarginContainer" unique_id=2059364346 node_paths=PackedStringArray("root", "edit_button", "title_label", "popup", "editor_root", "done_button", "delete_button", "up_add", "down_add", "alpha_root", "title_edit")]
+[node name="JournalPieceRep" type="MarginContainer" unique_id=2059364346 node_paths=PackedStringArray("root", "edit_button", "title_label", "popup", "editor_root", "done_button", "delete_button", "up_add", "down_add", "alpha_root", "title_edit", "editor_handle", "editor_popup_home", "inline_edit_home")]
 offset_right = 408.0
 offset_bottom = 60.0
 size_flags_horizontal = 3
@@ -25,6 +25,9 @@ up_add = NodePath("HBoxContainer/MarginContainer/VBoxContainer/Button2")
 down_add = NodePath("HBoxContainer/MarginContainer/VBoxContainer/Button3")
 alpha_root = NodePath("HBoxContainer/MarginContainer")
 title_edit = NodePath("PopupPanel/MarginContainer/VBoxContainer/LineEdit")
+editor_handle = NodePath("PopupPanel/MarginContainer/VBoxContainer")
+editor_popup_home = NodePath("PopupPanel/MarginContainer")
+inline_edit_home = NodePath("HBoxContainer/VBoxContainer/PanelContainer")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1878719288]
 layout_mode = 2
@@ -70,7 +73,7 @@ theme_override_constants/margin_top = -4
 theme_override_constants/margin_bottom = -4
 
 [node name="Title" type="Label" parent="HBoxContainer/VBoxContainer/MarginContainer" unique_id=2056553408]
-modulate = Color(1, 1, 1, 0.5764706)
+modulate = Color(1, 1, 1, 0.6039216)
 layout_mode = 2
 text = "Piece Title"
 label_settings = SubResource("LabelSettings_p070c")
@@ -86,16 +89,20 @@ theme_override_constants/margin_bottom = 0
 layout_mode = 2
 text = "Hello :)))"
 
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/VBoxContainer" unique_id=1951199434]
+layout_mode = 2
+
 [node name="PopupPanel" type="PopupPanel" parent="." unique_id=1375566815]
 oversampling_override = 1.0
-position = Vector2i(0, 113)
-size = Vector2i(334, 375)
+position = Vector2i(1920, 83)
+size = Vector2i(408, 375)
+visible = true
 
 [node name="MarginContainer" type="MarginContainer" parent="PopupPanel" unique_id=646857416]
-offset_left = 9.0
-offset_top = 9.0
-offset_right = 325.0
-offset_bottom = 366.0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 396.0
+offset_bottom = 363.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PopupPanel/MarginContainer" unique_id=1337069949]
 layout_mode = 2

@@ -16,6 +16,7 @@ class Piece extends Object:
 	var title: String
 	var uuid: String
 	var root: NoteJournalResource
+	var document: NoteJournalDocument
 	func _initial_data():
 		pass
 	func _serialize() -> Dictionary:
@@ -28,8 +29,11 @@ class Piece extends Object:
 		return null
 	func _make_editor() -> Control:
 		return null
-	func _update():
-		pass
+	func forward_changes_to_document():
+		for i in range(len(document.pieces)):
+			if document.pieces[i]["_uuid"] == uuid:
+				document.pieces[i] = _serialize()
+				break
 
 func set_word(word: String, val: Variant):
 	words[word] = val

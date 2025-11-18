@@ -35,6 +35,7 @@ func _make_editor() -> Control:
 	edit.gutters_draw_line_numbers = true
 	edit.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
 	edit.autowrap_mode = TextServer.AUTOWRAP_WORD
+	edit.scroll_fit_content_height = true
 	return edit
 func _update():
 	label.text = text

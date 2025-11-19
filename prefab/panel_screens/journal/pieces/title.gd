@@ -2,7 +2,7 @@
 extends NoteJournalResource.Piece
 
 var text: String
-var label: RichTextLabel
+var label: Label
 var edit: LineEdit
 
 func _serialize() -> Dictionary:
@@ -26,10 +26,8 @@ func _make_entry() -> Control:
 	panel.add_child(panel_label)
 	return panel
 func _make_rep() -> Control:
-	label = RichTextLabel.new()
+	label = Label.new()
 	label.text = text
-	label.fit_content = true
-	label.bbcode_enabled = true
 	return label
 func _make_editor() -> Control:
 	edit = LineEdit.new()

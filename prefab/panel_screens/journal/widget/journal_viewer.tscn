@@ -32,12 +32,12 @@ initial_journal = SubResource("Resource_u4l70")
 list_of_widgets = Array[String](["uid://tkfiwacw0387", "uid://btvdvje538ery"])
 document_viewing_root = NodePath("HBoxContainer/HSplitContainer/Viewer/SpaceDown/PagePanel/Padding/Pieces")
 show_on_open_document = NodePath("HBoxContainer/HSplitContainer/Viewer/SpaceDown/PagePanel")
-document_tree = NodePath("HBoxContainer/HSplitContainer/PanelContainer/VBoxContainer/Tree")
-create_document_button = NodePath("HBoxContainer/HSplitContainer/PanelContainer/VBoxContainer/HBoxContainer/Create")
-save_document_button = NodePath("HBoxContainer/HSplitContainer/PanelContainer/VBoxContainer/Save")
-delete_document_button = NodePath("HBoxContainer/HSplitContainer/PanelContainer/VBoxContainer/HBoxContainer/Delete")
+document_tree = NodePath("HBoxContainer/HSplitContainer/PanelContainer/MarginContainer/VBoxContainer/Tree")
+create_document_button = NodePath("HBoxContainer/HSplitContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/Create")
+save_document_button = NodePath("HBoxContainer/HSplitContainer/PanelContainer/MarginContainer/VBoxContainer/Save")
+delete_document_button = NodePath("HBoxContainer/HSplitContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/Delete")
 widget_palette_root = NodePath("WidgetPalette")
-widget_palette = NodePath("WidgetPalette/VBoxContainer")
+widget_palette = NodePath("WidgetPalette/ScrollContainer/MarginContainer/VBoxContainer")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=621436682]
 layout_mode = 2
@@ -50,15 +50,22 @@ drag_area_highlight_in_editor = true
 [node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/HSplitContainer" unique_id=1056629386]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/HSplitContainer/PanelContainer" unique_id=2006979096]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/HSplitContainer/PanelContainer" unique_id=1597394446]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/HSplitContainer/PanelContainer/MarginContainer" unique_id=2006979096]
 layout_mode = 2
 
-[node name="Save" type="Button" parent="HBoxContainer/HSplitContainer/PanelContainer/VBoxContainer" unique_id=1951068448]
+[node name="Save" type="Button" parent="HBoxContainer/HSplitContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1951068448]
 visible = false
 layout_mode = 2
 text = "Force Save"
 
-[node name="Tree" type="Tree" parent="HBoxContainer/HSplitContainer/PanelContainer/VBoxContainer" unique_id=1456884570]
+[node name="Tree" type="Tree" parent="HBoxContainer/HSplitContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1456884570]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_vertical = 3
@@ -66,15 +73,15 @@ enable_recursive_folding = false
 hide_root = true
 select_mode = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/HSplitContainer/PanelContainer/VBoxContainer" unique_id=838358583]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/HSplitContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=838358583]
 layout_mode = 2
 
-[node name="Create" type="Button" parent="HBoxContainer/HSplitContainer/PanelContainer/VBoxContainer/HBoxContainer" unique_id=1803539498]
+[node name="Create" type="Button" parent="HBoxContainer/HSplitContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1803539498]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Create"
 
-[node name="Delete" type="Button" parent="HBoxContainer/HSplitContainer/PanelContainer/VBoxContainer/HBoxContainer" unique_id=667689263]
+[node name="Delete" type="Button" parent="HBoxContainer/HSplitContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=667689263]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Delete"
@@ -92,7 +99,6 @@ theme_override_constants/margin_top = 32
 theme_override_constants/margin_bottom = 400
 
 [node name="PagePanel" type="PanelContainer" parent="HBoxContainer/HSplitContainer/Viewer/SpaceDown" unique_id=435647194]
-visible = false
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -116,7 +122,20 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="WidgetPalette" unique_id=1857197467]
+[node name="ScrollContainer" type="ScrollContainer" parent="WidgetPalette" unique_id=147218688]
+layout_mode = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="WidgetPalette/ScrollContainer" unique_id=986011718]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WidgetPalette/ScrollContainer/MarginContainer" unique_id=1857197467]
 layout_mode = 2
 
 [node name="Dropper" type="MarginContainer" parent="." unique_id=312380946 node_paths=PackedStringArray("container")]

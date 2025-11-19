@@ -10,7 +10,9 @@ func _notification(what: int) -> void:
 		show()
 	if what == NOTIFICATION_DRAG_END:
 		hide()
-
+func _is_valid_drop() -> bool:
+	var distance_from_center = abs((container.size.x*0.5) - container.get_local_mouse_position().x)
+	return distance_from_center < 200.0
 func _get_index() -> int:
 	var index = 0
 	for child in container.get_children():
@@ -21,13 +23,15 @@ func _get_index() -> int:
 	return index
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	queue_redraw()
-	return data is String
+	return _is_valid_drop() and data is String
 
 func _drop_data(at_position: Vector2, data: Variant) -> void:
 	piece_request.emit(_get_index(), data as String)
 
 func _draw() -> void:
 	if container == null: return
+	if !_is_valid_drop():
+		return
 	if container.get_child_count() == 0:
 		draw_line(container.global_position, container.global_position+container.size*Vector2(1.0, 0.0), Color.YELLOW, 2)
 		return

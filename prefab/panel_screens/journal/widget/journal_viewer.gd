@@ -129,7 +129,7 @@ func create_document():
 	var selected_document = document_tree.get_selected()
 	if selected_document != null:
 		parent = current_journal.find_document_by_uuid(selected_document.get_metadata(0))
-	current_journal.create_new_document("New Document", parent)
+	current_journal.create_new_document(tr("New Document"), parent)
 
 func delete_document():
 	if _delete_timeout < 0.0:

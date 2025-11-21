@@ -1,34 +1,18 @@
-[gd_scene load_steps=7 format=3 uid="uid://b06cv7xb1pnpj"]
+[gd_scene load_steps=4 format=3 uid="uid://b06cv7xb1pnpj"]
 
+[ext_resource type="Theme" uid="uid://s8avb4vk6ef6" path="res://addons/note/resource/note_ui/note_ui.tres" id="1_ory86"]
 [ext_resource type="Script" uid="uid://dhlhfgqm8lt2v" path="res://addons/note/prefab/panel_screens/journal/widget/journal_viewer.gd" id="1_swfht"]
-[ext_resource type="Script" uid="uid://ccoqbmnhankcb" path="res://addons/note/prefab/panel_screens/journal/journal_document.gd" id="2_ory86"]
-[ext_resource type="Script" uid="uid://pujdv5md856a" path="res://addons/note/prefab/panel_screens/journal/journal_resource.gd" id="3_d5hwy"]
 [ext_resource type="Script" uid="uid://de3kfjdah75f0" path="res://addons/note/prefab/panel_screens/journal/widget/journal_dropper.gd" id="4_v78mr"]
 
-[sub_resource type="Resource" id="Resource_h7ung"]
-script = ExtResource("2_ory86")
-uuid = "efjkqwjfewfjwejk"
-piece_data = Array[Dictionary]([{
-"_script": "uid://btvdvje538ery",
-"_uuid": "dfejkfqjeklfqjk",
-"text": "Wow, it worked!",
-"title": "Intro"
-}])
-metadata/_custom_type_script = "uid://ccoqbmnhankcb"
-
-[sub_resource type="Resource" id="Resource_u4l70"]
-script = ExtResource("3_d5hwy")
-documents = Array[ExtResource("2_ory86")]([SubResource("Resource_h7ung")])
-metadata/_custom_type_script = "uid://pujdv5md856a"
-
 [node name="JournalViewer" type="PanelContainer" unique_id=1163786821 node_paths=PackedStringArray("document_viewing_root", "show_on_open_document", "document_tree", "create_document_button", "save_document_button", "delete_document_button", "widget_palette_root", "widget_palette")]
+clip_children = 2
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_ory86")
 script = ExtResource("1_swfht")
-initial_journal = SubResource("Resource_u4l70")
 list_of_widgets = Array[String](["uid://tkfiwacw0387", "uid://btvdvje538ery"])
 document_viewing_root = NodePath("HBoxContainer/HSplitContainer/Viewer/SpaceDown/PagePanel/Padding/Pieces")
 show_on_open_document = NodePath("HBoxContainer/HSplitContainer/Viewer/SpaceDown/PagePanel")
@@ -45,9 +29,9 @@ layout_mode = 2
 [node name="HSplitContainer" type="HSplitContainer" parent="HBoxContainer" unique_id=1589487217]
 layout_mode = 2
 size_flags_horizontal = 3
-drag_area_highlight_in_editor = true
 
 [node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/HSplitContainer" unique_id=1056629386]
+self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/HSplitContainer/PanelContainer" unique_id=1597394446]
@@ -84,6 +68,7 @@ text = "Create"
 [node name="Delete" type="Button" parent="HBoxContainer/HSplitContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=667689263]
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Double click to delete."
 text = "Delete"
 
 [node name="Viewer" type="ScrollContainer" parent="HBoxContainer/HSplitContainer" unique_id=405397409]
@@ -95,10 +80,11 @@ vertical_scroll_mode = 4
 [node name="SpaceDown" type="MarginContainer" parent="HBoxContainer/HSplitContainer/Viewer" unique_id=1520180388]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/margin_top = 32
+theme_override_constants/margin_top = 16
 theme_override_constants/margin_bottom = 400
 
 [node name="PagePanel" type="PanelContainer" parent="HBoxContainer/HSplitContainer/Viewer/SpaceDown" unique_id=435647194]
+visible = false
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -108,10 +94,10 @@ mouse_filter = 2
 [node name="Padding" type="MarginContainer" parent="HBoxContainer/HSplitContainer/Viewer/SpaceDown/PagePanel" unique_id=669147389]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 2
-theme_override_constants/margin_top = 2
-theme_override_constants/margin_right = 2
-theme_override_constants/margin_bottom = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
 
 [node name="Pieces" type="VBoxContainer" parent="HBoxContainer/HSplitContainer/Viewer/SpaceDown/PagePanel/Padding" unique_id=1748019851]
 layout_mode = 2
@@ -133,7 +119,7 @@ size_flags_horizontal = 3
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_bottom = 20
 
 [node name="VBoxContainer" type="VBoxContainer" parent="WidgetPalette/ScrollContainer/MarginContainer" unique_id=1857197467]
 layout_mode = 2

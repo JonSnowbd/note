@@ -8,23 +8,22 @@ var edit: CodeEdit
 func _serialize() -> Dictionary:
 	return {
 		"_uuid" = uuid,
-		"_type" = "uid://btvdvje538ery",
+		"_script" = "uid://btvdvje538ery",
 		"title" = title,
 		"text" = text,
 	}
 func _first_time_setup():
-	title = tr("New Paragraph")
-	text = tr("Double Click to Edit")
+	title = ""
+	text = tr("New Paragraph")
 func _deserialize(data: Dictionary):
 	uuid = data["_uuid"]
 	text = data.get_or_add("text", "")
 	title = data.get_or_add("title", tr("New Paragraph"))
-func _make_entry() -> Control:
-	var panel = PanelContainer.new()
-	var panel_label = Label.new()
-	panel_label.text = tr("Paragraph")
-	panel.add_child(panel_label)
-	return panel
+func _make_entry() -> NoteJournalResource.PickUpType:
+	var inst = preload("uid://c52vtg71sbmwg").instantiate() as NoteJournalResource.PickUpType
+	inst.label.text = tr("Paragraph")
+	inst.script_target = "uid://btvdvje538ery"
+	return inst
 func _make_rep() -> Control:
 	label = RichTextLabel.new()
 	label.text = text

@@ -1,0 +1,42 @@
+[remap]
+
+importer="font_data_dynamic"
+type="FontFile"
+uid="uid://d0yiymhskci02"
+path="res://.godot/imported/StackSansText.ttf-8a341a7b9930b20508c0b330a3d97f1b.fontdata"
+
+[deps]
+
+source_file="res://addons/note/resource/note_ui/font/StackSansText.ttf"
+dest_files=["res://.godot/imported/StackSansText.ttf-8a341a7b9930b20508c0b330a3d97f1b.fontdata"]
+
+[params]
+
+Rendering=null
+antialiasing=1
+generate_mipmaps=true
+disable_embedded_bitmaps=false
+multichannel_signed_distance_field=false
+msdf_pixel_range=8
+msdf_size=48
+allow_system_fallback=false
+force_autohinter=false
+modulate_color_glyphs=false
+hinting=1
+subpixel_positioning=1
+keep_rounding_remainders=true
+oversampling=1.0
+Fallbacks=null
+fallbacks=[]
+Compress=null
+compress=true
+preload=[{
+"chars": [],
+"glyphs": [],
+"name": "New Configuration",
+"size": Vector2i(16, 0),
+&"variation_embolden": 0.0
+}]
+language_support={}
+script_support={}
+opentype_features={}

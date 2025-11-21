@@ -1,9 +1,13 @@
+@tool
 extends Control
 class_name NoteJournalChunkEditor
 
 signal starting_edit
 signal ending_edit
 signal delete
+signal swap_with(from: NoteJournalResource.Piece, to: NoteJournalResource.Piece)
+
+@export var drag_theme: Theme
 
 @export_group("Slot")
 @export var viewer_slot: Control
@@ -24,7 +28,6 @@ signal delete
 var source: NoteJournalResource.Piece
 var document: NoteJournalDocument
 var is_editing: bool = false
-var tree_item: TreeItem
 var _tween: Tween
 
 func _ready() -> void:
@@ -36,6 +39,28 @@ func _ready() -> void:
 	background_panel.self_modulate.a = 0.0
 	chunk_content_root.hide()
 	chunk_editor_root.hide()
+	
+	edit_button.set_drag_forwarding(forwarded_get_drag, forwarded_can_drop, forwarded_on_drop)
+
+func forwarded_get_drag(at: Vector2) -> Variant:
+	if source == null: return null
+	var p = PanelContainer.new()
+	var label = Label.new()
+	label.text = source.title
+	p.custom_minimum_size = Vector2(32,32)
+	p.add_child(label)
+	p.theme = drag_theme
+	set_drag_preview(p)
+	return self
+func forwarded_can_drop(at: Vector2, data: Variant):
+	return source != null and data is NoteJournalChunkEditor
+func forwarded_on_drop(at: Vector2, data: Variant):
+	if data is NoteJournalChunkEditor:
+		var outgoing = source
+		var incoming = data.source
+		data.set_source(outgoing)
+		set_source(incoming)
+		swap_with.emit(incoming, outgoing)
 
 func set_background(visibility: float = 1.0):
 	if _tween != null:
@@ -67,14 +92,17 @@ func delete_chunk():
 
 func set_chunk_title(new_title: String):
 	if source != null:
-		source.title = new_title
+		source.set_title(new_title)
 		chunk_label.text = new_title
-		if tree_item != null:
-			tree_item.set_text(0, new_title)
 
 func set_source(new_source: NoteJournalResource.Piece):
+	for c in viewer_slot.get_children():
+		c.queue_free()
+	for c in editor_slot.get_children():
+		c.queue_free()
 	source = new_source
 	if source != null:
+		chunk_label.visible = !source.title.is_empty()
 		chunk_label.text = source.title
 		var chunk_viewer = new_source._make_rep()
 		var chunk_editor = new_source._make_editor()
@@ -94,9 +122,9 @@ func set_source(new_source: NoteJournalResource.Piece):
 func _input(event: InputEvent) -> void:
 	if !is_editing:
 		return
-	if event is not InputEventMouseButton: return
 	if !event.is_pressed(): return
-	var rect = get_rect()
-	rect.position = Vector2.ZERO
-	if !rect.has_point(get_local_mouse_position()):
-		end_edit()
+	if event is InputEventMouseButton:
+		var rect = get_rect()
+		rect.position = Vector2.ZERO
+		if event.button_index == MOUSE_BUTTON_LEFT and !rect.has_point(get_local_mouse_position()):
+			end_edit()

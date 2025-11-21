@@ -1,0 +1,9 @@
+[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://bi0nfimm7wag6"]
+
+[ext_resource type="FontFile" uid="uid://d0yiymhskci02" path="res://addons/note/resource/note_ui/font/StackSansText.ttf" id="1_ctinw"]
+
+[resource]
+base_font = ExtResource("1_ctinw")
+variation_opentype = {
+2003265652: 450
+}

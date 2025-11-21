@@ -2,51 +2,38 @@
 extends Resource
 class_name NoteJournalResource
 
+const PickUpType = preload("uid://cxj8y7idv21t")
+
 signal word_updated
 signal tree_changed
 
 @export var documents: Array[NoteJournalDocument] = []
 @export var words: Dictionary[String,Variant] = {}
 
-class Piece extends Object:
-	signal changed
-	var title: String
-	var uuid: String
-	var document: NoteJournalDocument
-	func set_title(new_title:String):
-		title = new_title
-		changed.emit()
-	func _first_time_setup():
-		pass
-	func _serialize() -> Dictionary:
-		return {}
-	func _deserialize(data: Dictionary):
-		pass
-	func _make_entry() -> Control:
-		return null
-	func _make_rep() -> Control:
-		return null
-	func _make_editor() -> Control:
-		return null
-	func forward_changes_to_document():
-		for i in range(len(document.pieces)):
-			if document.piece_data[i]["_uuid"] == uuid:
-				document.piece_data[i] = _serialize()
-				break
+const Piece = preload("uid://46j4id6nlbsk")
 
 func create_new_document(new_document_title: String, parent: NoteJournalDocument = null) -> NoteJournalDocument:
 	var new_document = NoteJournalDocument.new()
+	new_document.create_piece(0, "res://addons/note/prefab/panel_screens/journal/pieces/title.gd")
+	new_document.create_piece(1, "res://addons/note/prefab/panel_screens/journal/pieces/paragraph.gd")
 	if parent != null:
 		parent.children.append(new_document)
 		new_document.parent = parent
 	else:
 		documents.append(new_document)
 	new_document.saturate()
+	new_document.pieces[0].title = new_document_title
 	emit_changed()
 	tree_changed.emit()
-	return null
+	return new_document
 
 func delete_document(document: NoteJournalDocument):
+	if document.parent == null:
+		documents.erase(document)
+	else:
+		document.parent.children.erase(document)
+	
+	document.parent = null
 	tree_changed.emit()
 
 func set_word(word: String, val: Variant):

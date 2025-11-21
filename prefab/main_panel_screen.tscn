@@ -1,6 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://1baqu2co3orh"]
+[gd_scene load_steps=6 format=3 uid="uid://1baqu2co3orh"]
 
+[ext_resource type="Theme" uid="uid://s8avb4vk6ef6" path="res://addons/note/resource/note_ui/note_ui.tres" id="1_dppm4"]
 [ext_resource type="PackedScene" uid="uid://dthkt8pfqui48" path="res://addons/note/prefab/panel_screens/lab.tscn" id="1_ynbih"]
+[ext_resource type="Script" uid="uid://da3jaydjx53je" path="res://addons/note/prefab/panel_screens/journal/editor_journal_manager.gd" id="1_ysu3v"]
+[ext_resource type="PackedScene" uid="uid://b06cv7xb1pnpj" path="res://addons/note/prefab/panel_screens/journal/widget/journal_viewer.tscn" id="2_dppm4"]
 [ext_resource type="PackedScene" uid="uid://cshopuvfrlqae" path="res://addons/note/prefab/panel_screens/help.tscn" id="2_o66sy"]
 
 [node name="MainPanelScreen" type="TabContainer" unique_id=1003540411]
@@ -11,12 +14,26 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = ExtResource("1_dppm4")
 current_tab = 0
 
-[node name="GDScript Lab" parent="." unique_id=1339672251 instance=ExtResource("1_ynbih")]
+[node name="Journal" type="MarginContainer" parent="." unique_id=82170185 node_paths=PackedStringArray("viewer")]
 layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_ysu3v")
+viewer = NodePath("JournalViewer")
 metadata/_tab_index = 0
+
+[node name="JournalViewer" parent="Journal" unique_id=1163786821 instance=ExtResource("2_dppm4")]
+layout_mode = 2
+include_editor_widgets = true
+
+[node name="GDScript Lab" parent="." unique_id=1339672251 instance=ExtResource("1_ynbih")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
 
 [node name="Help" parent="." unique_id=719916253 instance=ExtResource("2_o66sy")]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 2

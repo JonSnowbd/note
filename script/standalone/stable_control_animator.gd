@@ -1,3 +1,4 @@
+@tool
 extends Object
 class_name StableControlAnimator
 
@@ -47,6 +48,7 @@ func _init(control: Control) -> void:
 	target = control
 	var parent: Container = target.get_parent() as Container
 	if parent != null:
+		#parent.visibility_changed.connect(hard_refresh)
 		parent.sort_children.connect(_apply)
 
 ## Triggers a hard refresh of the parent container.

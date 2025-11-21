@@ -1,0 +1,47 @@
+[gd_scene load_steps=2 format=3 uid="uid://bd5y01kwbekmb"]
+
+[ext_resource type="Script" uid="uid://boeq5afaxvyrt" path="res://addons/note/prefab/panel_screens/journal/pieces/type/title/title_editor.gd" id="1_j2mdd"]
+
+[node name="TitleEditor" type="MarginContainer" unique_id=669402673 node_paths=PackedStringArray("title_editor", "color_editor", "size_editor")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -814.0
+offset_bottom = -571.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_j2mdd")
+title_editor = NodePath("VBoxContainer/LineEdit")
+color_editor = NodePath("VBoxContainer/GridContainer/ColorPickerButton")
+size_editor = NodePath("VBoxContainer/GridContainer/SpinBox")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1922237595]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=656670083]
+layout_mode = 2
+text = "Title Content"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer" unique_id=747387430]
+layout_mode = 2
+placeholder_text = "Title Text"
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer" unique_id=1326519762]
+layout_mode = 2
+columns = 2
+
+[node name="Label2" type="Label" parent="VBoxContainer/GridContainer" unique_id=588869716]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Font Size"
+
+[node name="Label3" type="Label" parent="VBoxContainer/GridContainer" unique_id=1116190319]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Color"
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/GridContainer" unique_id=1523040296]
+layout_mode = 2
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/GridContainer" unique_id=1837506312]
+layout_mode = 2

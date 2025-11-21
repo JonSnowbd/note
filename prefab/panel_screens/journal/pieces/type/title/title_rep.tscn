@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://c0qbuw5pkme35"]
+
+[ext_resource type="Script" uid="uid://7k0jmvuwlxtx" path="res://addons/note/prefab/panel_screens/journal/pieces/type/title/title_rep.gd" id="1_hrwsq"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ftykj"]
+font_size = 24
+
+[node name="TitleRep" type="MarginContainer" unique_id=385812348 node_paths=PackedStringArray("title_label")]
+offset_right = 1.0
+offset_bottom = 23.0
+script = ExtResource("1_hrwsq")
+title_label = NodePath("Label")
+
+[node name="Label" type="Label" parent="." unique_id=1589034485]
+layout_mode = 2
+text = "Example Label"
+label_settings = SubResource("LabelSettings_ftykj")

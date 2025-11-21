@@ -153,6 +153,7 @@ func close_open_document():
 			editor.delete.disconnect(_chunk_requested_delete)
 			editor.swap_with.disconnect(_chunk_swap)
 			editor.ending_edit.disconnect(_save)
+			editor.starting_edit.disconnect(hide_all_edit_buttons)
 			editor.source.forward_changes_to_document()
 			editor.queue_free()
 		open_document_chunks.clear()
@@ -175,10 +176,18 @@ func set_open_document(new_document_uuid: String):
 	for chunk in new_chunks:
 		chunk.delete.connect(_chunk_requested_delete.bind(chunk))
 		chunk.swap_with.connect(_chunk_swap)
+		chunk.starting_edit.connect(hide_all_edit_buttons)
 		chunk.ending_edit.connect(_save)
 		document_viewing_root.add_child(chunk)
 		open_document_chunks.append(chunk)
 	open_document.update_document_title()
+
+func hide_all_edit_buttons():
+	for i in open_document_chunks:
+		i.hide_edit_button()
+func show_all_edit_buttons():
+	for i in open_document_chunks:
+		i.show_edit_button()
 
 func _new_piece_request(at: int, script_path: String):
 	if open_document != null:
@@ -199,6 +208,7 @@ func _on_document_added_piece(at: int, piece: NoteJournalResource.Piece):
 		chunk.delete.connect(_chunk_requested_delete.bind(chunk))
 		chunk.swap_with.connect(_chunk_swap)
 		chunk.ending_edit.connect(_save)
+		chunk.starting_edit.connect(hide_all_edit_buttons)
 		chunk.modulate.a = 0.0
 		document_viewing_root.add_child(chunk)
 		document_viewing_root.move_child(chunk, at)

@@ -14,8 +14,8 @@ const Piece = preload("uid://46j4id6nlbsk")
 
 func create_new_document(new_document_title: String, parent: NoteJournalDocument = null) -> NoteJournalDocument:
 	var new_document = NoteJournalDocument.new()
-	new_document.create_piece(0, "res://addons/note/prefab/panel_screens/journal/pieces/title.gd")
-	new_document.create_piece(1, "res://addons/note/prefab/panel_screens/journal/pieces/paragraph.gd")
+	new_document.create_piece(0, "uid://tkfiwacw0387")
+	new_document.create_piece(1, "uid://btvdvje538ery")
 	if parent != null:
 		parent.children.append(new_document)
 		new_document.parent = parent
@@ -23,6 +23,7 @@ func create_new_document(new_document_title: String, parent: NoteJournalDocument
 		documents.append(new_document)
 	new_document.saturate()
 	new_document.pieces[0].title = new_document_title
+	new_document.update_document_title()
 	emit_changed()
 	tree_changed.emit()
 	return new_document

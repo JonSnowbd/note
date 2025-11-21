@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cxj8y7idv21t" path="res://addons/note/prefab/panel_screens/journal/widget/journal_pick_up.gd" id="1_de2do"]
 
 [node name="Control" type="PanelContainer" unique_id=1893168211 node_paths=PackedStringArray("label")]
-mouse_default_cursor_shape = 13
+mouse_default_cursor_shape = 6
 script = ExtResource("1_de2do")
 label = NodePath("MarginContainer/Label")
 

@@ -31,6 +31,8 @@ var is_editing: bool = false
 var _tween: Tween
 
 func _ready() -> void:
+	if is_part_of_edited_scene(): return
+	edit_button.modulate.a = 0.0
 	edit_button.pressed.connect(begin_edit)
 	chunk_editor_delete_button.pressed.connect(delete.emit)
 	chunk_editor_done_button.pressed.connect(end_edit)
@@ -94,7 +96,12 @@ func set_chunk_title(new_title: String):
 	if source != null:
 		source.set_title(new_title)
 		chunk_label.text = new_title
-
+func hide_edit_button():
+	var t = create_tween()
+	t.tween_property(edit_button, "modulate:a", 0.0, 0.2)
+func show_edit_button():
+	var t = create_tween()
+	t.tween_property(edit_button, "modulate:a", 1.0, 0.2)
 func set_source(new_source: NoteJournalResource.Piece):
 	for c in viewer_slot.get_children():
 		c.queue_free()

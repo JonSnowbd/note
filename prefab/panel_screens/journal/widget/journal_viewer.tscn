@@ -1,9 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://b06cv7xb1pnpj"]
+[gd_scene load_steps=9 format=3 uid="uid://b06cv7xb1pnpj"]
 
 [ext_resource type="Theme" uid="uid://s8avb4vk6ef6" path="res://addons/note/resource/note_ui/note_ui.tres" id="1_ory86"]
 [ext_resource type="Script" uid="uid://dhlhfgqm8lt2v" path="res://addons/note/prefab/panel_screens/journal/widget/journal_viewer.gd" id="1_swfht"]
+[ext_resource type="Script" uid="uid://ccoqbmnhankcb" path="res://addons/note/prefab/panel_screens/journal/journal_document.gd" id="3_d5hwy"]
 [ext_resource type="Script" uid="uid://rubst5u0tnuq" path="res://addons/note/prefab/panel_screens/journal/widget/hover_toggler.gd" id="3_swfht"]
+[ext_resource type="Script" uid="uid://pujdv5md856a" path="res://addons/note/prefab/panel_screens/journal/journal_resource.gd" id="4_ujse4"]
 [ext_resource type="Script" uid="uid://de3kfjdah75f0" path="res://addons/note/prefab/panel_screens/journal/widget/journal_dropper.gd" id="4_v78mr"]
+[ext_resource type="Script" uid="uid://dajlkw7vaeiae" path="res://addons/note/prefab/panel_screens/journal/widget/hover_editor.gd" id="6_v78mr"]
+
+[sub_resource type="Resource" id="Resource_bvxlr"]
+script = ExtResource("4_ujse4")
+metadata/_custom_type_script = "uid://pujdv5md856a"
 
 [node name="JournalViewer" type="PanelContainer" unique_id=1163786821 node_paths=PackedStringArray("document_viewing_root", "show_on_open_document", "document_tree", "create_document_button", "save_document_button", "delete_document_button", "widget_palette_root", "widget_palette")]
 clip_children = 2
@@ -14,6 +21,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_ory86")
 script = ExtResource("1_swfht")
+initial_journal = SubResource("Resource_bvxlr")
 list_of_widgets = Array[String](["uid://tkfiwacw0387", "uid://btvdvje538ery"])
 document_viewing_root = NodePath("HBoxContainer/HSplitContainer/Viewer/SpaceDown/PagePanel/Padding/Pieces")
 show_on_open_document = NodePath("HBoxContainer/HSplitContainer/Viewer/SpaceDown/PagePanel")
@@ -111,16 +119,31 @@ size_flags_vertical = 0
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 20
 
-[node name="PanelContainer" type="PanelContainer" parent="Hover" unique_id=755532459 node_paths=PackedStringArray("target")]
+[node name="VBoxContainer" type="VBoxContainer" parent="Hover" unique_id=1175293612]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="HoverToggle" type="PanelContainer" parent="Hover/VBoxContainer" unique_id=755532459 node_paths=PackedStringArray("target")]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 script = ExtResource("3_swfht")
-target = NodePath("../../WidgetPalette")
+target = NodePath("../../../WidgetPalette")
 
-[node name="Label" type="Label" parent="Hover/PanelContainer" unique_id=2047154479]
+[node name="Label" type="Label" parent="Hover/VBoxContainer/HoverToggle" unique_id=2047154479]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "+"
+horizontal_alignment = 1
+
+[node name="HoverEdit" type="PanelContainer" parent="Hover/VBoxContainer" unique_id=129116422]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+script = ExtResource("6_v78mr")
+
+[node name="Label" type="Label" parent="Hover/VBoxContainer/HoverEdit" unique_id=478313683]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "E"
 horizontal_alignment = 1
 
 [node name="WidgetPalette" type="PanelContainer" parent="." unique_id=509435816]
@@ -150,4 +173,5 @@ layout_mode = 2
 script = ExtResource("4_v78mr")
 container = NodePath("../HBoxContainer/HSplitContainer/Viewer/SpaceDown/PagePanel/Padding/Pieces")
 
+[connection signal="hovered" from="Hover/VBoxContainer/HoverEdit" to="." method="show_all_edit_buttons"]
 [connection signal="piece_request" from="Dropper" to="." method="_new_piece_request"]

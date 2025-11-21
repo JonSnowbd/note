@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://df36fneqf4q0b"]
+
+[ext_resource type="Script" uid="uid://c3fvkw7fv4q7l" path="res://addons/note/prefab/panel_screens/journal/pieces/type/paragraph/paragraph_rep.gd" id="1_8s7ok"]
+
+[node name="ParagraphRep" type="MarginContainer" unique_id=1275172286 node_paths=PackedStringArray("label", "margin")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 0
+script = ExtResource("1_8s7ok")
+label = NodePath("RichTextLabel")
+margin = NodePath(".")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=1941507267]
+layout_mode = 2
+bbcode_enabled = true
+text = "[b]Hello[/b]"
+fit_content = true
+scroll_active = false

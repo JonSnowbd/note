@@ -25,18 +25,15 @@ var current_journal: NoteJournalResource = null
 var open_document: NoteJournalDocument = null
 var open_document_chunks: Array[NoteJournalChunkEditor] = []
 
-var sidebar_animation_contract: StableControlAnimator
-
 var _delete_timeout: float = -1.0
 
 func _ready() -> void:
+	if is_part_of_edited_scene(): return
 	document_tree.nothing_selected.connect(_no_item_selected)
 	document_tree.item_selected.connect(_new_item_selected)
 	create_document_button.pressed.connect(create_document)
 	delete_document_button.pressed.connect(delete_document)
 	save_document_button.pressed.connect(_save)
-	
-	sidebar_animation_contract = StableControlAnimator.new(widget_palette_root)
 	
 	if initial_journal != null:
 		set_journal(initial_journal)
@@ -44,15 +41,12 @@ func _ready() -> void:
 	show_on_open_document.hide()
 
 func _process(delta: float) -> void:
+	if is_part_of_edited_scene(): return
 	if _delete_timeout >= 0.0:
 		_delete_timeout -= delta
-	if widget_palette_root.visible:
-		var mouse_from_edge = ((size.x-200.0)-get_local_mouse_position().x) / 200.0
-		mouse_from_edge = clamp(1.0-mouse_from_edge, 0.0, 1.0)
-		
-		sidebar_animation_contract.offset.x = lerp(widget_palette_root.size.x+60.0, 0.0, mouse_from_edge)
 
 func set_journal(new_journal: NoteJournalResource):
+	if is_part_of_edited_scene(): return
 	if current_journal != null:
 		current_journal.tree_changed.disconnect(update_tree)
 	current_journal = new_journal
@@ -87,6 +81,7 @@ func _notification(what: int) -> void:
 		_save()
 	
 func update_widget_palette():
+	if is_part_of_edited_scene(): return
 	const PickupScript = preload("uid://cxj8y7idv21t")
 	for child in widget_palette.get_children():
 		child.queue_free()
@@ -113,6 +108,7 @@ func _create_entries_for(document: NoteJournalDocument, parent: TreeItem = null)
 		_create_entries_for(subdoc, i)
 	
 func update_tree():
+	if is_part_of_edited_scene(): return
 	document_tree.clear()
 	
 	var root = document_tree.create_item()
@@ -122,6 +118,7 @@ func update_tree():
 		_create_entries_for(document, root)
 
 func create_document():
+	if is_part_of_edited_scene(): return
 	if current_journal == null:
 		return
 	close_open_document()
@@ -132,6 +129,7 @@ func create_document():
 	current_journal.create_new_document(tr("New Document"), parent)
 
 func delete_document():
+	if is_part_of_edited_scene(): return
 	if _delete_timeout < 0.0:
 		_delete_timeout = 0.5
 		return

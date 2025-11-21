@@ -7,6 +7,7 @@ signal piece_move(to: int, piece: NoteJournalResource.Piece)
 @export var container: BoxContainer
 
 func _notification(what: int) -> void:
+	if is_part_of_edited_scene(): return
 	if what == NOTIFICATION_DRAG_BEGIN:
 		var data = get_viewport().gui_get_drag_data()
 		if _is_valid_type(data):
@@ -40,7 +41,10 @@ func _drop_data(at_position: Vector2, data: Variant) -> void:
 	if data is NoteJournalResource.Piece:
 		piece_move.emit(_get_index(), data as NoteJournalResource.Piece)
 
+func _ready() -> void:
+	hide()
 func _draw() -> void:
+	if is_part_of_edited_scene(): return
 	if container == null: return
 	if !_is_valid_drop():
 		return

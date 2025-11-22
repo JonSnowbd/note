@@ -39,6 +39,7 @@ func _ready() -> void:
 		set_journal(initial_journal)
 	
 	show_on_open_document.hide()
+	document_tree.set_drag_forwarding(_forwarded_tree_get_drag_data, _forwarded_tree_can_drop, _forwarded_tree_drop)
 
 func _process(delta: float) -> void:
 	if is_part_of_edited_scene(): return
@@ -227,3 +228,32 @@ func _on_document_deleted_piece(at: int):
 		document_viewing_root.remove_child(target)
 		target.queue_free()
 		open_document.update_document_title()
+
+func _forwarded_tree_can_drop(at: Vector2, data) -> bool:
+	var can = data is NoteJournalDocument
+	if can:
+		document_tree.drop_mode_flags = Tree.DROP_MODE_INBETWEEN | Tree.DROP_MODE_ON_ITEM
+	else:
+		document_tree.drop_mode_flags = Tree.DROP_MODE_DISABLED
+	return can
+func _forwarded_tree_get_drag_data(at: Vector2) -> Variant:
+	if current_journal == null: return
+	var drag_target = document_tree.get_item_at_position(at)
+	var document = current_journal.find_document_by_uuid(drag_target.get_metadata(0))
+	if document == null: return
+	
+	var panel = PanelContainer.new()
+	var label = Label.new()
+	label.text = document.document_title
+	panel.add_child(label)
+	set_drag_preview(panel)
+	return document
+func _forwarded_tree_drop(at: Vector2, data):
+	var from = document_tree.get_item_at_position(at)
+	if from == null:
+		current_journal.move_document(data as NoteJournalDocument, null, 0)
+		return
+	var target_doc = current_journal.find_document_by_uuid(from.get_metadata(0))
+	if target_doc == null or target_doc == data: return
+	var offset = document_tree.get_drop_section_at_position(at)
+	current_journal.move_document(data as NoteJournalDocument, target_doc, offset)

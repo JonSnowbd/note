@@ -37,6 +37,40 @@ func delete_document(document: NoteJournalDocument):
 	document.parent = null
 	tree_changed.emit()
 
+func move_document(target: NoteJournalDocument, to: NoteJournalDocument, offset: int):
+	if target.parent != null:
+		target.parent.children.erase(target)
+		target.parent = null
+	else:
+		documents.erase(target)
+		
+	if to == null and offset == 0:
+		documents.append(target)
+		target.parent = null
+		tree_changed.emit()
+		return
+	
+	if offset == 0:
+		to.children.append(target)
+		target.parent = to
+	else:
+		if to.parent != null:
+			var index = to.parent.children.find(to)
+			if offset == 1:
+				to.parent.children.insert(index+1, target)
+			else:
+				to.parent.children.insert(index, target)
+			target.parent = to.parent
+		else:
+			var index = documents.find(to)
+			if offset == 1:
+				documents.insert(index+1, target)
+			else:
+				documents.insert(index, target)
+			target.parent = null
+	
+	tree_changed.emit()
+
 func set_word(word: String, val: Variant):
 	words[word] = val
 	word_updated.emit()

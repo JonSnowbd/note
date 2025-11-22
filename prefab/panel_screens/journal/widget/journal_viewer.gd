@@ -72,6 +72,8 @@ func _new_item_selected():
 		else:
 			close_open_document()
 func _save():
+	if open_document != null:
+		open_document.store_data_changes()
 	should_save.emit()
 
 func _notification(what: int) -> void:

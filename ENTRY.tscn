@@ -1,117 +1,24 @@
-[gd_scene load_steps=9 format=3 uid="uid://k7kf706i87f8"]
+[gd_scene load_steps=7 format=3 uid="uid://k7kf706i87f8"]
 
 [ext_resource type="Script" uid="uid://cisngsrm6qppo" path="res://addons/note/script/meta/entry_script.gd" id="1_j2ojt"]
 [ext_resource type="PackedScene" uid="uid://b0aww2yb021su" path="res://addons/note/prefab/save_pill.tscn" id="2_lpsy7"]
-[ext_resource type="Texture2D" uid="uid://fl7yaybo81e2" path="res://icon.svg" id="3_pksbd"]
-
-[sub_resource type="Animation" id="Animation_85dmm"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Imagery:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("LogoContainer/Logo:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_lpsy7"]
-resource_name = "intro"
-length = 2.0
-step = 0.0333333
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Imagery:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.73333335, 2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("LogoContainer/Logo:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(1.2666667, 1.7333333),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("LogoContainer")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(2),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"hide"
-}]
-}
-tracks/3/type = "method"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Imagery")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(2),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"hide"
-}]
-}
-
-[sub_resource type="Animation" id="Animation_pksbd"]
-resource_name = "outro"
-step = 0.0333333
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_85dmm"]
-_data = {
-&"RESET": SubResource("Animation_85dmm"),
-&"intro": SubResource("Animation_lpsy7"),
-&"outro": SubResource("Animation_pksbd")
-}
+[ext_resource type="Texture2D" uid="uid://vso0m52br76m" path="res://addons/note/documentation/your_logo_here.png" id="3_mhbyb"]
+[ext_resource type="Texture2D" uid="uid://rdqugohlobue" path="res://addons/note/documentation/godot_logo.png" id="4_pkclg"]
+[ext_resource type="Texture2D" uid="uid://yjvt6nbkxk60" path="res://addons/note/documentation/logo.png" id="5_qqwqg"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_lpsy7"]
 font_size = 24
 
-[node name="Entry" type="CanvasLayer" unique_id=1179327049 node_paths=PackedStringArray("pills", "animation")]
+[node name="Entry" type="CanvasLayer" unique_id=1179327049 node_paths=PackedStringArray("pills", "splash_screen", "splash_cover", "credit_container", "godot_credit_logo", "note_credit_logo", "your_credit_logo")]
 layer = 4
 script = ExtResource("1_j2ojt")
 pills = [NodePath("MainContainer/ProfileOutercase/Profiles/Scroll/Padding/ProfileList/Profile1"), NodePath("MainContainer/ProfileOutercase/Profiles/Scroll/Padding/ProfileList/Profile2"), NodePath("MainContainer/ProfileOutercase/Profiles/Scroll/Padding/ProfileList/Profile3"), NodePath("MainContainer/ProfileOutercase/Profiles/Scroll/Padding/ProfileList/Profile4"), NodePath("MainContainer/ProfileOutercase/Profiles/Scroll/Padding/ProfileList/Profile5"), NodePath("MainContainer/ProfileOutercase/Profiles/Scroll/Padding/ProfileList/Profile6")]
-animation = NodePath("AnimationPlayer")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=585129108]
-libraries = {
-&"": SubResource("AnimationLibrary_85dmm")
-}
+splash_screen = NodePath("SplashScreen")
+splash_cover = NodePath("SplashScreen/ColorRect")
+credit_container = NodePath("SplashScreen/CreditCorner")
+godot_credit_logo = NodePath("SplashScreen/CreditCorner/VBoxContainer/Credits/GodotCredit")
+note_credit_logo = NodePath("SplashScreen/CreditCorner/VBoxContainer/Credits/NoteCredit")
+your_credit_logo = NodePath("SplashScreen/LogoContainer/YourLogo")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=755334811]
 anchors_preset = 15
@@ -183,26 +90,56 @@ layout_mode = 2
 [node name="Profile6" parent="MainContainer/ProfileOutercase/Profiles/Scroll/Padding/ProfileList" unique_id=286007267 instance=ExtResource("2_lpsy7")]
 layout_mode = 2
 
-[node name="Imagery" type="ColorRect" parent="." unique_id=1789492331]
+[node name="SplashScreen" type="MarginContainer" parent="." unique_id=1292250815]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="SplashBackground" type="ColorRect" parent="SplashScreen" unique_id=1789492331]
+layout_mode = 2
 mouse_filter = 2
 color = Color(0.12955844, 0.12955847, 0.12955844, 1)
 
-[node name="LogoContainer" type="CenterContainer" parent="." unique_id=734596321]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
+[node name="CreditCorner" type="MarginContainer" parent="SplashScreen" unique_id=1132163804]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_bottom = 20
 
-[node name="Logo" type="TextureRect" parent="LogoContainer" unique_id=857242052]
-custom_minimum_size = Vector2(128, 128)
+[node name="VBoxContainer" type="VBoxContainer" parent="SplashScreen/CreditCorner" unique_id=2098227947]
+layout_mode = 2
+
+[node name="MadeWith" type="Label" parent="SplashScreen/CreditCorner/VBoxContainer" unique_id=606867141]
+self_modulate = Color(1, 1, 1, 0.5058824)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Made with"
+horizontal_alignment = 1
+
+[node name="Credits" type="HBoxContainer" parent="SplashScreen/CreditCorner/VBoxContainer" unique_id=1214314785]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="GodotCredit" type="TextureRect" parent="SplashScreen/CreditCorner/VBoxContainer/Credits" unique_id=1171072391]
+layout_mode = 2
+texture = ExtResource("4_pkclg")
+
+[node name="NoteCredit" type="TextureRect" parent="SplashScreen/CreditCorner/VBoxContainer/Credits" unique_id=50379553]
+layout_mode = 2
+texture = ExtResource("5_qqwqg")
+
+[node name="LogoContainer" type="CenterContainer" parent="SplashScreen" unique_id=734596321]
 layout_mode = 2
 mouse_filter = 2
-texture = ExtResource("3_pksbd")
-expand_mode = 3
+
+[node name="YourLogo" type="TextureRect" parent="SplashScreen/LogoContainer" unique_id=499960546]
+layout_mode = 2
+texture = ExtResource("3_mhbyb")
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="SplashScreen" unique_id=633150987]
+layout_mode = 2
+color = Color(0, 0, 0, 1)

@@ -2,9 +2,19 @@ extends CanvasLayer
 const PillType = preload("uid://pufbtr67lcto")
 
 @export var pills: Array[PillType] = []
-@export var animation: AnimationPlayer
+@export var splash_screen_duration: float = 3.0
+
+@export var splash_screen: Control
+@export var splash_cover: Control
+@export var credit_container: Control
+@export var godot_credit_logo: Control
+@export var note_credit_logo: Control
+@export var your_credit_logo: Control
 
 @onready var _nt = get_tree().root.get_node("note")
+
+var countdown: float = 0.0
+var start_trip: bool = false
 
 func save_exists(profile_name: String) -> bool:
 	return DirAccess.dir_exists_absolute("user://profile_"+profile_name)
@@ -45,18 +55,11 @@ func post_load_action(skip_animation: bool = false):
 	else:
 		_nt.level.change_to(_nt.settings.initial_scene, true)
 
-func _ready() -> void:
+func begin_save_screen():
+	_nt.transition.trigger(0.3)
+	splash_screen.hide()
 	var is_simple = _nt.settings.save_strategy == NoteDeveloperSettings.NoteEntrySceneType.SIMPLE
 	var uses_stuck_save = _nt.settings.save_sticky
-	
-	## Restore soft settings if they are available.
-	if _nt.settings.save_soft_settings:
-		if !_nt.meta.first_launch:
-			_nt.info("Soft save settings restored.")
-			_nt.meta.restore_soft_settings(_nt)
-		else:
-			_nt.info("Soft save settings detected first launch. Not restoring settings.")
-	
 	## If there is a stuck save and it is set to profiled save strategy, skip all this
 	## and just get in.
 	if !_nt.meta.stuck_save.is_empty() and !is_simple and uses_stuck_save:
@@ -65,9 +68,7 @@ func _ready() -> void:
 			_nt.info("Automatically loading 'stuck save' profile <%s>"%_nt.meta.stuck_save)
 			load_save(_nt.meta.stuck_save)
 			call_deferred("post_load_action", true)
-	
 	if is_simple:
-		hide()
 		if save_exists("simple_profile"):
 			_nt.info("Loading pre-existing simple profile")
 			load_save("simple_profile")
@@ -79,7 +80,6 @@ func _ready() -> void:
 			call_deferred("post_load_action")
 	else:
 		show()
-		animation.play("intro")
 		for i in range(len(pills)):
 			var profile_name = "save%d"%i
 			var exists = save_exists(profile_name)
@@ -101,3 +101,30 @@ func _ready() -> void:
 					_nt.meta.persist(_nt)
 				call_deferred("post_load_action")
 			)
+	
+
+func _ready() -> void:
+	## Restore soft settings if they are available.
+	if _nt.settings.save_soft_settings:
+		if !_nt.meta.first_launch:
+			_nt.info("Soft save settings restored.")
+			_nt.meta.restore_soft_settings(_nt)
+		else:
+			_nt.info("Soft save settings detected first launch. Not restoring settings.")
+	
+	countdown = splash_screen_duration
+	var t = create_tween()
+	t.tween_property(splash_cover, "modulate:a", 0.0, 0.3)\
+	.set_ease(Tween.EASE_IN)\
+	.set_trans(Tween.TRANS_CUBIC)
+
+func _process(delta: float) -> void:
+	if start_trip: return
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) or Input.is_key_pressed(KEY_SPACE) or Input.is_key_pressed(KEY_ESCAPE):
+		countdown = -1.0
+	
+	countdown -= delta
+	
+	if countdown <= 0.0:
+		begin_save_screen()
+		start_trip = true

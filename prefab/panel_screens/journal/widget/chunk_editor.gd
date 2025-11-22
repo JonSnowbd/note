@@ -81,6 +81,8 @@ func begin_edit():
 	starting_edit.emit()
 	set_background(1.0)
 func end_edit():
+	if source != null:
+		source.forward_changes_to_document()
 	chunk_label.visible = !chunk_label.text.is_empty()
 	edit_button.show()
 	is_editing = false

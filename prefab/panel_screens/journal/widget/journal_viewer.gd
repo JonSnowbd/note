@@ -20,6 +20,7 @@ signal should_save
 @export_group("Other References")
 @export var widget_palette_root: Container
 @export var widget_palette: Container
+@export var document_scroll_container: ScrollContainer
 
 var current_journal: NoteJournalResource = null
 var open_document: NoteJournalDocument = null
@@ -88,7 +89,14 @@ func update_widget_palette():
 	const PickupScript = preload("uid://cxj8y7idv21t")
 	for child in widget_palette.get_children():
 		child.queue_free()
+	var selected_widgets: Array[String] = []
 	for widget in list_of_widgets:
+		selected_widgets.append(widget)
+	if Engine.is_editor_hint():
+		for widget in list_of_editor_only_widgets:
+			selected_widgets.append(widget)
+	
+	for widget in selected_widgets:
 		var new_scr = Object.new()
 		var script = load(widget)
 		new_scr.set_script(script)
@@ -184,6 +192,7 @@ func set_open_document(new_document_uuid: String):
 		document_viewing_root.add_child(chunk)
 		open_document_chunks.append(chunk)
 	open_document.update_document_title()
+	document_scroll_container.scroll_vertical = 0
 
 func hide_all_edit_buttons():
 	for i in open_document_chunks:
@@ -224,6 +233,7 @@ func _on_document_added_piece(at: int, piece: NoteJournalResource.Piece):
 		open_document.update_document_title()
 func _on_document_deleted_piece(at: int):
 	if open_document != null:
+		open_document_chunks.remove_at(at)
 		var target = document_viewing_root.get_child(at)
 		document_viewing_root.remove_child(target)
 		target.queue_free()

@@ -12,7 +12,7 @@
 script = ExtResource("4_ujse4")
 metadata/_custom_type_script = "uid://pujdv5md856a"
 
-[node name="JournalViewer" type="PanelContainer" unique_id=1163786821 node_paths=PackedStringArray("document_viewing_root", "show_on_open_document", "document_tree", "create_document_button", "save_document_button", "delete_document_button", "widget_palette_root", "widget_palette")]
+[node name="JournalViewer" type="PanelContainer" unique_id=1163786821 node_paths=PackedStringArray("document_viewing_root", "show_on_open_document", "document_tree", "create_document_button", "save_document_button", "delete_document_button", "widget_palette_root", "widget_palette", "document_scroll_container")]
 clip_children = 2
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,6 +23,7 @@ theme = ExtResource("1_ory86")
 script = ExtResource("1_swfht")
 initial_journal = SubResource("Resource_bvxlr")
 list_of_widgets = Array[String](["uid://tkfiwacw0387", "uid://btvdvje538ery"])
+list_of_editor_only_widgets = Array[String](["uid://ctaymxqonp17p"])
 document_viewing_root = NodePath("HBoxContainer/HSplitContainer/Viewer/SpaceDown/PagePanel/Padding/Pieces")
 show_on_open_document = NodePath("HBoxContainer/HSplitContainer/Viewer/SpaceDown/PagePanel")
 document_tree = NodePath("HBoxContainer/HSplitContainer/PanelContainer/MarginContainer/VBoxContainer/Tree")
@@ -31,6 +32,7 @@ save_document_button = NodePath("HBoxContainer/HSplitContainer/PanelContainer/Ma
 delete_document_button = NodePath("HBoxContainer/HSplitContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/Delete")
 widget_palette_root = NodePath("WidgetPalette")
 widget_palette = NodePath("WidgetPalette/ScrollContainer/MarginContainer/VBoxContainer")
+document_scroll_container = NodePath("HBoxContainer/HSplitContainer/Viewer")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=621436682]
 layout_mode = 2

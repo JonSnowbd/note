@@ -41,8 +41,13 @@ var dependant_tween: Tween :
 		if dependant_tween != val:
 			dependant_tween = val
 			dependant_tween.finished.connect(func():
-				free()
+				# Dont ask me why this is needed, its an issue from 2023
+				# and free() cant be called directly in an object...
+				free_obj(self)
 			)
+
+func free_obj(obj: Object):
+	obj.free()
 
 func _init(control: Control) -> void:
 	target = control
@@ -57,6 +62,8 @@ func hard_refresh():
 	if target == null:
 		return
 	var parent = target.get_parent()
+	if parent == null:
+		return
 	if parent is Container:
 		parent.queue_sort()
 

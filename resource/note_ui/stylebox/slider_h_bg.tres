@@ -1,0 +1,12 @@
+[gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://djcxv6uymr6u"]
+
+[ext_resource type="Texture2D" uid="uid://b3yjflsro8n2b" path="res://addons/note/texture/note_ui_sheet.png" id="1_ryon1"]
+
+[resource]
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+texture = ExtResource("1_ryon1")
+texture_margin_left = 4.0
+texture_margin_right = 4.0
+region_rect = Rect2(256, 184, 32, 8)
+modulate_color = Color(0.25524214, 0.25524214, 0.25524214, 0.62)

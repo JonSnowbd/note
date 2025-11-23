@@ -1,0 +1,7 @@
+[gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://b66dds2nhxwi8"]
+
+[ext_resource type="Texture2D" uid="uid://b3yjflsro8n2b" path="res://addons/note/texture/note_ui_sheet.png" id="1_wvv55"]
+
+[resource]
+atlas = ExtResource("1_wvv55")
+region = Rect2(239, 111, 14, 14)

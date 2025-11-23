@@ -1,0 +1,59 @@
+[gd_scene load_steps=3 format=3 uid="uid://c303j7d7piu4f"]
+
+[ext_resource type="Script" uid="uid://dcp2puxe5411c" path="res://addons/note/prefab/panel_screens/journal/pieces/type/editor_reference/editor_reference_rep.gd" id="1_pi3is"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_75466"]
+font_size = 11
+font_color = Color(1, 1, 1, 0.6862745)
+
+[node name="EditorReferenceRep" type="MarginContainer" unique_id=471147377 node_paths=PackedStringArray("overall_icon_container", "name_label", "desc_label", "icon", "inherit_button")]
+offset_right = 203.0
+offset_bottom = 51.0
+script = ExtResource("1_pi3is")
+overall_icon_container = NodePath("HBoxContainer/PanelContainer")
+name_label = NodePath("HBoxContainer/VBoxContainer/HBoxContainer/Title")
+desc_label = NodePath("HBoxContainer/VBoxContainer/Desc")
+icon = NodePath("HBoxContainer/PanelContainer/TextureRect")
+inherit_button = NodePath("HBoxContainer/VBoxContainer/HBoxContainer/Inherit")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1481225313]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer" unique_id=1850570146]
+custom_minimum_size = Vector2(70, 45)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/PanelContainer" unique_id=855611559]
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1866137326]
+layout_mode = 2
+size_flags_vertical = 4
+alignment = 1
+
+[node name="HBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=1527688824]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Title" type="LinkButton" parent="HBoxContainer/VBoxContainer/HBoxContainer" unique_id=222482697]
+layout_mode = 2
+text = "Link to asset"
+
+[node name="Inherit" type="LinkButton" parent="HBoxContainer/VBoxContainer/HBoxContainer" unique_id=216424708]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 10
+text = "Create Inherited Scene"
+underline = 1
+
+[node name="Desc" type="Label" parent="HBoxContainer/VBoxContainer" unique_id=221208450]
+layout_mode = 2
+text = "This is the description
+a long
+description"
+label_settings = SubResource("LabelSettings_75466")

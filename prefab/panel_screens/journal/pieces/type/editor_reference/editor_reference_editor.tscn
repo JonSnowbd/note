@@ -1,0 +1,44 @@
+[gd_scene load_steps=2 format=3 uid="uid://fbcnqfoikgkv"]
+
+[ext_resource type="Script" uid="uid://cm8twmb7g0jjb" path="res://addons/note/prefab/panel_screens/journal/pieces/type/editor_reference/editor_reference_editor.gd" id="1_cvgfr"]
+
+[node name="EditorReferenceEditor" type="HBoxContainer" unique_id=881727958 node_paths=PackedStringArray("current_path_label", "description_editor", "drop_target", "color_edit")]
+offset_right = 569.0
+offset_bottom = 215.0
+script = ExtResource("1_cvgfr")
+current_path_label = NodePath("VBoxContainer/Label")
+description_editor = NodePath("VBoxContainer/CodeEdit")
+drop_target = NodePath("PanelContainer")
+color_edit = NodePath("VBoxContainer/ColorPickerButton")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=752220338]
+custom_minimum_size = Vector2(120, 60)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="PanelContainer" unique_id=1525106933]
+self_modulate = Color(1, 1, 1, 0.48235294)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Drop Here"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=689232683]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=1920355360]
+layout_mode = 2
+text = "Current File: %s"
+
+[node name="CodeEdit" type="CodeEdit" parent="VBoxContainer" unique_id=1209764114]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+placeholder_text = "Description"
+wrap_mode = 1
+scroll_fit_content_height = true
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer" unique_id=1818527364]
+custom_minimum_size = Vector2(100, 25)
+layout_mode = 2
+size_flags_horizontal = 0

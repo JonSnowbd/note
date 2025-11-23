@@ -127,13 +127,3 @@ func set_source(new_source: NoteJournalResource.Piece):
 		chunk_content_root.hide()
 		chunk_editor_root.hide()
 	is_editing = false
-
-func _input(event: InputEvent) -> void:
-	if !is_editing:
-		return
-	if !event.is_pressed(): return
-	if event is InputEventMouseButton:
-		var rect = get_rect()
-		rect.position = Vector2.ZERO
-		if event.button_index == MOUSE_BUTTON_LEFT and !rect.has_point(get_local_mouse_position()):
-			end_edit()

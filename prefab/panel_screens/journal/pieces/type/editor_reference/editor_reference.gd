@@ -30,6 +30,8 @@ func _deserialize(data: Dictionary):
 	cached_scene = null
 	if FileAccess.file_exists(path):
 		cached_scene = load(path)
+	else:
+		path = ""
 func _make_entry() -> NoteJournalResource.PickUpType:
 	var inst = preload("uid://c52vtg71sbmwg").instantiate() as NoteJournalResource.PickUpType
 	inst.label.text = tr("Editor Reference")

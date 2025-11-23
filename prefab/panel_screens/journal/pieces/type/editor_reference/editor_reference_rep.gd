@@ -24,30 +24,27 @@ func update_to_spec(target: RefType):
 	inherit_button.hide()
 
 	if Engine.is_editor_hint() and !target.path.is_empty() and FileAccess.file_exists(target.path):
-		var item = load(target.path)
-		if item is PackedScene:
+		if target.cached_scene is PackedScene:
 			inherit_button.show()
 		EditorInterface.get_resource_previewer()\
-		.queue_resource_preview(target.path, self, &"preview_callback", item)
+		.queue_resource_preview(target.path, self, &"preview_callback", target.cached_scene)
 
 func clicked_inherit(target: RefType):
 	if target.path.is_empty():
 		return
-	if FileAccess.file_exists(target.path):
-		var item = load(target.path)
-		if item is PackedScene:
-			open_scene(target.path, item, true)
+	if ResourceLoader.exists(target.path):
+		if target.cached_scene is PackedScene:
+			open_scene(target.path, target.cached_scene, true)
 func clicked_link(target: RefType):
 	if target.path.is_empty():
 		return
-	if FileAccess.file_exists(target.path):
-		var item = load(target.path)
-		if item is Resource:
-			EditorInterface.edit_resource(item)
-		if item is GDScript:
-			EditorInterface.edit_script(item)
-		if item is PackedScene:
-			open_scene(target.path, item, false)
+	if ResourceLoader.exists(target.path):
+		if target.cached_scene is Resource:
+			EditorInterface.edit_resource(target.cached_scene)
+		if target.cached_scene is GDScript:
+			EditorInterface.edit_script(target.cached_scene)
+		if target.cached_scene is PackedScene:
+			open_scene(target.path, target.cached_scene, false)
 
 func open_scene(scene: String, packed: PackedScene, inherited: bool = false):
 	EditorInterface.open_scene_from_path(scene, inherited)

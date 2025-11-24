@@ -6,6 +6,7 @@ extends Control
 @export var label: Label
 @export var primary_button: Button
 @export var menu_button: MenuButton
+@export var face_slot: Control
 
 signal selected
 signal deleting
@@ -13,6 +14,7 @@ signal deleting
 @onready var _nt = get_tree().root.get_node("note")
 
 func _ready() -> void:
+	face_slot.hide()
 	primary_button.pressed.connect(func():
 		selected.emit()
 	)
@@ -28,7 +30,14 @@ func _physics_process(delta: float) -> void:
 		modulate.a = 1.0-clamp(distance/350.0, 0.0, 0.5)
 	else:
 		modulate.a = 1.0
-
+func set_face_plate(new_plate: Control):
+	if new_plate != null:
+		label.hide()
+		face_slot.add_child(new_plate)
+		face_slot.show()
+	else:
+		face_slot.hide()
+		label.show()
 func set_state_save_exists(save_alias: String):
 	label.text = save_alias
 	primary_button.text = tr("Select", "'Select a save', used on a button on the save profile")

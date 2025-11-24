@@ -24,6 +24,7 @@ custom_minimum_size = Vector2(70, 45)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+theme_type_variation = &"PanelContainerInset"
 
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer/PanelContainer" unique_id=855611559]
 layout_mode = 2

@@ -22,7 +22,7 @@ func _load_done_callback(path: String):
 				async_load_finished.emit()
 				_load_awaiting = ""
 
-var transition_time: float = 0.45
+var transition_time: float = 0.6
 
 func _internal_swap_logic(new_scene, with_loading_screen: bool) -> Node:
 	if !_load_awaiting.is_empty():

@@ -19,6 +19,17 @@ var start_trip: bool = false
 func save_exists(profile_name: String) -> bool:
 	return DirAccess.dir_exists_absolute("user://profile_"+profile_name)
 
+func get_save_faceplate(profile_name: String) -> Control:
+	var base_folder = "user://profile_"+profile_name
+	var save_type = NoteSaveSession
+	if _nt.settings.save_session_type != null:
+		save_type = _nt.settings.save_session_type
+	
+	var new_save: NoteSaveSession = save_type.new(base_folder, false)
+	var result = new_save.get_fancy_pill()
+	new_save.queue_free()
+	return result
+
 func create_save(profile_name: String):
 	var base_folder = "user://profile_"+profile_name
 	DirAccess.make_dir_recursive_absolute(base_folder)
@@ -56,10 +67,11 @@ func post_load_action(skip_animation: bool = false):
 		_nt.level.change_to(_nt.settings.initial_scene, true)
 
 func begin_save_screen():
-	_nt.transition.trigger(0.3)
+	_nt.transition.trigger()
 	splash_screen.hide()
 	var is_simple = _nt.settings.save_strategy == NoteDeveloperSettings.NoteEntrySceneType.SIMPLE
 	var uses_stuck_save = _nt.settings.save_sticky
+	var save_type: GDScript = _nt.settings.save_session_type
 	## If there is a stuck save and it is set to profiled save strategy, skip all this
 	## and just get in.
 	if !_nt.meta.stuck_save.is_empty() and !is_simple and uses_stuck_save:
@@ -84,7 +96,10 @@ func begin_save_screen():
 			var profile_name = "save%d"%i
 			var exists = save_exists(profile_name)
 			if exists:
+				var face_plate = get_save_faceplate(profile_name)
 				pills[i].set_state_save_exists(profile_name)
+				if face_plate != null:
+					pills[i].set_face_plate(face_plate)
 			else:
 				pills[i].set_state_waiting_for(profile_name)
 			pills[i].selected.connect(func():
@@ -115,8 +130,8 @@ func _ready() -> void:
 	
 	countdown = splash_screen_duration
 	var t = create_tween()
-	t.tween_property(splash_cover, "modulate:a", 0.0, 0.3)\
-	.set_ease(Tween.EASE_IN)\
+	t.tween_property(splash_cover, "modulate:a", 0.0, 0.5)\
+	.set_ease(Tween.EASE_OUT)\
 	.set_trans(Tween.TRANS_CUBIC)
 
 func _process(delta: float) -> void:

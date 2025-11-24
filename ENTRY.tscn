@@ -52,7 +52,6 @@ label_settings = SubResource("LabelSettings_lpsy7")
 horizontal_alignment = 1
 
 [node name="Profiles" type="PanelContainer" parent="MainContainer/ProfileOutercase" unique_id=1153701796]
-self_modulate = Color(1, 1, 1, 0.3529412)
 layout_mode = 2
 
 [node name="Scroll" type="ScrollContainer" parent="MainContainer/ProfileOutercase/Profiles" unique_id=150198664]

@@ -2,15 +2,16 @@
 
 [ext_resource type="Script" uid="uid://pufbtr67lcto" path="res://addons/note/prefab/save_pill.gd" id="1_bta0g"]
 
-[node name="SavePill" type="PanelContainer" unique_id=1215840183 node_paths=PackedStringArray("label", "primary_button", "menu_button")]
+[node name="SavePill" type="PanelContainer" unique_id=1215840183 node_paths=PackedStringArray("label", "primary_button", "menu_button", "face_slot")]
 offset_right = 208.0
 offset_bottom = 74.0
 size_flags_horizontal = 3
-theme_type_variation = &"InsetVPanel"
+theme_type_variation = &"PanelContainerInset"
 script = ExtResource("1_bta0g")
 label = NodePath("MarginContainer/VBoxContainer/Label")
 primary_button = NodePath("MarginContainer/VBoxContainer/HBoxContainer/Button")
 menu_button = NodePath("MarginContainer/VBoxContainer/HBoxContainer/MenuButton")
+face_slot = NodePath("MarginContainer/VBoxContainer/FaceSlot")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=888290163]
 layout_mode = 2
@@ -20,6 +21,10 @@ theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=941133845]
+layout_mode = 2
+
+[node name="FaceSlot" type="MarginContainer" parent="MarginContainer/VBoxContainer" unique_id=1674082756]
+visible = false
 layout_mode = 2
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=116880616]

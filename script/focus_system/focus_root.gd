@@ -189,6 +189,7 @@ func activate(start: Control):
 	active = true
 	on_begin.emit(target)
 func deactivate():
+	_stacked_effects.clear()
 	on_end.emit()
 	hide()
 
@@ -232,7 +233,8 @@ func _change(new_target: Control):
 	
 	if _scroll != null:
 		await get_tree().process_frame
-		_scroll.ensure_control_visible(target)
+		if _scroll != null:
+			_scroll.ensure_control_visible(target)
 	
 	if !just_began:
 		sfx_move.pitch_scale = randf_range(1.0-sfx_pitch_variance, 1.0+sfx_pitch_variance)
@@ -277,6 +279,10 @@ func _cycle(delta: float) -> void:
 		else:
 			_times[i] = 0.0
 	
+	#if _shift_tween == null or !_shift_tween.is_running():
+		#if target != null:
+			#position = target.position
+			#size = target.size
 	queue_redraw()
 
 func _move_to_target(transition_duration = 0.2):
@@ -296,13 +302,21 @@ func _move_to_target(transition_duration = 0.2):
 	.set_ease(Tween.EASE_OUT)\
 	.set_trans(Tween.TRANS_CUBIC)
 
+## Going from source, and looking in the stick direction "impulse" find
+## the most likely next item its requesting. 
 func _get_next_item(source: Control, impulse: Vector2) -> Control:
 	var path: NodePath = ""
 	if abs(impulse.x) > 0.5 and abs(impulse.y) < 0.33:
 		path = source.focus_neighbor_right if impulse.x > 0.0 else source.focus_neighbor_left
-	if abs(impulse.x) < 0.33 and abs(impulse.y) > 0.5:
+	elif abs(impulse.x) < 0.33 and abs(impulse.y) > 0.5:
 		path = source.focus_neighbor_bottom if impulse.y > 0.0 else source.focus_neighbor_top
 	if path.is_empty():
 		return null
 	else:
-		return source.get_node(path)
+		var node = source.get_node(path)
+		if node is Control:
+			if node.has_meta(FocusDynamicEntrance.MetaTag):
+				var meta: FocusDynamicEntrance = node.get_meta(FocusDynamicEntrance.MetaTag)
+				var to_local = node.make_canvas_position_local(source.global_position)
+				return meta.get_new_target(to_local, impulse)
+		return node

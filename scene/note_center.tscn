@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://b6rrb216vfjay"]
+[gd_scene load_steps=26 format=3 uid="uid://b6rrb216vfjay"]
 
 [ext_resource type="Script" uid="uid://ow7brajv5vuq" path="res://addons/note/scene/note_center.gd" id="1_fmhej"]
 [ext_resource type="Script" uid="uid://dsuqhn7s348wn" path="res://addons/note/script/controls.gd" id="1_jhty6"]
@@ -8,6 +8,7 @@
 [ext_resource type="Material" uid="uid://dk5oqc43jlalx" path="res://addons/note/material/perlin_transition.tres" id="5_cqyws"]
 [ext_resource type="Script" uid="uid://caty0hb5uijx2" path="res://addons/note/script/phase/phase_manager.gd" id="5_k0cor"]
 [ext_resource type="Script" uid="uid://dj5ae4svel0vv" path="res://addons/note/script/loading_screen.gd" id="6_sv8pk"]
+[ext_resource type="StyleBox" uid="uid://c0dpaf201wta7" path="res://addons/note/resource/note_ui/stylebox/panel_controller_focus.tres" id="7_5m30c"]
 [ext_resource type="AudioStream" uid="uid://cjkq5qho04woa" path="res://addons/note/audio/move.ogg" id="7_p0kr4"]
 [ext_resource type="Script" uid="uid://ej2vfmjw2dkq" path="res://addons/note/script/tooltip_manager.gd" id="8_2dhwh"]
 [ext_resource type="AudioStream" uid="uid://bk1fgovjsn1l8" path="res://addons/note/audio/activate.ogg" id="8_wn61t"]
@@ -20,11 +21,9 @@
 [ext_resource type="AudioStream" uid="uid://bmgstvn7rmu0n" path="res://addons/note/audio/press.ogg" id="11_nmt5t"]
 [ext_resource type="AudioStream" uid="uid://ddpgtvjs717hg" path="res://addons/note/audio/long_press.ogg" id="12_p5oq1"]
 [ext_resource type="PackedScene" uid="uid://b8vpfmxrxetcf" path="res://addons/note/prefab/control_guide/basic_guidelet.tscn" id="12_rsod3"]
+[ext_resource type="AudioStream" uid="uid://cu4ny8r1k1e5" path="res://addons/note/audio/failed_input.ogg" id="13_m2x0e"]
 [ext_resource type="Script" uid="uid://4iwdim3cbvkf" path="res://addons/note/script/focus_system/focus_root.gd" id="14_iouvy"]
 [ext_resource type="PackedScene" uid="uid://pjkhoomtso4a" path="res://addons/note/prefab/faux_keyboard.tscn" id="22_jlad3"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icukk"]
-bg_color = Color(1, 1, 1, 0.6039216)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_arint"]
 atlas = ExtResource("10_3s5ow")
@@ -60,12 +59,12 @@ script = ExtResource("5_k0cor")
 [node name="NoteUISpace" type="CanvasLayer" parent="." unique_id=1102055093]
 layer = 120
 
-[node name="Focus" type="Control" parent="NoteUISpace" unique_id=2029769993 node_paths=PackedStringArray("sfx_move", "sfx_activate", "sfx_charge", "sfx_long_press", "sfx_up", "sfx_down")]
+[node name="Focus" type="Control" parent="NoteUISpace" unique_id=2029769993 node_paths=PackedStringArray("sfx_move", "sfx_activate", "sfx_charge", "sfx_long_press", "sfx_up", "sfx_down", "sfx_fail")]
 visible = false
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("14_iouvy")
-regular_box = SubResource("StyleBoxFlat_icukk")
+regular_box = ExtResource("7_5m30c")
 sfx_pitch_variance = 0.075
 sfx_move = NodePath("Move")
 sfx_activate = NodePath("Activate")
@@ -73,6 +72,7 @@ sfx_charge = NodePath("Charge")
 sfx_long_press = NodePath("LongPress")
 sfx_up = NodePath("Up")
 sfx_down = NodePath("Down")
+sfx_fail = NodePath("Fail")
 
 [node name="Move" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=1254488439]
 stream = ExtResource("7_p0kr4")
@@ -97,6 +97,10 @@ volume_db = -23.0
 [node name="Press" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=746006432]
 stream = ExtResource("11_nmt5t")
 volume_db = -23.0
+
+[node name="Fail" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=683985785]
+stream = ExtResource("13_m2x0e")
+volume_db = -25.0
 
 [node name="LongPress" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=722230450]
 stream = ExtResource("12_p5oq1")

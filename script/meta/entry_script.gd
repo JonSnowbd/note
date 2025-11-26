@@ -136,7 +136,10 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if start_trip: return
-	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) or Input.is_key_pressed(KEY_SPACE) or Input.is_key_pressed(KEY_ESCAPE):
+	var gp_hit = Input.is_joy_button_pressed(0, JOY_BUTTON_START) or Input.is_joy_button_pressed(0, JOY_BUTTON_A)
+	var kb_hit = Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) or Input.is_key_pressed(KEY_SPACE) or Input.is_key_pressed(KEY_ESCAPE)
+
+	if gp_hit or kb_hit:
 		if countdown > 0.25:
 			countdown = 0.2
 	

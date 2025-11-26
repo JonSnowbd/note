@@ -22,6 +22,7 @@ signal on_end()
 @export var sfx_long_press: AudioStreamPlayer
 @export var sfx_up: AudioStreamPlayer
 @export var sfx_down: AudioStreamPlayer
+@export var sfx_fail: AudioStreamPlayer
 
 var active: bool = false
 var target: Control = null
@@ -40,6 +41,8 @@ var _overflow: Vector2 = Vector2.ZERO
 var _times: Array[float] = [0.0, 0.0, 0.0, 0.0]
 var _states: Array[bool] = [false, false, false, false]
 
+var _shift_tween: Tween
+
 func _ready() -> void:
 	hide()
 
@@ -56,7 +59,7 @@ func _draw() -> void:
 		fx.focus_draw(self)
 	for fx: FocusEffect in _stacked_effects:
 		fx.focus_draw(self)
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	if automatic_gamepad_id < 0:
 		return
 	if event is InputEventJoypadButton:
@@ -136,8 +139,8 @@ func get_local_rect(target_node: Control) -> Rect2:
 func _send_btn(down: bool, state_id: int, send_fn: String, pitch_shift: float = 0.0):
 	var long_press = _has_long_press()
 	if down:
+		var button_consumed: bool = false
 		if !long_press:
-			var button_consumed: bool = false
 			# Check stacked effects first.
 			# TODO: Reverse the order, so newer stacked items win first.
 			for fx in _stacked_effects:
@@ -150,17 +153,25 @@ func _send_btn(down: bool, state_id: int, send_fn: String, pitch_shift: float = 
 					if fx.call(send_fn, true, false):
 						button_consumed = true
 						break
-		
-		sfx_down.pitch_scale = randf_range(1.0-sfx_pitch_variance, 1.0+sfx_pitch_variance)+pitch_shift
-		sfx_down.play()
+		if button_consumed:
+			sfx_down.pitch_scale = randf_range(1.0-sfx_pitch_variance, 1.0+sfx_pitch_variance)+pitch_shift
+			sfx_down.play()
+		else:
+			sfx_fail.play()
 	else:
 		var button_consumed: bool = false
 		for fx in _stacked_effects:
 			if fx.call(send_fn, false, false):
 				button_consumed = true
 				break
-		sfx_up.pitch_scale = randf_range(1.0-sfx_pitch_variance, 1.0+sfx_pitch_variance)+pitch_shift
-		sfx_up.play()
+		if !button_consumed:
+			for fx in _loaded_effects:
+				if fx.call(send_fn, false, false):
+					button_consumed = true
+					break
+		if button_consumed:
+			sfx_up.pitch_scale = randf_range(1.0-sfx_pitch_variance, 1.0+sfx_pitch_variance)+pitch_shift
+			sfx_up.play()
 	_states[state_id] = down
 func send_confirm(down: bool):
 	_send_btn(down, 0, "focus_confirm")
@@ -209,8 +220,8 @@ func _change(new_target: Control):
 			if _stacked_effects.has(c): continue
 			_loaded_effects.append(c as FocusEffect)
 			c.focus_enter()
-	
 	target = new_target
+	_move_to_target(0.2)
 	var parent = target.get_parent()
 	while parent != null:
 		if parent is ScrollContainer:
@@ -241,7 +252,6 @@ func _cycle(delta: float) -> void:
 	if target == null or !is_instance_valid(target) or target.is_queued_for_deletion() or !target.visible:
 		deactivate()
 		return
-	_move_to_target(3500.0*delta, 1000.0*delta)
 	
 	if automatic_gamepad_id >= 0:
 		var ls = Vector2.ZERO
@@ -269,11 +279,22 @@ func _cycle(delta: float) -> void:
 	
 	queue_redraw()
 
-func _move_to_target(position_speed: float,size_speed: float):
+func _move_to_target(transition_duration = 0.2):
 	var corrected = target.get_global_rect()
+	if target.get_viewport() != get_viewport():
+		var tform = target.get_viewport().get_screen_transform()
+		corrected.position = tform * corrected.position
 	
-	position = position.move_toward(corrected.position, position_speed)
-	size = size.move_toward(corrected.size, size_speed)
+	if _shift_tween != null and _shift_tween.is_running():
+		_shift_tween.stop()
+	_shift_tween = create_tween()
+	_shift_tween.set_parallel()
+	_shift_tween.tween_property(self, "size", corrected.size, transition_duration)\
+	.set_ease(Tween.EASE_OUT)\
+	.set_trans(Tween.TRANS_CUBIC)
+	_shift_tween.tween_property(self, "position", corrected.position, transition_duration)\
+	.set_ease(Tween.EASE_OUT)\
+	.set_trans(Tween.TRANS_CUBIC)
 
 func _get_next_item(source: Control, impulse: Vector2) -> Control:
 	var path: NodePath = ""

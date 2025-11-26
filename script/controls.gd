@@ -34,8 +34,10 @@ func set_mode(new_mode: Type):
 		input_method_changed.emit(new_mode)
 		match new_mode:
 			Type.MouseKeyboard:
+				is_now_keyboard.emit()
 				_nt.info("Changed input mode to Mouse & Keyboard")
 			Type.Gamepad:
+				is_now_gamepad.emit()
 				_nt.info("Changed input mode to Gamepad")
 			Type.Mobile:
 				_nt.info("Changed input mode to Mobile Input")

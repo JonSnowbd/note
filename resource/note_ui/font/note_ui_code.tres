@@ -1,0 +1,7 @@
+[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://bha8jfuuf8aei"]
+
+[ext_resource type="FontFile" uid="uid://7bu7t5na2asc" path="res://addons/note/resource/note_ui/font/NotoSansMono-Regular.ttf" id="1_g21yu"]
+
+[resource]
+base_font = ExtResource("1_g21yu")
+variation_embolden = 0.33

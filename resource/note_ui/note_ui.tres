@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=64 format=3 uid="uid://s8avb4vk6ef6"]
+[gd_resource type="Theme" load_steps=66 format=3 uid="uid://s8avb4vk6ef6"]
 
 [ext_resource type="StyleBox" uid="uid://bm0f60uoh2pxs" path="res://addons/note/resource/note_ui/stylebox/panel_regular.tres" id="1_4eopk"]
 [ext_resource type="StyleBox" uid="uid://bs3vovt80qwkd" path="res://addons/note/resource/note_ui/stylebox/button_primary_disabled.tres" id="1_ghwoo"]
@@ -22,6 +22,8 @@
 [ext_resource type="Texture2D" uid="uid://bhcxlwqwbdyv4" path="res://addons/note/resource/note_ui/texture/slider_tick_h.tres" id="12_rvbeg"]
 [ext_resource type="StyleBox" uid="uid://b7i2boavi8bms" path="res://addons/note/resource/note_ui/stylebox/scrollbar_fg_active.tres" id="13_c888h"]
 [ext_resource type="StyleBox" uid="uid://djcxv6uymr6u" path="res://addons/note/resource/note_ui/stylebox/slider_h_bg.tres" id="13_s18xk"]
+[ext_resource type="FontVariation" uid="uid://c5sliisjkpuqb" path="res://addons/note/resource/note_ui/font/note_ui_bold.tres" id="18_5i777"]
+[ext_resource type="FontVariation" uid="uid://bha8jfuuf8aei" path="res://addons/note/resource/note_ui/font/note_ui_code.tres" id="19_rvbeg"]
 [ext_resource type="Texture2D" uid="uid://dsh6oasgqx0a" path="res://addons/note/resource/note_ui/texture/slider_tick_v.tres" id="22_sf27h"]
 [ext_resource type="StyleBox" uid="uid://kmejhb1ve5el" path="res://addons/note/resource/note_ui/stylebox/slider_bg.tres" id="23_x3vxi"]
 
@@ -156,7 +158,7 @@ expand_margin_bottom = 2.0
 _source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\"><path fill=\"#fff\" fill-opacity=\".75\" d=\"m1 3 2-2 5 5 5-5 2 2-5 5 5 5-2 2-5-5-5 5-2-2 5-5z\"/></svg>
 "
 
-[sub_resource type="Image" id="Image_j4w6o"]
+[sub_resource type="Image" id="Image_s18xk"]
 data = {
 "data": PackedByteArray(255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255),
 "format": "RGBA8",
@@ -166,7 +168,7 @@ data = {
 }
 
 [sub_resource type="ImageTexture" id="ImageTexture_f07ad"]
-image = SubResource("Image_j4w6o")
+image = SubResource("Image_s18xk")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_b5tvb"]
 content_margin_left = 0.0
@@ -494,6 +496,9 @@ RichTextLabel/font_sizes/bold_italics_font_size = 16
 RichTextLabel/font_sizes/italics_font_size = 16
 RichTextLabel/font_sizes/mono_font_size = 16
 RichTextLabel/font_sizes/normal_font_size = 16
+RichTextLabel/fonts/bold_font = ExtResource("18_5i777")
+RichTextLabel/fonts/mono_font = ExtResource("19_rvbeg")
+RichTextLabel/fonts/normal_font = ExtResource("3_yetdl")
 RichTextLabel/icons/horizontal_rule = SubResource("ImageTexture_f07ad")
 RichTextLabel/styles/focus = SubResource("StyleBoxFlat_nojbf")
 RichTextLabel/styles/normal = SubResource("StyleBoxEmpty_b5tvb")

@@ -158,7 +158,7 @@ expand_margin_bottom = 2.0
 _source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\"><path fill=\"#fff\" fill-opacity=\".75\" d=\"m1 3 2-2 5 5 5-5 2 2-5 5 5 5-2 2-5-5-5 5-2-2 5-5z\"/></svg>
 "
 
-[sub_resource type="Image" id="Image_s18xk"]
+[sub_resource type="Image" id="Image_5i777"]
 data = {
 "data": PackedByteArray(255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255),
 "format": "RGBA8",
@@ -168,7 +168,7 @@ data = {
 }
 
 [sub_resource type="ImageTexture" id="ImageTexture_f07ad"]
-image = SubResource("Image_s18xk")
+image = SubResource("Image_5i777")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_b5tvb"]
 content_margin_left = 0.0

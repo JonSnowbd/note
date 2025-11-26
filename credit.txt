@@ -2,5 +2,6 @@ https://kenney.nl/assets/input-prompts
 https://kenney.nl/assets/ui-audio
 https://gl-transitions.com
 https://www.svgrepo.com/collection/denali-solid-interface-icons
-https://fonts.google.com/specimen/Outfit
 https://github.com/binogure-studio/godot-uuid/tree/master
+https://fonts.google.com/specimen/Stack+Sans+Text
+https://fonts.google.com/noto/specimen/Noto+Sans

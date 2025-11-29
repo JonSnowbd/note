@@ -3,6 +3,7 @@ extends Control
 signal on_begin(new_target: Control)
 signal changed_control(new_control: Control)
 signal on_end()
+signal lost_focus
 
 ## Taps longer than this are auto-sent as a long press.
 @export var long_press_duration: float = 0.4
@@ -43,6 +44,9 @@ var _states: Array[bool] = [false, false, false, false]
 
 var _shift_tween: Tween
 
+## If true, any calls to begin are ignored.
+var locked: bool = false
+
 func _ready() -> void:
 	hide()
 
@@ -60,6 +64,7 @@ func _draw() -> void:
 	for fx: FocusEffect in _stacked_effects:
 		fx.focus_draw(self)
 func _input(event: InputEvent) -> void:
+	if locked: return
 	if automatic_gamepad_id < 0:
 		return
 	if event is InputEventJoypadButton:
@@ -98,6 +103,7 @@ func _input(event: InputEvent) -> void:
 			return
 
 func _send_dir(dir: Vector2):
+	if locked: return
 	var next = _get_next_item(target, dir)
 	if next == null:
 		var butt_consumed: bool = false
@@ -133,8 +139,13 @@ func send_impulse(stick: Vector2):
 	if l < 0.4:
 		_impulse_trip = false
 
-func get_local_rect(target_node: Control) -> Rect2:
-	return Rect2(target_node.global_position-global_position, target_node.size)
+func get_localized_rect(query: Control) -> Rect2:
+	var corrected = target.get_global_rect()
+	if target.get_viewport() != get_viewport():
+		var tform = target.get_viewport().get_screen_transform()
+		corrected.position = tform * corrected.position
+	return corrected
+	
 
 func _send_btn(down: bool, state_id: int, send_fn: String, pitch_shift: float = 0.0):
 	var long_press = _has_long_press()
@@ -183,15 +194,24 @@ func send_special2(down: bool):
 	_send_btn(down, 3, "focus_special2", 0.12)
 
 func activate(start: Control):
+	if locked: return
 	show()
 	_overflow = Vector2.ZERO
 	_change(start)
 	active = true
 	on_begin.emit(target)
-func deactivate():
-	_stacked_effects.clear()
+func deactivate(is_loss: bool = false):
+	reset()
+	active = false
+	_loaded_effects.clear()
 	on_end.emit()
 	hide()
+	if is_loss:
+		lost_focus.emit()
+## Resets special state like the stack and scrolling overflow.
+func reset():
+	_stacked_effects.clear()
+	_overflow = Vector2.ZERO
 
 func send_scroll(stick: Vector2, delta: float, speed: float = 450.0):
 	if _scroll != null:
@@ -251,8 +271,10 @@ func _has_long_press() -> bool:
 func _cycle(delta: float) -> void:
 	if !active:
 		return
-	if target == null or !is_instance_valid(target) or target.is_queued_for_deletion() or !target.visible:
+	if target == null or !is_instance_valid(target) or target.is_queued_for_deletion() or !target.is_visible_in_tree():
 		deactivate()
+		lost_focus.emit()
+		print("Losterino")
 		return
 	
 	if automatic_gamepad_id >= 0:
@@ -279,26 +301,24 @@ func _cycle(delta: float) -> void:
 		else:
 			_times[i] = 0.0
 	
-	#if _shift_tween == null or !_shift_tween.is_running():
-		#if target != null:
-			#position = target.position
-			#size = target.size
+	if _shift_tween == null or !_shift_tween.is_running():
+		if target != null:
+			var dest = get_localized_rect(target)
+			position = dest.position
+			size = dest.size
 	queue_redraw()
 
 func _move_to_target(transition_duration = 0.2):
-	var corrected = target.get_global_rect()
-	if target.get_viewport() != get_viewport():
-		var tform = target.get_viewport().get_screen_transform()
-		corrected.position = tform * corrected.position
+	var destination = get_localized_rect(target)
 	
 	if _shift_tween != null and _shift_tween.is_running():
 		_shift_tween.stop()
 	_shift_tween = create_tween()
 	_shift_tween.set_parallel()
-	_shift_tween.tween_property(self, "size", corrected.size, transition_duration)\
+	_shift_tween.tween_property(self, "size", destination.size, transition_duration)\
 	.set_ease(Tween.EASE_OUT)\
 	.set_trans(Tween.TRANS_CUBIC)
-	_shift_tween.tween_property(self, "position", corrected.position, transition_duration)\
+	_shift_tween.tween_property(self, "position", destination.position, transition_duration)\
 	.set_ease(Tween.EASE_OUT)\
 	.set_trans(Tween.TRANS_CUBIC)
 

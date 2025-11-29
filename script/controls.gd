@@ -15,6 +15,8 @@ signal is_now_gamepad
 
 var current_mode: Type = Type.MouseKeyboard
 
+var change_mouse_mode_automatically: bool = true
+
 var __mouse_track: float = 0.0
 @onready var _nt = get_tree().root.get_node("note")
 
@@ -25,13 +27,15 @@ func _ready() -> void:
 ## note's automatic controller detection, this is how you toggle it.
 ## Not needed if you are letting note automatically detect changes.
 func set_mode(new_mode: Type):
-	if new_mode == Type.MouseKeyboard:
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	else:
-		Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+	if change_mouse_mode_automatically:
+		if new_mode == Type.MouseKeyboard:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		else:
+			Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 	if new_mode != current_mode:
 		current_mode = new_mode
 		input_method_changed.emit(new_mode)
+		print("CHANGED TO "+str(new_mode))
 		match new_mode:
 			Type.MouseKeyboard:
 				is_now_keyboard.emit()

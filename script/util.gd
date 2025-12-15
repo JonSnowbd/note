@@ -29,13 +29,15 @@ func unscaled_dt() -> float:
 ## Accurate, and constant. Perfect for use in any physics process that needs to be free from timescale.
 func unscaled_physics_dt() -> float:
 	return 1.0/Engine.physics_ticks_per_second
-
-## A stateless move_towards that scales the speed up as it gets further away,
-## avoiding the linear feeling.
-func smooth_move_towards_speed(from: Vector2, to: Vector2, speed: float) -> float:
-	var dist = from.distance_to(to)
-	return speed + (sqrt(speed*dist))
-
+## Smoothly move towards a value. Like a damped value lerp. Float version.
+func smooth_toward(from: float, to: float, speed: float, delta: float) -> float:
+	return lerp(from, to, 1.0 - exp(-speed * delta))
+## Smoothly move towards a value. Like a damped value lerp. Vector2 version.
+func smooth_toward_v2(from: Vector2, to: Vector2, speed: float, delta: float) -> Vector2:
+	return from.lerp(to, 1.0 - exp(-speed * delta))
+## Smoothly move towards a value. Like a damped value lerp. Vector2 version.
+func smooth_toward_v3(from: Vector3, to: Vector3, speed: float, delta: float) -> Vector3:
+	return from.lerp(to, 1.0 - exp(-speed * delta))
 ## If a tween has been started from the same id, it will be stopped and removed before returning
 ## this new tween. Useful for avoiding overlaps with simple tweens without handling it yourself,
 ## if the code path is hot enough to have potential overlaps

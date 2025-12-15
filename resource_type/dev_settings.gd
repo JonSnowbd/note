@@ -41,6 +41,8 @@ enum NoteEntrySceneType {
 ## to your save session that you don't want every frame.
 @export var save_pulse_duration: float = 1.0
 
+@export_storage var developer_journal: NoteJournalResource
+
 
 # TODO
 #@export_group("Hoist Mods")

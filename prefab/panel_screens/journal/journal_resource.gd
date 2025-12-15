@@ -2,6 +2,9 @@
 extends Resource
 class_name NoteJournalResource
 
+## The main type that houses all the documents contained
+## in a journal.
+
 const PickUpType = preload("uid://cxj8y7idv21t")
 
 signal word_updated

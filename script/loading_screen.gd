@@ -48,6 +48,15 @@ func begin_loading():
 	initial_load_quantity = len(statuses)
 	_nt.transition.trigger()
 	show()
+
+func get_load_progress(path:String) -> float:
+	if is_cached(path):
+		return 1.0
+	if statuses_shadows.has(path) or statuses.has(path):
+		var pct = []
+		ResourceLoader.load_threaded_get_status(path, pct)
+		return pct[0]
+	return 0.0
 ## Pre-loads things in the background immediately without causing any signals or responses.
 func shadow_load(path:String):
 	ResourceLoader.load_threaded_request(path)

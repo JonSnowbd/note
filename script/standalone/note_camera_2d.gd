@@ -121,7 +121,11 @@ func _process_effects(delta: float):
 			effect_stack.remove_at(i)
 
 func _update_properties():
-	var size = get_viewport_rect().size
+	var size
+	if is_inside_tree():
+		size = get_viewport_rect().size
+	else:
+		size = DisplayServer.window_get_size()
 	window_size = size
 	zoom = Vector2(float(size.x)/virtual_size.x, float(size.y)/virtual_size.y)
 	if scaling_mode == 1:

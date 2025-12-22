@@ -1,7 +1,6 @@
 extends RefCounted
 
 var stuck_save: String = ""
-var first_launch: bool = true
 var previous_master_bus_volume: float = 0.0
 var previous_fullscreen_mode: int = 0
 
@@ -17,7 +16,6 @@ func _init() -> void:
 		stuck_save = json["stuck_save"]
 		previous_master_bus_volume = json["previous_master_bus_volume"]
 		previous_fullscreen_mode = json["previous_fullscreen_mode"]
-		first_launch = json["first_launch"]
 func persist(_nt) -> void:
 	previous_fullscreen_mode = _nt.util.get_fullscreen()
 	previous_master_bus_volume = _nt.util.get_volume("Master")
@@ -26,7 +24,6 @@ func persist(_nt) -> void:
 		"stuck_save" = stuck_save,
 		"previous_master_bus_volume" =  previous_master_bus_volume,
 		"previous_fullscreen_mode" = previous_fullscreen_mode,
-		"first_launch" = false,
 	}))
 	fi.close()
 

@@ -45,7 +45,8 @@ func _init() -> void:
 	
 func _ready() -> void:
 	meta = TypeMetadata.new()
-	util.set_volume("Master", meta.previous_master_bus_volume)
+	if settings.save_soft_settings:
+		meta.restore_soft_settings(self)
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST or what == NOTIFICATION_EXIT_TREE:
 		end_session()

@@ -20,11 +20,11 @@ func _resource_saved(res: Resource):
 		var current_settings = ProjectSettings.get_setting("addons/note/settings", "")
 		if current_settings == "":
 			var path = res.resource_path
+			var uid = ResourceUID.path_to_uid(path)
 			
 			print_rich("Note automatically loaded your new developer settings: '%s'[br]If this was not\
  desired, please correct this in Project Settings Addons/Note/Settings" % path)
-			
-			ProjectSettings.set_setting("addons/note/settings", path)
+			ProjectSettings.set_setting("addons/note/settings", uid)
 
 func _enter_tree() -> void:
 	resource_saved.connect(_resource_saved)
@@ -62,4 +62,4 @@ func _get_plugin_name() -> String:
 func _has_main_screen() -> bool:
 	return true
 func _get_plugin_icon() -> Texture2D:
-	return EditorInterface.get_editor_theme().get_icon("CodeEdit", "EditorIcons")
+	return preload("uid://c01cjqbs86bvo")

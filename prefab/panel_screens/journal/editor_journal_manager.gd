@@ -42,7 +42,6 @@ func load_journal_through_temp():
 		journal.resource_path = path
 		journal.create_new_document("New Document")
 		save()
-	print("Loading Journal via temp path: %s" % path)
 	is_in_settings_file = false
 	
 # Called when the node enters the scene tree for the first time.
@@ -50,7 +49,8 @@ func _ready() -> void:
 	if is_part_of_edited_scene(): return
 	
 	var settings_path: String = ProjectSettings.get_setting("addons/note/settings", "")
-	settings = load(ProjectSettings.get_setting("addons/note/settings", "")) as NoteDeveloperSettings
+	if !settings_path.is_empty():
+		settings = load(ProjectSettings.get_setting("addons/note/settings", "")) as NoteDeveloperSettings
 	if settings == null:
 		load_journal_through_temp()
 	else:

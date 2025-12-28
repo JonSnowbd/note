@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://1baqu2co3orh"]
+[gd_scene format=3 uid="uid://1baqu2co3orh"]
 
 [ext_resource type="Theme" uid="uid://s8avb4vk6ef6" path="res://addons/note/resource/note_ui/note_ui.tres" id="1_dppm4"]
 [ext_resource type="PackedScene" uid="uid://dthkt8pfqui48" path="res://addons/note/prefab/panel_screens/lab.tscn" id="1_ynbih"]

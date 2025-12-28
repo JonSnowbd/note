@@ -5,16 +5,18 @@ extends Button
 @export var icon_when_mobile: Texture2D
 
 
+@onready var _nt = get_tree().root.get_node("note")
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	note.controls.input_method_changed.connect(update)
-	update(note.controls.current_mode)
+	_nt.controls.input_method_changed.connect(update)
+	update(_nt.controls.current_mode)
 
-func update(to_type: note.TypeControlManager.Type):
+func update(to_type):
 	match to_type:
-		note.TypeControlManager.Type.Mobile:
+		_nt.TypeControlManager.Type.Mobile:
 			icon = icon_when_mobile
-		note.TypeControlManager.Type.Gamepad:
+		_nt.TypeControlManager.Type.Gamepad:
 			icon = icon_when_gp
-		note.TypeControlManager.Type.MouseKeyboard:
+		_nt.TypeControlManager.Type.MouseKeyboard:
 			icon = icon_when_kb

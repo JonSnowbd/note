@@ -37,11 +37,12 @@ var storage: Dictionary = {}
 var meta: TypeMetadata
 
 func _init() -> void:
-	var settings_path = ProjectSettings.get_setting("addons/note/settings", "")
-	if settings_path == "":
+	var settings_path: String = ProjectSettings.get_setting("addons/note/settings", "")
+	if settings_path.is_empty():
 		error("Settings path was not set in project settings: Addons/Note/Settings")
 		return
-	settings = load(settings_path)
+	else:
+		settings = load(settings_path)
 	
 func _ready() -> void:
 	meta = TypeMetadata.new()

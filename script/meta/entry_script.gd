@@ -132,7 +132,8 @@ func _ready() -> void:
 	instant_load_check()
 	countdown = splash_screen_duration
 	var t = create_tween()
-	t.tween_property(splash_cover, "modulate:a", 0.0, 0.5)\
+	t.tween_interval(0.5)
+	t.tween_property(splash_cover, "modulate:a", 0.0, 0.8)\
 	.set_ease(Tween.EASE_OUT)\
 	.set_trans(Tween.TRANS_CUBIC)
 

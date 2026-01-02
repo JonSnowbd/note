@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://k7kf706i87f8"]
+[gd_scene format=3 uid="uid://k7kf706i87f8"]
 
 [ext_resource type="Script" uid="uid://cisngsrm6qppo" path="res://addons/note/script/meta/entry_script.gd" id="1_j2ojt"]
 [ext_resource type="PackedScene" uid="uid://b0aww2yb021su" path="res://addons/note/prefab/save_pill.tscn" id="2_lpsy7"]
@@ -14,7 +14,7 @@ layer = 4
 script = ExtResource("1_j2ojt")
 pills = [NodePath("MainContainer/ProfileOutercase/Profiles/Scroll/Padding/ProfileList/Profile1"), NodePath("MainContainer/ProfileOutercase/Profiles/Scroll/Padding/ProfileList/Profile2"), NodePath("MainContainer/ProfileOutercase/Profiles/Scroll/Padding/ProfileList/Profile3"), NodePath("MainContainer/ProfileOutercase/Profiles/Scroll/Padding/ProfileList/Profile4"), NodePath("MainContainer/ProfileOutercase/Profiles/Scroll/Padding/ProfileList/Profile5"), NodePath("MainContainer/ProfileOutercase/Profiles/Scroll/Padding/ProfileList/Profile6")]
 splash_screen = NodePath("SplashScreen")
-splash_cover = NodePath("SplashScreen/ColorRect")
+splash_cover = NodePath("SplashScreen/SplashCover")
 credit_container = NodePath("SplashScreen/CreditCorner")
 godot_credit_logo = NodePath("SplashScreen/CreditCorner/VBoxContainer/Credits/GodotCredit")
 note_credit_logo = NodePath("SplashScreen/CreditCorner/VBoxContainer/Credits/NoteCredit")
@@ -139,6 +139,6 @@ layout_mode = 2
 texture = ExtResource("3_mhbyb")
 stretch_mode = 5
 
-[node name="ColorRect" type="ColorRect" parent="SplashScreen" unique_id=633150987]
+[node name="SplashCover" type="ColorRect" parent="SplashScreen" unique_id=633150987]
 layout_mode = 2
 color = Color(0, 0, 0, 1)

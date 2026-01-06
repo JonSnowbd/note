@@ -21,8 +21,7 @@ var context
 ## A list of every effect affecting this calculator. Do not manipulate this
 ## manually.
 var effects: Array[AutoStateEffect] = []
-## If the
-var oldest_effects_first: bool = false
+
 
 func _filter_effects(item: AutoStateEffect) -> bool:
 	var keep = item._effect_duration < 0.0 or item._effect_lifetime < item._effect_duration
@@ -85,12 +84,11 @@ func add_ephemeral_effect(new_effect: AutoStateEffect, priority: float = 0.0, du
 	add_effect(new_effect, priority, duration)
 
 ## Returns true if the calculator is under the influence of any effect of this type.
-func has_effect_type(effector_type: Script) -> bool:
+func has_effect_type(effector_type) -> bool:
 	for e in effects:
 		if is_instance_of(e, effector_type):
 			return true
 	return false
-
 ## Returns the first instance(lowest priority) that is, or is a descendant
 ## of the provided type.
 func get_effect(effector_type) -> AutoStateEffect:

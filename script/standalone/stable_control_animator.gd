@@ -33,7 +33,10 @@ var rotation_degrees: float = 0.0 :
 var scale: Vector2 = Vector2.ONE:
 	set(val):
 		if scale != val:
+			var diff = val - scale
 			scale = val
+			if target != null:
+				target.scale += diff
 
 ## If assigned, this control self destructs when its over.
 var dependant_tween: Tween :
@@ -78,3 +81,4 @@ func _apply():
 	target.pivot_offset = target.size*origin
 	target.position += offset
 	target.rotation_degrees += rotation_degrees
+	target.scale = scale

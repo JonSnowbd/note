@@ -63,7 +63,7 @@ func get_fullscreen() -> FullscreenState:
 			return FullscreenState.Windowed
 	return FullscreenState.Unknown
 ## If true, sets the display server to fullscreen, otherwise windowed.
-func set_fullscreen(state: FullscreenState):
+func set_screen_state(state: FullscreenState):
 	var current_mode = DisplayServer.window_get_mode()
 	var current_state = get_fullscreen()
 	if current_state == FullscreenState.Unknown:
@@ -78,6 +78,13 @@ func set_fullscreen(state: FullscreenState):
 			FullscreenState.Fullscreen:
 				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
 		fullscreen_changed.emit()
+
+func set_fullscreen():
+	set_screen_state(FullscreenState.Fullscreen)
+func set_borderless_fullscreen():
+	set_screen_state(FullscreenState.BorderlessFullscreen)
+func set_windowed():
+	set_screen_state(FullscreenState.Windowed)
 
 ## Gets the linear volume of the bus requested, from 0.0 to 2.0 (to account for users
 ## who wish to overclock audio volume. 0.0 to 1.0 is the normal expectation.)

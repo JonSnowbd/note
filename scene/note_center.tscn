@@ -217,7 +217,6 @@ layout_mode = 2
 mouse_filter = 2
 
 [node name="Transition" type="TextureRect" parent="NoteUISpace" unique_id=1380330631]
-visible = false
 material = ExtResource("5_cqyws")
 anchors_preset = 15
 anchor_right = 1.0
@@ -225,5 +224,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
 script = ExtResource("3_vdx63")
 metadata/_custom_type_script = "uid://b53sh8bwtjj8g"

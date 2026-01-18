@@ -1,3 +1,4 @@
+@abstract
 extends RefCounted
 class_name NoteGameScript
 
@@ -17,7 +18,7 @@ func script_name() -> String:
 func script_documentation() -> String:
 	return ""
 
+@abstract
 ## VIRTUAL: This is ran when [code]note.execute[/code] is called with
 ## this script referenced.
-func execute(param):
-	pass
+func execute(param)

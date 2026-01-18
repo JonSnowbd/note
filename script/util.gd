@@ -5,8 +5,8 @@ signal fullscreen_changed
 enum FullscreenState {
 	Unknown,
 	Windowed,
-	BorderlessFullscreen,
 	Fullscreen,
+	ExclusiveFullscreen,
 }
 
 var _tween_cache: Dictionary[String,Tween] = {}
@@ -56,9 +56,9 @@ func get_fullscreen() -> FullscreenState:
 	var current_mode = DisplayServer.window_get_mode()
 	match current_mode:
 		DisplayServer.WindowMode.WINDOW_MODE_FULLSCREEN:
-			return FullscreenState.BorderlessFullscreen
-		DisplayServer.WindowMode.WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
 			return FullscreenState.Fullscreen
+		DisplayServer.WindowMode.WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
+			return FullscreenState.ExclusiveFullscreen
 		DisplayServer.WindowMode.WINDOW_MODE_WINDOWED:
 			return FullscreenState.Windowed
 	return FullscreenState.Unknown
@@ -73,16 +73,16 @@ func set_screen_state(state: FullscreenState):
 		match state:
 			FullscreenState.Windowed:
 				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-			FullscreenState.BorderlessFullscreen:
-				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 			FullscreenState.Fullscreen:
+				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+			FullscreenState.ExclusiveFullscreen:
 				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
 		fullscreen_changed.emit()
 
 func set_fullscreen():
 	set_screen_state(FullscreenState.Fullscreen)
-func set_borderless_fullscreen():
-	set_screen_state(FullscreenState.BorderlessFullscreen)
+func set_exclusive_fullscreen():
+	set_screen_state(FullscreenState.ExclusiveFullscreen)
 func set_windowed():
 	set_screen_state(FullscreenState.Windowed)
 
@@ -118,3 +118,24 @@ func profiler_end(val: int) -> String:
 		return "%.2fs"%(time*1000.0)
 	else:
 		return "%.2fms"%time
+
+func get_closest_node_2d(array: Array, target: Node2D) -> Node2D:
+	var closest_dist = INF
+	var closest = null
+	for i in array:
+		if i is Node2D:
+			var dist = i.global_position.distance_to(target.global_position)
+			if dist < closest_dist:
+				closest_dist = dist
+				closest = i
+	return closest
+func set_distance_between_nodes_2d(stator: Node2D, mover: Node2D, distance: float):
+	var diff = (mover.global_position - stator.global_position).normalized()
+	mover.global_position = stator.global_position+(diff*distance)
+
+## Adds distance between 2 nodes, can also contract nodes. Ratio determines how much
+## node1 and node2 split the work. 0.0 means only node1 moves, 1.0 means only node2 moves.
+func spread_nodes_2d(node1: Node2D, node2: Node2D, spread: float, ratio: float = 0.5):
+	var diff = (node2.global_position - node1.global_position).normalized()
+	node1.global_position -= diff*(spread*(1.0-ratio))
+	node2.global_position += diff*(spread*ratio)

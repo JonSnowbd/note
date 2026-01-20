@@ -2,13 +2,6 @@ extends Node
 
 signal fullscreen_changed
 
-enum FullscreenState {
-	Unknown,
-	Windowed,
-	Fullscreen,
-	ExclusiveFullscreen,
-}
-
 var _tween_cache: Dictionary[String,Tween] = {}
 
 ## Takes time as a float, and returns a speedrun style format, `HH:MM:SS.MS`
@@ -41,8 +34,11 @@ func smooth_toward_v3(from: Vector3, to: Vector3, speed: float, delta: float) ->
 ## If a tween has been started from the same id, it will be stopped and removed before returning
 ## this new tween. Useful for avoiding overlaps with simple tweens without handling it yourself,
 ## if the code path is hot enough to have potential overlaps
-func clean_tween(id: String) -> Tween:
+func clean_tween(id: String, smooth: bool = true) -> Tween:
 	var t = create_tween()
+	if smooth:
+		t.set_trans(Tween.TRANS_CUBIC)
+		t.set_ease(Tween.EASE_OUT)
 	if _tween_cache.has(id):
 		var prev = _tween_cache[id]
 		if prev.is_running():
@@ -52,39 +48,23 @@ func clean_tween(id: String) -> Tween:
 func clean_tween_free(id: String):
 	_tween_cache.erase(id)
 
-func get_fullscreen() -> FullscreenState:
-	var current_mode = DisplayServer.window_get_mode()
-	match current_mode:
-		DisplayServer.WindowMode.WINDOW_MODE_FULLSCREEN:
-			return FullscreenState.Fullscreen
-		DisplayServer.WindowMode.WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
-			return FullscreenState.ExclusiveFullscreen
-		DisplayServer.WindowMode.WINDOW_MODE_WINDOWED:
-			return FullscreenState.Windowed
-	return FullscreenState.Unknown
-## If true, sets the display server to fullscreen, otherwise windowed.
-func set_screen_state(state: FullscreenState):
-	var current_mode = DisplayServer.window_get_mode()
-	var current_state = get_fullscreen()
-	if current_state == FullscreenState.Unknown:
-		return
-	
-	if current_state != state:
-		match state:
-			FullscreenState.Windowed:
-				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-			FullscreenState.Fullscreen:
-				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
-			FullscreenState.ExclusiveFullscreen:
-				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
-		fullscreen_changed.emit()
-
 func set_fullscreen():
-	set_screen_state(FullscreenState.Fullscreen)
+	if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_MAXIMIZED:
+		set_windowed()
+		await get_tree().process_frame
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+	fullscreen_changed.emit()
 func set_exclusive_fullscreen():
-	set_screen_state(FullscreenState.ExclusiveFullscreen)
-func set_windowed():
-	set_screen_state(FullscreenState.Windowed)
+	if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_MAXIMIZED:
+		set_windowed()
+		await get_tree().process_frame
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+	fullscreen_changed.emit()
+func set_windowed(fix_borderless: bool = true):
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+	if fix_borderless:
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, false)
+	fullscreen_changed.emit()
 
 ## Gets the linear volume of the bus requested, from 0.0 to 2.0 (to account for users
 ## who wish to overclock audio volume. 0.0 to 1.0 is the normal expectation.)
@@ -119,7 +99,9 @@ func profiler_end(val: int) -> String:
 	else:
 		return "%.2fms"%time
 
-func get_closest_node_2d(array: Array, target: Node2D) -> Node2D:
+## Scours an array of Node2Ds, and tracks which is closest to [code]target[/code],
+## and returns it. Can return null.
+func get_closest_node_2d(array, target: Node2D) -> Node2D:
 	var closest_dist = INF
 	var closest = null
 	for i in array:
@@ -129,10 +111,13 @@ func get_closest_node_2d(array: Array, target: Node2D) -> Node2D:
 				closest_dist = dist
 				closest = i
 	return closest
+	
+## Using the relative positions of 2 nodes, moves [code]mover[/code] to be 
+## [code]distance[/code] away from the [code]stator[/code], maintaining the angle.
 func set_distance_between_nodes_2d(stator: Node2D, mover: Node2D, distance: float):
 	var diff = (mover.global_position - stator.global_position).normalized()
 	mover.global_position = stator.global_position+(diff*distance)
-
+	
 ## Adds distance between 2 nodes, can also contract nodes. Ratio determines how much
 ## node1 and node2 split the work. 0.0 means only node1 moves, 1.0 means only node2 moves.
 func spread_nodes_2d(node1: Node2D, node2: Node2D, spread: float, ratio: float = 0.5):

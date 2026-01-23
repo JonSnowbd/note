@@ -34,7 +34,6 @@ var enabled: bool = true :
 
 var component_handles: Dictionary[Script,int]
 var side_effects: Array[PECSSideEffect]
-var frame_tags: Array = []
 var transient: bool = false
 var is_setup_complete: bool = false
 var relationships: Dictionary[Script,Array] = {}
@@ -65,9 +64,12 @@ func _exit_tree() -> void:
 	if parent != null:
 		parent.remove_meta(ENTMARK_METATAG)
 
-func add_component(component: Script, value):
+func add_component(component: Script, value = null):
 	if core != null:
-		core.entity_add_component(self, component, value)
+		if value == null:
+			core.entity_add_component(self, component, component.new())
+		else:
+			core.entity_add_component(self, component, value)
 	else:
 		note.warn("Entity %s requested component without a core.")
 func has_component(component: Script) -> bool:

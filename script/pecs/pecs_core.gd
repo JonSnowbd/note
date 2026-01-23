@@ -47,15 +47,20 @@ class Lens extends RefCounted:
 
 var component_store: Dictionary[Script,Array] = {}
 var systems: Array[PECSSystem] = []
+var observers: Array[PECSObserver] = []
 
 var entities: Array[PECSEntityMarker] = []
 var entity_index: Dictionary[PECSEntityMarker, int]
 
 var _update_pairs: Array = []
 var _component_holes: Dictionary[Script,Array] = {}
+var _queued_events: Array = []
 
 var maintained_lenses: Array[Lens]
 var relevant_lenses: Dictionary[Script, Array] = {}
+var _immediate_observers: Array[PECSObserver]
+var _deferred_observers: Array[PECSObserver]
+
 
 func _get_configuration_warnings() -> PackedStringArray:
 	var warns = []
@@ -78,9 +83,8 @@ func _enter_tree() -> void:
 	for i in get_children():
 		if i is PECSSystem:
 			system_add_via_node(i)
-
-func _ready() -> void:
-	if Engine.is_editor_hint(): return
+		if i is PECSObserver:
+			observer_add_via_node(i)
 
 func instantiate_packed_scene(scene: PackedScene, to_parent: Node) -> PECSEntityMarker:
 	var inst = scene.instantiate()
@@ -127,6 +131,7 @@ func entity_has_component(entity: PECSEntityMarker, component: Script) -> bool:
 	return entity.component_handles.has(component)
 ## Reserves a spot in the component store 
 func entity_add_component(entity: PECSEntityMarker, component: Script, value: Variant) -> void:
+	component_add(component)
 	var ind = len(component_store[component])
 	var using_hole: bool = false
 	if len(_component_holes[component]) > 0:
@@ -199,13 +204,36 @@ func refresh_lens(lens: Lens):
 
 func _sort_systems(l: PECSSystem, r: PECSSystem) -> bool:
 	return l.priority > r.priority
+func _sort_observers(l: PECSObserver, r: PECSObserver) -> bool:
+	return l.priority > r.priority
+
+func observer_add_via_script(observer: Script) -> void:
+	var instance = Node.new()
+	instance.set_script(observer)
+	if instance is PECSObserver:
+		observer_add_via_node(instance)
+func observer_add_via_node(observer: PECSObserver) -> void:
+	observer.setup(self)
+	observers.append(observer)
+	observers.sort_custom(_sort_observers)
+	if observer.event_bubble_behaviour == 0:
+		_deferred_observers.append(observer)
+	else:
+		_immediate_observers.append(observer)
+func observer_remove_via_node(observer: PECSObserver) -> void:
+	_deferred_observers.erase(observer)
+	_immediate_observers.erase(observer)
+	observers.erase(observer)
+func observer_remove_via_script(observer: Script) -> void:
+	for s in observers:
+		if s.get_script() == observer:
+			observer_remove_via_node(s)
+			break
 func system_add_via_script(system: Script) -> void:
 	var instance = Node.new()
 	instance.set_script(system)
 	if instance is PECSSystem:
-		instance.setup(self)
-		systems.append(instance)
-		systems.sort_custom(_sort_systems)
+		system_add_via_node(instance)
 func system_add_via_node(system: PECSSystem) -> void:
 	system.setup(self)
 	systems.append(system)
@@ -215,15 +243,22 @@ func system_remove_via_node(system: PECSSystem) -> void:
 func system_remove_via_script(system: Script) -> void:
 	for s in systems:
 		if s.get_script() == system:
-			systems.erase(s)
+			system_remove_via_node(s)
 			break
 
+## Creates and maintains a lens which lets you filter and look for
+## entities dynamically. The entity list is refreshed for the first time
+## on an ECS run tick, after which all changes to entities will be reflected
+## in real time.
 func create_lens() -> Lens:
 	var l = Lens.new()
 	maintained_lenses.append(l)
 	return l
 
+## Main access to tick the ECS system. This is done for you
+## if you set auto run.
 func run_ecs(delta: float):
+	_queued_events.clear()
 	var refresh_required: bool = false
 	for lens in maintained_lenses:
 		if lens.dirty_lens:
@@ -241,6 +276,18 @@ func run_ecs(delta: float):
 			if reacts:
 				fx.run(ent, component, component_store[component][ent.component_handles[component]])
 	_update_pairs.clear()
+	for event in _queued_events:
+		for observer in _deferred_observers:
+			if observer.is_interested_in(event):
+				observer.run(event)
+
+## Raises an event to every observer, immediately for immediate observers,
+## And after every system is done for deferred observers.
+func raise_event(event):
+	for o in _immediate_observers:
+		if o.is_interested_in(event):
+			o.run(event)
+	_queued_events.append(event)
 
 func _physics_process(delta: float) -> void:
 	if !Engine.is_editor_hint() and auto_run == 1:

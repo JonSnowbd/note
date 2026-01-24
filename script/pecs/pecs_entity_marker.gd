@@ -64,6 +64,12 @@ func _exit_tree() -> void:
 	if parent != null:
 		parent.remove_meta(ENTMARK_METATAG)
 
+func mark_for_deletion():
+	if core != null:
+		for scr in component_handles.keys():
+			remove_component(scr)
+		core.notify_lost_entity(self)
+		get_parent().queue_free()
 func add_component(component: Script, value = null):
 	if core != null:
 		if value == null:

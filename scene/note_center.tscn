@@ -63,6 +63,7 @@ layer = 120
 visible = false
 layout_mode = 3
 anchors_preset = 0
+mouse_filter = 2
 script = ExtResource("14_iouvy")
 regular_box = ExtResource("7_5m30c")
 sfx_pitch_variance = 0.075

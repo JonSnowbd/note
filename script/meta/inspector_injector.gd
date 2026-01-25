@@ -2,6 +2,7 @@
 extends EditorInspectorPlugin
 
 func _can_handle(object: Object) -> bool:
+	if object == null: return false
 	return object.has_method("note_property_editor")
 
 func _parse_property(object: Object, type: Variant.Type, name: String, hint_type: PropertyHint, hint_string: String, usage_flags: int, wide: bool) -> bool:

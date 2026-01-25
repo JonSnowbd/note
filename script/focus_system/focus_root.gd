@@ -224,6 +224,9 @@ func send_scroll(stick: Vector2, delta: float, speed: float = 450.0):
 func is_consuming_input() -> bool:
 	return active and target != null
 
+func is_active() -> bool:
+	return active
+
 func _acknowledge(control: Control):
 	for c in control.get_children():
 		if c is FocusEffect:
@@ -274,7 +277,6 @@ func _cycle(delta: float) -> void:
 	if target == null or !is_instance_valid(target) or target.is_queued_for_deletion() or !target.is_visible_in_tree():
 		deactivate()
 		lost_focus.emit()
-		print("Losterino")
 		return
 	
 	if automatic_gamepad_id >= 0:

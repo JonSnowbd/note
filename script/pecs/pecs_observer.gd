@@ -1,4 +1,5 @@
 @abstract
+@icon("res://addons/note/texture/icon/pecs/observer.svg")
 extends Node
 class_name PECSObserver
 

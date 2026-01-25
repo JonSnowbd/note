@@ -1,3 +1,4 @@
+@icon("res://addons/note/texture/icon/pecs/entity_marker.svg")
 extends Node
 class_name PECSEntityMarker
 

@@ -1,4 +1,5 @@
 @abstract
+@icon("res://addons/note/texture/icon/pecs/system.svg")
 extends Node
 class_name PECSSystem
 

@@ -1,4 +1,5 @@
 @tool
+@icon("res://addons/note/texture/icon/pecs/core.svg")
 extends Node
 class_name PECSCore
 

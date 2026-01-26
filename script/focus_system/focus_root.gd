@@ -42,7 +42,6 @@ var _overflow: Vector2 = Vector2.ZERO
 var _times: Array[float] = [0.0, 0.0, 0.0, 0.0]
 var _states: Array[bool] = [false, false, false, false]
 
-var _shift_tween: Tween
 var _current_t: Transform2D
 
 ## If true, any calls to begin are ignored.
@@ -189,10 +188,14 @@ func send_special2(down: bool):
 
 func activate(start: Control):
 	if locked: return
+	var is_fresh_activation = target == null
 	show()
 	_overflow = Vector2.ZERO
 	_change(start)
 	active = true
+	if is_fresh_activation:
+		_current_t = get_target_transform(target)
+		size = target.size
 	on_begin.emit(target)
 func deactivate(is_loss: bool = false):
 	reset()
@@ -302,8 +305,8 @@ func _cycle(delta: float) -> void:
 			_times[i] = 0.0
 	
 	var target_dest = get_target_transform(target)
-	size = note.util.smooth_toward_v2(size, target.size, 8.0, delta)
-	_current_t = note.util.smooth_toward_tform2(_current_t, target_dest, 8.0, delta)
+	size = note.util.smooth_toward_v2(size, target.size, 17.0, delta)
+	_current_t = note.util.smooth_toward_tform2(_current_t, target_dest, 14.0, delta)
 	
 	queue_redraw()
 

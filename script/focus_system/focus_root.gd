@@ -15,7 +15,7 @@ signal lost_focus
 @export_group("Design")
 @export var regular_box: StyleBox
 @export_group("Audio")
-@export var sfx_pitch_variance: float = 0.05
+@export var sfx_pitch_variance: float = 0.035
 @export var sfx_move: AudioStreamPlayer
 @export var sfx_activate: AudioStreamPlayer
 @export var sfx_charge: AudioStreamPlayer
@@ -43,6 +43,7 @@ var _times: Array[float] = [0.0, 0.0, 0.0, 0.0]
 var _states: Array[bool] = [false, false, false, false]
 
 var _shift_tween: Tween
+var _current_t: Transform2D
 
 ## If true, any calls to begin are ignored.
 var locked: bool = false
@@ -57,8 +58,9 @@ func _physics_process(delta: float) -> void:
 	if physics_mode:
 		_cycle(delta)
 func _draw() -> void:
-	draw_style_box(regular_box, Rect2(Vector2.ZERO, size))
-	var local = Rect2(target.global_position-global_position, target.size)
+	global_position = Vector2.ZERO
+	draw_set_transform_matrix(_current_t)
+	draw_style_box(regular_box, Rect2(Vector2.ZERO, size*_current_t.get_scale()))
 	for fx: FocusEffect in _loaded_effects:
 		fx.focus_draw(self)
 	for fx: FocusEffect in _stacked_effects:
@@ -139,14 +141,6 @@ func send_impulse(stick: Vector2):
 	if l < 0.4:
 		_impulse_trip = false
 
-func get_localized_rect(query: Control) -> Rect2:
-	var corrected = target.get_global_rect()
-	if target.get_viewport() != get_viewport():
-		var tform = target.get_viewport().get_screen_transform()
-		corrected.position = tform * corrected.position
-	return corrected
-	
-
 func _send_btn(down: bool, state_id: int, send_fn: String, pitch_shift: float = 0.0):
 	var long_press = _has_long_press()
 	if down:
@@ -213,6 +207,10 @@ func reset():
 	_stacked_effects.clear()
 	_overflow = Vector2.ZERO
 
+func get_target_transform(of: Control) -> Transform2D:
+	var t = of.get_screen_transform()
+	return t
+
 func send_scroll(stick: Vector2, delta: float, speed: float = 450.0):
 	if _scroll != null:
 		if stick.length() > 0.2:
@@ -245,7 +243,7 @@ func _change(new_target: Control):
 			_loaded_effects.append(c as FocusEffect)
 			c.focus_enter()
 	target = new_target
-	_move_to_target(0.2)
+	#_move_to_target(0.2)
 	var parent = target.get_parent()
 	while parent != null:
 		if parent is ScrollContainer:
@@ -303,26 +301,11 @@ func _cycle(delta: float) -> void:
 		else:
 			_times[i] = 0.0
 	
-	if _shift_tween == null or !_shift_tween.is_running():
-		if target != null:
-			var dest = get_localized_rect(target)
-			position = dest.position
-			size = dest.size
-	queue_redraw()
-
-func _move_to_target(transition_duration = 0.2):
-	var destination = get_localized_rect(target)
+	var target_dest = get_target_transform(target)
+	size = note.util.smooth_toward_v2(size, target.size, 8.0, delta)
+	_current_t = note.util.smooth_toward_tform2(_current_t, target_dest, 8.0, delta)
 	
-	if _shift_tween != null and _shift_tween.is_running():
-		_shift_tween.stop()
-	_shift_tween = create_tween()
-	_shift_tween.set_parallel()
-	_shift_tween.tween_property(self, "size", destination.size, transition_duration)\
-	.set_ease(Tween.EASE_OUT)\
-	.set_trans(Tween.TRANS_CUBIC)
-	_shift_tween.tween_property(self, "position", destination.position, transition_duration)\
-	.set_ease(Tween.EASE_OUT)\
-	.set_trans(Tween.TRANS_CUBIC)
+	queue_redraw()
 
 ## Going from source, and looking in the stick direction "impulse" find
 ## the most likely next item its requesting. 

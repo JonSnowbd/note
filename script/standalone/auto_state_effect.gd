@@ -1,3 +1,4 @@
+@abstract
 extends RefCounted
 class_name AutoStateEffect
 
@@ -27,6 +28,5 @@ func effect_get_completion() -> float:
 func effect_get_inverse_completion() -> float:
 	return 1.0-effect_get_completion()
 
-## ABSTRACT: Do things to the calculator.
-func apply(obj: AutoStateCalculator):
-	pass
+@abstract
+func apply(obj: AutoStateCalculator)

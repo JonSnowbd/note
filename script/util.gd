@@ -31,6 +31,8 @@ func smooth_toward_v2(from: Vector2, to: Vector2, speed: float, delta: float) ->
 ## Smoothly move towards a value. Like a damped value lerp. Vector2 version.
 func smooth_toward_v3(from: Vector3, to: Vector3, speed: float, delta: float) -> Vector3:
 	return from.lerp(to, 1.0 - exp(-speed * delta))
+func smooth_toward_tform2(from: Transform2D, to: Transform2D, speed: float, delta: float) -> Transform2D:
+	return from.interpolate_with(to, 1.0-exp(-speed*delta))
 ## If a tween has been started from the same id, it will be stopped and removed before returning
 ## this new tween. Useful for avoiding overlaps with simple tweens without handling it yourself,
 ## if the code path is hot enough to have potential overlaps

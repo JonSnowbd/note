@@ -19,4 +19,4 @@ func is_interested_in(event) -> bool:
 func setup(core: PECSCore)
 
 @abstract
-func run(event)
+func run(event, value)

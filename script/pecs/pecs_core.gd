@@ -56,6 +56,7 @@ var entity_index: Dictionary[PECSEntityMarker, int]
 var _update_pairs: Array = []
 var _component_holes: Dictionary[Script,Array] = {}
 var _queued_events: Array = []
+var _queued_event_values: Array = []
 
 var maintained_lenses: Array[Lens]
 var relevant_lenses: Dictionary[Script, Array] = {}
@@ -260,6 +261,7 @@ func create_lens() -> Lens:
 ## if you set auto run.
 func run_ecs(delta: float):
 	_queued_events.clear()
+	_queued_event_values.clear()
 	var refresh_required: bool = false
 	for lens in maintained_lenses:
 		if lens.dirty_lens:
@@ -277,18 +279,19 @@ func run_ecs(delta: float):
 			if reacts:
 				fx.run(ent, component, component_store[component][ent.component_handles[component]])
 	_update_pairs.clear()
-	for event in _queued_events:
+	for i in range(len(_queued_events)) :
 		for observer in _deferred_observers:
-			if observer.is_interested_in(event):
-				observer.run(event)
+			if observer.is_interested_in(_queued_events[i]):
+				observer.run(_queued_events[i],_queued_event_values[i])
 
 ## Raises an event to every observer, immediately for immediate observers,
 ## And after every system is done for deferred observers.
-func raise_event(event):
+func raise_event(event, value = null):
 	for o in _immediate_observers:
 		if o.is_interested_in(event):
-			o.run(event)
+			o.run(event, value)
 	_queued_events.append(event)
+	_queued_event_values.append(value)
 
 func _physics_process(delta: float) -> void:
 	if !Engine.is_editor_hint() and auto_run == 1:

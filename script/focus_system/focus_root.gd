@@ -43,6 +43,7 @@ var _times: Array[float] = [0.0, 0.0, 0.0, 0.0]
 var _states: Array[bool] = [false, false, false, false]
 
 var _current_t: Transform2D
+var time_since_start: float = 0.0
 
 ## If true, any calls to begin are ignored.
 var locked: bool = false
@@ -104,7 +105,7 @@ func _input(event: InputEvent) -> void:
 			return
 
 func _send_dir(dir: Vector2):
-	if locked: return
+	if locked or !is_active(): return
 	var next = _get_next_item(target, dir)
 	if next == null:
 		var butt_consumed: bool = false
@@ -186,22 +187,29 @@ func send_special1(down: bool):
 func send_special2(down: bool):
 	_send_btn(down, 3, "focus_special2", 0.12)
 
-func activate(start: Control):
-	if locked: return
-	var is_fresh_activation = target == null
+func activate(start: Control, fade_in_duration: float = 0.0, fade_in_delay: float = 0.0):
+	if locked or is_active(): return
+	reset()
 	show()
-	_overflow = Vector2.ZERO
+	if fade_in_duration > 0.0:
+		var t = create_tween()
+		modulate.a = 0.0
+		if fade_in_delay > 0.0:
+			t.tween_interval(fade_in_delay)
+		t.tween_property(self, "modulate:a", 1.0, fade_in_duration)\
+		.set_trans(Tween.TRANS_CUBIC)\
+		.set_ease(Tween.EASE_OUT)
+	else:
+		modulate.a = 1.0
 	_change(start)
 	active = true
-	if is_fresh_activation:
-		_current_t = get_target_transform(target)
-		size = target.size
 	on_begin.emit(target)
 func deactivate(is_loss: bool = false):
 	reset()
 	active = false
 	_loaded_effects.clear()
 	on_end.emit()
+	target = null
 	hide()
 	if is_loss:
 		lost_focus.emit()
@@ -209,6 +217,7 @@ func deactivate(is_loss: bool = false):
 func reset():
 	_stacked_effects.clear()
 	_overflow = Vector2.ZERO
+	time_since_start = 0.0
 
 func get_target_transform(of: Control) -> Transform2D:
 	var t = of.get_screen_transform()
@@ -273,13 +282,14 @@ func _has_long_press() -> bool:
 			return true
 	return false
 func _cycle(delta: float) -> void:
-	if !active:
+	if !is_active():
 		return
-	if target == null or !is_instance_valid(target) or target.is_queued_for_deletion() or !target.is_visible_in_tree():
+	time_since_start += delta
+	if target == null or !is_instance_valid(target) or target.is_queued_for_deletion():
 		deactivate()
 		lost_focus.emit()
 		return
-	
+
 	if automatic_gamepad_id >= 0:
 		var ls = Vector2.ZERO
 		ls.x = Input.get_joy_axis(automatic_gamepad_id, JOY_AXIS_LEFT_X)
@@ -304,9 +314,14 @@ func _cycle(delta: float) -> void:
 		else:
 			_times[i] = 0.0
 	
-	var target_dest = get_target_transform(target)
-	size = note.util.smooth_toward_v2(size, target.size, 17.0, delta)
-	_current_t = note.util.smooth_toward_tform2(_current_t, target_dest, 14.0, delta)
+	if target.is_inside_tree():
+		if time_since_start < 0.2:
+			_current_t = get_target_transform(target)
+			size = target.size
+		else:
+			var target_dest = get_target_transform(target)
+			size = note.util.smooth_toward_v2(size, target.size, 17.0, delta)
+			_current_t = note.util.smooth_toward_tform2(_current_t, target_dest, 14.0, delta)
 	
 	queue_redraw()
 

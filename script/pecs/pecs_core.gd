@@ -279,10 +279,15 @@ func run_ecs(delta: float):
 			if reacts:
 				fx.run(ent, component, component_store[component][ent.component_handles[component]])
 	_update_pairs.clear()
-	for i in range(len(_queued_events)) :
+	_flush_deferred_events()
+
+func _flush_deferred_events():
+	while len(_queued_events) > 0:
+		var evt = _queued_events.pop_front()
+		var dat = _queued_event_values.pop_front()
 		for observer in _deferred_observers:
-			if observer.is_interested_in(_queued_events[i]):
-				observer.run(_queued_events[i],_queued_event_values[i])
+			if observer.is_interested_in(evt):
+				observer.run(evt, dat)
 
 ## Raises an event to every observer, immediately for immediate observers,
 ## And after every system is done for deferred observers.

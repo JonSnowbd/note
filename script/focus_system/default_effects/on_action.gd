@@ -25,6 +25,9 @@ func _ready() -> void:
 func consume_input():
 	awaiting_consume = false
 
+func focus_butted(impulse: Vector2) -> bool:
+	on_butted.emit(impulse)
+	return on_butted.has_connections()
 func focus_confirm(down: bool, long: bool = false) -> bool:
 	awaiting_consume = true
 	if down:

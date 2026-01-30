@@ -62,6 +62,7 @@ var maintained_lenses: Array[Lens]
 var relevant_lenses: Dictionary[Script, Array] = {}
 var _immediate_observers: Array[PECSObserver]
 var _deferred_observers: Array[PECSObserver]
+var _in_run: bool = false
 
 
 func _get_configuration_warnings() -> PackedStringArray:
@@ -260,8 +261,6 @@ func create_lens() -> Lens:
 ## Main access to tick the ECS system. This is done for you
 ## if you set auto run.
 func run_ecs(delta: float):
-	_queued_events.clear()
-	_queued_event_values.clear()
 	var refresh_required: bool = false
 	for lens in maintained_lenses:
 		if lens.dirty_lens:
@@ -269,6 +268,7 @@ func run_ecs(delta: float):
 			refresh_required = true
 	if refresh_required:
 		hard_refresh_lens_cache()
+	_in_run = true
 	for sys in systems:
 		sys.run(delta)
 	for pair in _update_pairs:
@@ -278,8 +278,11 @@ func run_ecs(delta: float):
 			var reacts = fx.listening_for_update.get(component, false)
 			if reacts:
 				fx.run(ent, component, component_store[component][ent.component_handles[component]])
+	_in_run = false
 	_update_pairs.clear()
 	_flush_deferred_events()
+	_queued_events.clear()
+	_queued_event_values.clear()
 
 func _flush_deferred_events():
 	while len(_queued_events) > 0:
@@ -292,6 +295,11 @@ func _flush_deferred_events():
 ## Raises an event to every observer, immediately for immediate observers,
 ## And after every system is done for deferred observers.
 func raise_event(event, value = null):
+	if !_in_run:
+		for o in observers:
+			if o.is_interested_in(event):
+				o.run(event, value)
+		return
 	for o in _immediate_observers:
 		if o.is_interested_in(event):
 			o.run(event, value)

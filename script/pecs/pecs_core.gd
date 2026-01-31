@@ -281,8 +281,6 @@ func run_ecs(delta: float):
 	_in_run = false
 	_update_pairs.clear()
 	_flush_deferred_events()
-	_queued_events.clear()
-	_queued_event_values.clear()
 
 func _flush_deferred_events():
 	while len(_queued_events) > 0:

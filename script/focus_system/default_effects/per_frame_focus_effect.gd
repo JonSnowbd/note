@@ -22,6 +22,7 @@ func focus_exit():
 	active = false
 
 func _process(delta: float) -> void:
+	if !get_parent().visible: return
 	if include_mouse_over:
 		if active or is_mouse_over():
 			on_process.emit()

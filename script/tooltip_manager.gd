@@ -66,7 +66,7 @@ func request_simple(title:String = "", body:String = "", priority: int = 0):
 ## Takes in a path or UID to load, and instantiates it as the tooltip. Data is passed in to a method
 ## called "tooltip" if it exists.
 func request_string(prefabPath:String, data = null , priority: int = 0):
-	request_packed(load(prefabPath), data, priority)
+	request_packed(note.loading_screen.force_fetch(prefabPath), data, priority)
 
 ## Takes in an already loaded packed scene, and instantiates it as the tooltip. Data is passed in to a method
 ## called "tooltip" if it exists.

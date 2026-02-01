@@ -38,6 +38,8 @@ var side_effects: Array[PECSSideEffect]
 var transient: bool = false
 var is_setup_complete: bool = false
 var relationships: Dictionary[Script,Array] = {}
+## General use entity data store for systems.
+var blackboard: Dictionary
 
 func _hook_into_core(new_core: PECSCore):
 	core = new_core
@@ -57,13 +59,7 @@ func _enter_tree() -> void:
 				core.notify_new_entity(self)
 			break
 		parent = parent.get_parent()
-func _exit_tree() -> void:
-	if core != null:
-		core.notify_lost_entity(self)
-		core = null
-	var parent = get_parent()
-	if parent != null:
-		parent.remove_meta(ENTMARK_METATAG)
+	is_setup_complete = true
 
 func mark_for_deletion():
 	if core != null:

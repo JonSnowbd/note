@@ -158,11 +158,12 @@ func _send_btn(down: bool, state_id: int, send_fn: String, pitch_shift: float = 
 					if fx.call(send_fn, true, false):
 						button_consumed = true
 						break
-		if button_consumed:
-			sfx_down.pitch_scale = randf_range(1.0-sfx_pitch_variance, 1.0+sfx_pitch_variance)+pitch_shift
-			sfx_down.play()
-		else:
-			sfx_fail.play()
+		if is_active():
+			if button_consumed:
+				sfx_down.pitch_scale = randf_range(1.0-sfx_pitch_variance, 1.0+sfx_pitch_variance)+pitch_shift
+				sfx_down.play()
+			else:
+				sfx_fail.play()
 	else:
 		var button_consumed: bool = false
 		for fx in _stacked_effects:
@@ -174,9 +175,10 @@ func _send_btn(down: bool, state_id: int, send_fn: String, pitch_shift: float = 
 				if fx.call(send_fn, false, false):
 					button_consumed = true
 					break
-		if button_consumed:
-			sfx_up.pitch_scale = randf_range(1.0-sfx_pitch_variance, 1.0+sfx_pitch_variance)+pitch_shift
-			sfx_up.play()
+		if is_active():
+			if button_consumed:
+				sfx_up.pitch_scale = randf_range(1.0-sfx_pitch_variance, 1.0+sfx_pitch_variance)+pitch_shift
+				sfx_up.play()
 	_states[state_id] = down
 func send_confirm(down: bool):
 	_send_btn(down, 0, "focus_confirm")

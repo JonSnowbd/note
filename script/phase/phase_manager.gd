@@ -6,8 +6,9 @@ extends CanvasLayer
 @export var kill_processes_on_end: bool = false
 
 var current_phase: Phase = null
-
 var lookup: Dictionary = {}
+var _awaiting_init: bool = false
+var _is_current_phase_instant: bool = false
 
 @onready var _nt = get_tree().root.get_node("note")
 
@@ -53,13 +54,15 @@ func begin(identity) -> Variant:
 		_nt.info("Beginning phase: [b]"+new_phase.name+"[/b]", "PHSMNGR")
 		add_child(new_phase)
 		new_phase.modulate.a = 0.0
-		new_phase.phase_init()
-		
+		_awaiting_init = true
+		_is_current_phase_instant = false
 		var t = create_tween()
 		t.tween_property(new_phase, "modulate:a", 1.0, transition_time)
 		t.tween_callback(new_phase.phase_begin)
 		
 		return new_phase
+	else:
+		_nt.error("note.phase.begin called with '%s' which doesnt exist. Is it in your note settings?" % str(identity))
 	return null
 
 ## Ends the current phase with no animation if it exists, and then, with
@@ -73,8 +76,8 @@ func begin_instant(identity) -> Variant:
 		current_phase = new_phase
 		_nt.info("Beginning phase: [b]"+new_phase.name+"[/b]", "PHSMNGR")
 		add_child(new_phase)
-		new_phase.phase_init()
-		new_phase.phase_begin()
+		_awaiting_init = true
+		_is_current_phase_instant = true
 		return new_phase
 	return null
 func end():
@@ -95,3 +98,10 @@ func end_instant():
 		current_phase.phase_end()
 		current_phase.queue_free()
 		current_phase = null
+
+func _process(delta: float) -> void:
+	if _awaiting_init and current_phase != null:
+		current_phase.phase_init()
+		if _is_current_phase_instant:
+			current_phase.phase_begin()
+		_awaiting_init = false

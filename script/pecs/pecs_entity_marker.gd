@@ -2,71 +2,42 @@
 extends Node
 class_name PECSEntityMarker
 
-class RelationshipData:
-	var target: PECSEntityMarker
-	var data: Variant
-
-## Convenience method to mark a node as an entity during runtime.
-## Please prefer to place markers in your nodes manually.
-static func mark(node: Node) -> PECSEntityMarker:
-	var marker = PECSEntityMarker.new()
-	node.add_child(marker)
-	return marker
-
-## Convenience method to create an entity that belongs to no real node.
-static func make_transient(transient_core: PECSCore) -> PECSEntityMarker:
-	var marker = PECSEntityMarker.new()
-	marker.transient = true
-	marker.core = transient_core
-	marker.core.notify_new_entity(marker)
-	return marker
-
 const ENTMARK_METATAG = &"__pecs_entity_marker"
 
-var core: PECSCore
-var enabled: bool = true :
-	set(val):
-		if enabled != val:
-			enabled = val
-			if enabled and core != null:
-				core.notify_new_entity(self)
-			elif !enabled and core != null:
-				core.notify_lost_entity(self)
+@export var node: Node
 
+var core: PECSCore
 var component_handles: Dictionary[Script,int]
 var side_effects: Array[PECSSideEffect]
-var transient: bool = false
-var is_setup_complete: bool = false
-var relationships: Dictionary[Script,Array] = {}
+var relationships: Dictionary[Script,PECSEntityMarker] = {}
 ## General use entity data store for systems.
 var blackboard: Dictionary
 
-func _hook_into_core(new_core: PECSCore):
-	core = new_core
-	if enabled:
-		core.notify_new_entity(self)
-
 func _enter_tree() -> void:
+	_setup_entity()
+func _ready() -> void:
+	_setup_entity()
+
+func _setup_entity() -> void:
+	if core != null: return
 	var parent = get_parent()
 	if parent != null:
 		parent.set_meta(ENTMARK_METATAG, self)
-	if transient or is_setup_complete:
-		return
 	while parent != null:
 		if parent.has_meta(PECSCore.CORE_METATAG):
 			core = parent.get_meta(PECSCore.CORE_METATAG)
-			if enabled:
-				core.notify_new_entity(self)
+			core.notify_new_entity(self)
 			break
 		parent = parent.get_parent()
-	is_setup_complete = true
 
+# Strips away every component and frees the node.
 func mark_for_deletion():
 	if core != null:
 		for scr in component_handles.keys():
 			remove_component(scr)
 		core.notify_lost_entity(self)
-		get_parent().queue_free()
+		node.queue_free()
+
 func add_component(component: Script, value = null):
 	if core != null:
 		if value == null:
@@ -92,44 +63,36 @@ func remove_component(component: Script):
 		core.entity_remove_component(self, component)
 	else:
 		note.warn("Entity %s requested component without a core.")
-
-func add_relation(relation: Script, to: PECSEntityMarker, value = null):
+func add_relation(relation: Script, to: PECSEntityMarker):
 	if core != null:
-		core.entity_bond(self, relation, to, value)
+		core.entity_add_relation(self, relation, to)
 	else:
 		note.warn("Entity %s requested bond without a core.")
-func remove_relation(relation: Script, to: PECSEntityMarker):
+func remove_relation(relation: Script):
 	if core != null:
-		core.entity_unbond(self, relation, to)
+		core.entity_remove_relation(self, relation)
 	else:
 		note.warn("Entity %s requested bond without a core.")
-func get_relations(relation: Script) -> Array[PECSEntityMarker]:
-	var results: Array[PECSEntityMarker] = []
-	var potentials = relationships.get_or_add(relation, [])
-	for i: RelationshipData in potentials:
-		results.append(i.target)
-	return results
-func has_relation(relation: Script, to: PECSEntityMarker) -> bool:
-	var potentials = relationships.get_or_add(relation, [])
-	for i: RelationshipData in potentials:
-		if i.target == to:
+func get_relation(relation: Script) -> PECSEntityMarker:
+	return relationships.get(relation,null)
+func has_relation(relation: Script, to_specifically: PECSEntityMarker = null) -> bool:
+	if !relationships.has(relation):
+		return false
+	if to_specifically != null:
+		if relationships[relation] == to_specifically:
 			return true
-	return false
-func get_relation_data(relation: Script, to: PECSEntityMarker) -> Variant:
-	var potentials = relationships.get_or_add(relation, [])
-	for i: RelationshipData in potentials:
-		if i.target == to:
-			return i.data
-	return null
+		else:
+			return false
+	return true
 
 func add_side_effect(fx: PECSSideEffect):
 	side_effects.append(fx)
 	fx.setup(self)
 
-## Component is the script name that you are updating. new_value may be optionally
-## passed for components that use a non-reference type under the hood such as Vector2.
-func mark_updated(component: Script, new_value = null):
+## Component is the script name that you are updating. Marks a component
+## as updated. Used for side effect mutation.
+func mark_updated(component: Script):
 	if core != null:
-		core.entity_mark_component_updated(self, component, new_value)
+		core.entity_mark_component_updated(self, component)
 	else:
 		note.warn("Entity %s requested component without a core.")

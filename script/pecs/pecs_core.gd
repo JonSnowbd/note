@@ -3,6 +3,17 @@
 extends Node
 class_name PECSCore
 
+## Where the ECS should be automatically run for you.
+enum AutorunTarget {
+	## Nowhere, will not tick by itself, this is for custom control.
+	NONE,
+	## Runs in _process, recommended for most use cases
+	PROCESS,
+	## Runs in _physics_process, recommended for games/scenarios that do a lot
+	## of physics work with bodies.
+	PHYSICS_PROCESS
+}
+
 const CORE_METATAG = &"__pecs_core_meta_marker"
 
 class Lens extends RefCounted:
@@ -39,12 +50,16 @@ class Lens extends RefCounted:
 		filter_with_relationship = relationships
 		dirty_lens = true
 
-@export var domain: Node :
+@export_file("*.tscn", "*.scn") var prewarm_assets: Array[String] = []
+@export var root_nodes: Dictionary[StringName, Node] = {} :
 	set(val):
-		domain = val
+		root_nodes = val
 		update_configuration_warnings()
-@export var preload_components: Array[Script] = []
-@export_enum("None:0", "On Physics:1", "On Process:2") var auto_run: int = 0
+@export var default_root: StringName = &"" :
+	set(val):
+		default_root = val
+		update_configuration_warnings()
+@export var auto_run: AutorunTarget = AutorunTarget.NONE
 
 var component_store: Dictionary[Script,Array] = {}
 var systems: Array[PECSSystem] = []
@@ -58,19 +73,25 @@ var _component_holes: Dictionary[Script,Array] = {}
 var _queued_events: Array = []
 var _queued_event_values: Array = []
 
-var maintained_lenses: Array[Lens]
+var maintained_lenses: Array[Lens] = []
 var relevant_lenses: Dictionary[Script, Array] = {}
-var _immediate_observers: Array[PECSObserver]
-var _deferred_observers: Array[PECSObserver]
+var blackboard: Dictionary[StringName,Variant] = {}
+var _immediate_observers: Array[PECSObserver] = []
+var _deferred_observers: Array[PECSObserver] = []
 var _in_run: bool = false
+var _began: bool = false
 
 
 func _get_configuration_warnings() -> PackedStringArray:
 	var warns = []
-	if domain == null:
-		warns.append("Domain is a required parameter to function.") 
 	if process_priority >= 0:
-		warns.append("Physics and Regular Process priority should be <0 so this runs before your entities.")
+		warns.append("Physics and Regular Process priority should be <0 so systems runs before your entities.")
+	if root_nodes.is_empty():
+		warns.append("You need to assign atleast one root node.")
+	if default_root.is_empty():
+		warns.append("Default Root should not be empty, set it to one of the root nodes from the dictionary above.")
+	if !root_nodes.has(default_root):
+		warns.append("Default Root must point to a StringName in the dictionary above.")
 	return warns
 
 func _set(property: StringName, value: Variant) -> bool:
@@ -80,24 +101,41 @@ func _set(property: StringName, value: Variant) -> bool:
 
 func _enter_tree() -> void:
 	if Engine.is_editor_hint(): return
-	domain.set_meta(CORE_METATAG, self)
-	for i in preload_components:
-		component_add(i)
+	for asset in prewarm_assets:
+		if !note.loading_screen.is_cached(asset):
+			note.loading_screen.shadow_load(asset)
+	for node in root_nodes.values():
+		node.set_meta(CORE_METATAG, self)
 	for i in get_children():
 		if i is PECSSystem:
 			system_add_via_node(i)
 		if i is PECSObserver:
 			observer_add_via_node(i)
+	print("\n")
+	note.info("Beginning [b]%s[/b] with the following Systems/Observers:" % name, "PECS")
+	for sys in systems:
+		sys.setup(self)
+		note.info("[b]%s[/b]" % sys.name, "SYS")
+	for obs in observers:
+		obs.setup(self)
+		note.info("[b]%s[/b]" % obs.name, "OBS")
+	print("\n")
+	_began = true
 
-func instantiate_packed_scene(scene: PackedScene, to_parent: Node) -> PECSEntityMarker:
+func instantiate_entity(scene: PackedScene, root_override: StringName = &"") -> PECSEntityMarker:
+	var destination = default_root if root_override.is_empty() else root_override
+	var parent = root_nodes[destination]
 	var inst = scene.instantiate()
 	for c in inst.get_children():
 		if c is PECSEntityMarker:
-			c._hook_into_core(self)
-			c.is_setup_complete = true
-			to_parent.call_deferred("add_child",inst)
+			c.core = self
+			notify_new_entity(c)
+			parent.call_deferred("add_child", inst)
 			return c
 	return null
+func instantiate_entity_s(scene: String, root_override: StringName = &"") -> PECSEntityMarker:
+	var packed_scene = note.loading_screen.force_fetch(scene)
+	return instantiate_entity(packed_scene, root_override)
 
 func _comb(ent: PECSEntityMarker, node: Node):
 	for c in node.get_children():
@@ -111,7 +149,7 @@ func notify_new_entity(ent: PECSEntityMarker):
 	var ind = len(entities)
 	entities.append(ent)
 	entity_index[ent] = ind
-	var true_node = ent.get_parent()
+	var true_node = ent.node
 	if true_node != null:
 		_comb(ent, true_node)
 	_comb(ent, ent)
@@ -136,6 +174,8 @@ func entity_has_component(entity: PECSEntityMarker, component: Script) -> bool:
 func entity_add_component(entity: PECSEntityMarker, component: Script, value: Variant) -> void:
 	component_add(component)
 	var ind = len(component_store[component])
+	if value is PECSComponent:
+		value.component_entity = entity
 	var using_hole: bool = false
 	if len(_component_holes[component]) > 0:
 		ind = _component_holes[component].pop_front()
@@ -159,33 +199,27 @@ func entity_remove_component(entity: PECSEntityMarker, component: Script) -> voi
 	var related_lenses = relevant_lenses.get_or_add(component, [])
 	for lens in related_lenses:
 		lens.consider(entity)
-func entity_bond(source: PECSEntityMarker, relation: Script, target: PECSEntityMarker, value):
-	var ent_array: Array = source.relationships.get_or_add(relation, [])
-	var new_data = PECSEntityMarker.RelationshipData.new()
-	new_data.target = target
-	new_data.data = value
-	ent_array.append(new_data)
-	
+func entity_add_relation(source: PECSEntityMarker, relation: Script, target: PECSEntityMarker):
+	if source.relationships.has(relation):
+		if source.relationships[relation] != null and is_instance_valid(source.relationships[relation]):
+			note.warn("%s added relation %s, but it already had one pointing to %s" % [
+				source.name,
+				str(relation),
+				target.name
+			])
+	source.relationships[relation] = target
 	var related_lenses = relevant_lenses.get_or_add(relation, [])
 	for lens in related_lenses:
 		lens.consider(source)
-func entity_unbond(source: PECSEntityMarker, relation: Script, target: PECSEntityMarker):
-	var arr: Array = source.relationships.get_or_add(relation)
-	var ind = arr.find_custom(func(item):
-		return item.target == target
-	)
-	if ind != -1:
-		arr.remove_at(ind)
-		var related_lenses = relevant_lenses.get_or_add(relation, [])
-		for lens in related_lenses:
-			lens.consider(source)
+func entity_remove_relation(source: PECSEntityMarker, relation: Script):
+	source.relationships.erase(relation)
+	var related_lenses = relevant_lenses.get_or_add(relation, [])
+	for lens in related_lenses:
+		lens.consider(source)
 func entity_get_component(entity: PECSEntityMarker, component: Script) -> Variant:
 	return component_store[component][entity.component_handles[component]]
-func entity_mark_component_updated(entity: PECSEntityMarker, component: Script, new_value) -> void:
+func entity_mark_component_updated(entity: PECSEntityMarker, component: Script) -> void:
 	_update_pairs.append([entity, component])
-	if new_value != null:
-		component_store[component][entity.component_handles[component]] = new_value
-
 
 func _relevant_lens_add(lens: Lens, component: Script):
 	var arr: Array = relevant_lenses.get_or_add(component, [])
@@ -206,46 +240,72 @@ func refresh_lens(lens: Lens):
 	lens.dirty_lens = false
 
 func _sort_systems(l: PECSSystem, r: PECSSystem) -> bool:
+	if l.priority == r.priority:
+		return l._internal_index < r._internal_index
 	return l.priority > r.priority
 func _sort_observers(l: PECSObserver, r: PECSObserver) -> bool:
+	if l.priority == r.priority:
+		return l._internal_index < r._internal_index
 	return l.priority > r.priority
+
+func find_system_by_type(type: Script) -> PECSSystem:
+	for sys in systems:
+		if is_instance_of(sys, type):
+			return sys
+	return null
+func find_observer_by_type(type: Script) -> PECSObserver:
+	for obs in observers:
+		if is_instance_of(obs, type):
+			return obs
+	return null
 
 func observer_add_via_script(observer: Script) -> void:
 	var instance = Node.new()
 	instance.set_script(observer)
 	if instance is PECSObserver:
 		observer_add_via_node(instance)
+
 func observer_add_via_node(observer: PECSObserver) -> void:
-	observer.setup(self)
+	observer._internal_index = len(observers)
 	observers.append(observer)
 	observers.sort_custom(_sort_observers)
 	if observer.event_bubble_behaviour == 0:
 		_deferred_observers.append(observer)
 	else:
 		_immediate_observers.append(observer)
+	if _began:
+		observer.setup(self)
+
 func observer_remove_via_node(observer: PECSObserver) -> void:
 	_deferred_observers.erase(observer)
 	_immediate_observers.erase(observer)
 	observers.erase(observer)
+
 func observer_remove_via_script(observer: Script) -> void:
 	for s in observers:
 		if s.get_script() == observer:
 			observer_remove_via_node(s)
 			break
+
 func system_add_via_script(system: Script) -> void:
 	var instance = Node.new()
 	instance.set_script(system)
 	if instance is PECSSystem:
 		system_add_via_node(instance)
+
 func system_add_via_node(system: PECSSystem) -> void:
-	system.setup(self)
+	system._internal_index = len(observers)
 	systems.append(system)
 	systems.sort_custom(_sort_systems)
+	if _began:
+		system.setup(self)
+
 func system_remove_via_node(system: PECSSystem) -> void:
 	systems.erase(system)
+
 func system_remove_via_script(system: Script) -> void:
 	for s in systems:
-		if s.get_script() == system:
+		if is_instance_of(s, system):
 			system_remove_via_node(s)
 			break
 

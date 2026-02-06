@@ -4,8 +4,10 @@ extends Node
 class_name PECSObserver
 
 @export_enum("After All Systems", "When Raised") var event_bubble_behaviour: int = 0
+## Higher = Ran first.
 @export var priority: int = 0
 var _listening_to: Dictionary[Variant, bool] = {}
+var _internal_index: int = -1
 
 func listen(event):
 	_listening_to[event] = true

@@ -22,13 +22,16 @@ func _register(path: String):
 	lookup[instance.get_script()] = packed_scene
 	lookup[path] = packed_scene
 	instance.queue_free()
-	_nt.info("Registered new phase -> [b]"+instance.name+"[/b]", "PHSMNGR")
+	if note.settings.note_info_prints:
+		_nt.info("Registered new phase -> [b]"+instance.name+"[/b]", "PHSMNGR")
 
 func _is_all_loaded() -> bool:
 	return loads_remaining.is_empty()
 
 
 func _ready() -> void:
+	if _nt.settings.test_mode:
+		return
 	_nt.loading_screen.loading_shadow_file_finished.connect(func(path):
 		if loads_remaining.is_empty(): return
 		if loads_remaining.has(path):
@@ -51,7 +54,8 @@ func begin(identity) -> Variant:
 		var packed: PackedScene = lookup[identity]
 		var new_phase: Phase = packed.instantiate()
 		current_phase = new_phase
-		_nt.info("Beginning phase: [b]"+new_phase.name+"[/b]", "PHSMNGR")
+		if note.settings.note_info_prints:
+			_nt.info("Beginning phase: [b]"+new_phase.name+"[/b]", "PHSMNGR")
 		add_child(new_phase)
 		new_phase.modulate.a = 0.0
 		_awaiting_init = true
@@ -74,7 +78,8 @@ func begin_instant(identity) -> Variant:
 		var packed: PackedScene = lookup[identity]
 		var new_phase: Phase = packed.instantiate()
 		current_phase = new_phase
-		_nt.info("Beginning phase: [b]"+new_phase.name+"[/b]", "PHSMNGR")
+		if note.settings.note_info_prints:
+			_nt.info("Beginning phase: [b]"+new_phase.name+"[/b]", "PHSMNGR")
 		add_child(new_phase)
 		_awaiting_init = true
 		_is_current_phase_instant = true

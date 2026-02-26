@@ -128,7 +128,16 @@ func begin_save_screen():
 	
 
 func _ready() -> void:
+	if note.settings.test_mode:
+		if !save_exists("note_test_mode"):
+			create_save("note_test_mode")
+		load_save("note_test_mode")
+		note.run_tests(true)
+		return
 	_nt.loading_screen.shadow_load(_nt.settings.initial_scene)
+	if note.settings.fast_boot:
+		post_load_action()
+		return
 	instant_load_check()
 	countdown = splash_screen_duration
 	var t = create_tween()

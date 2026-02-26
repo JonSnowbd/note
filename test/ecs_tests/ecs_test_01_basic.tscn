@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://df1tif6bomrwk"]
+
+[ext_resource type="Script" uid="uid://b3k68jyn4xbsh" path="res://addons/note/test/ecs_tests/ecs_test_01_basic.gd" id="1_wtq7u"]
+[ext_resource type="Script" uid="uid://cc6v2h26ksif4" path="res://addons/note/script/pecs/pecs_core.gd" id="2_yt6iw"]
+[ext_resource type="Script" uid="uid://fkbnrgpdrl0l" path="res://addons/note/test/ecs_tests/bits/s_physics.gd" id="3_cajei"]
+
+[node name="BasicEcsTests" type="Node" unique_id=72802975 node_paths=PackedStringArray("core", "velocity_system")]
+script = ExtResource("1_wtq7u")
+core = NodePath("PECSCore")
+velocity_system = NodePath("PECSCore/PhysicsSys")
+test_in_physics_process = true
+
+[node name="PECSCore" type="Node" parent="." unique_id=762789361 node_paths=PackedStringArray("root_nodes")]
+process_priority = -1
+process_physics_priority = -1
+script = ExtResource("2_yt6iw")
+root_nodes = {
+&"Root": NodePath("..")
+}
+default_root = &"Root"
+metadata/_custom_type_script = "uid://cc6v2h26ksif4"
+
+[node name="PhysicsSys" type="Node" parent="PECSCore" unique_id=586258710]
+script = ExtResource("3_cajei")

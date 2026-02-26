@@ -15,6 +15,9 @@ const TypeLevelManager = preload("uid://d1ghq77fsfx07")
 const TypeControlManager = preload("uid://dsuqhn7s348wn")
 const TypeMetadata = preload("uid://dpj8fxiopchxi")
 const TypeFocusGroup = preload("uid://4iwdim3cbvkf")
+const _default_note_tests = [
+	"uid://df1tif6bomrwk"
+]
 
 @export_group("Internal References")
 @export var level: TypeLevelManager
@@ -45,14 +48,17 @@ func _init() -> void:
 		settings = load(settings_path)
 	
 func _ready() -> void:
+	if settings.test_mode:
+		return
 	meta = TypeMetadata.new()
 	if settings.save_soft_settings:
 		meta.restore_soft_settings(self)
 func _notification(what: int) -> void:
+	if settings.test_mode:
+		return
 	if what == NOTIFICATION_WM_CLOSE_REQUEST or what == NOTIFICATION_EXIT_TREE:
 		end_session()
 		meta.persist(self)
-
 func _process(delta: float) -> void:
 	if save != null:
 		var timer = storage.get_or_add("save_session_timer", 0.0)
@@ -63,6 +69,23 @@ func _process(delta: float) -> void:
 			save.pulse(settings.save_pulse_duration)
 		
 		storage["save_session_timer"] = timer
+func _input(event: InputEvent) -> void:
+	if settings != null and !settings.run_tests_action.is_empty():
+		if event.is_action_pressed(settings.run_tests_action):
+			run_tests()
+
+func run_tests(exit_after: bool = false):
+	var tests = settings.tests
+	if settings.include_note_tests:
+		tests.append_array(_default_note_tests)
+	for test in tests:
+		await get_tree().process_frame
+		var current_test = await level.change_to(test) as NoteTestFixture
+		await current_test.test_over
+	if exit_after:
+		get_tree().quit()
+	else:
+		level.change_to(settings.initial_scene)
 
 func _message(header: String, separator: String = " >> ", message: String = ""):
 	var time: float = float(Time.get_ticks_msec()) / 1000.0

@@ -31,12 +31,16 @@ func _setup_entity() -> void:
 		parent = parent.get_parent()
 
 # Strips away every component and frees the node.
+# This is an immediate effect, every lens will be updated
+# and every component will be gone when you call this.
 func mark_for_deletion():
 	if core != null:
 		for scr in component_handles.keys():
 			remove_component(scr)
 		core.notify_lost_entity(self)
 		node.queue_free()
+	else:
+		note.warn("Entity %s requested deletion without a core." % name)
 
 func add_component(component: Script, value = null):
 	if core != null:
@@ -45,34 +49,39 @@ func add_component(component: Script, value = null):
 		else:
 			core.entity_add_component(self, component, value)
 	else:
-		note.warn("Entity %s requested component without a core.")
+		note.warn("Entity %s requested component without a core." % name)
 func has_component(component: Script) -> bool:
 	if core != null:
 		return core.entity_has_component(self, component)
 	else:
-		note.warn("Entity %s requested component without a core.")
+		note.warn("Entity %s requested component without a core." % name)
 	return false
 func get_component(component: Script) -> Variant:
 	if core != null:
 		return core.entity_get_component(self, component)
 	else:
-		note.warn("Entity %s requested component without a core.")
+		note.warn("Entity %s requested component without a core." % name)
 	return null
+## Removes the component from the component registry and immediately reflects
+## the change in every lens. If you are doing this in a lens' get_entities()
+## loop, prefer deferred, or track them and remove after the loop.
 func remove_component(component: Script):
 	if core != null:
 		core.entity_remove_component(self, component)
 	else:
-		note.warn("Entity %s requested component without a core.")
+		note.warn("Entity %s requested component without a core." % name)
+func remove_component_deferred(component: Script):
+	call_deferred(&"remove_component", component)
 func add_relation(relation: Script, to: PECSEntityMarker):
 	if core != null:
 		core.entity_add_relation(self, relation, to)
 	else:
-		note.warn("Entity %s requested bond without a core.")
+		note.warn("Entity %s requested bond without a core." % name)
 func remove_relation(relation: Script):
 	if core != null:
 		core.entity_remove_relation(self, relation)
 	else:
-		note.warn("Entity %s requested bond without a core.")
+		note.warn("Entity %s requested bond without a core." % name)
 func get_relation(relation: Script) -> PECSEntityMarker:
 	return relationships.get(relation,null)
 func has_relation(relation: Script, to_specifically: PECSEntityMarker = null) -> bool:
@@ -95,4 +104,4 @@ func mark_updated(component: Script):
 	if core != null:
 		core.entity_mark_component_updated(self, component)
 	else:
-		note.warn("Entity %s requested component without a core.")
+		note.warn("Entity %s requested component without a core." % name)

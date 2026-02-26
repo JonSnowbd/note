@@ -19,6 +19,10 @@ enum NoteEntrySceneType {
 ## For the phase control system you should list them here. They will be summonable
 ## with their UID, their path, the base node name, or the class name of the script they inherit.
 @export_file("*.tscn", "*.scn") var phases: Array[String]
+## If true, the intro scene will be skipped and no animations will play.
+@export var fast_boot: bool = false
+## If true, note subsystems will print information regarding their function.
+@export var note_info_prints: bool = false
 
 @export_group("Saves", "save_")
 ## Select how the end user will experience the start of the game. This
@@ -40,6 +44,17 @@ enum NoteEntrySceneType {
 ## function for things such as tracking time until auto-save, or other book keeping related
 ## to your save session that you don't want every frame.
 @export var save_pulse_duration: float = 1.0
+
+@export_group("Tests")
+@export_file("*.tscn", "*.scn") var tests: Array[String]
+## If you suspect any modifications you made to Note may have caused an issue,
+## you can include all the note test fixtures.
+@export var include_note_tests: bool = false
+## When this action is pressed, test fixtures are all ran one after the other.
+@export var run_tests_action: StringName
+## If true, the boot process is instead running every test then closing.
+## Disable before exporting, or when you want to resume the real game.
+@export var test_mode: bool = false
 
 @export_storage var developer_journal: NoteJournalResource
 

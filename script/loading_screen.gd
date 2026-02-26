@@ -110,7 +110,8 @@ func _process_path(path: String) -> float:
 		ResourceLoader.ThreadLoadStatus.THREAD_LOAD_IN_PROGRESS:
 			return loading_array[0]
 		ResourceLoader.ThreadLoadStatus.THREAD_LOAD_LOADED:
-			_nt.info("Finished loading file %s" % path)
+			if note.settings.note_info_prints:
+				_nt.info("Finished loading file %s" % path)
 			results[path] = ResourceLoader.load_threaded_get(path)
 			return 1.0005 # I fear floating point more than I should, sorry.
 	return -1.0

@@ -17,6 +17,8 @@ enum AutorunTarget {
 const CORE_METATAG = &"__pecs_core_meta_marker"
 
 class Lens extends RefCounted:
+	signal entity_added(ent: PECSEntityMarker)
+	signal entity_lost(ent: PECSEntityMarker)
 	var filter_needs: Array[Script] = []
 	var filter_without: Array[Script] = []
 	var filter_with_relationship: Array[Script] = []
@@ -35,8 +37,10 @@ class Lens extends RefCounted:
 				break
 		if already_listening and !is_valid:
 			list.erase(ent)
+			entity_lost.emit(ent)
 		if !already_listening and is_valid:
 			list.append(ent)
+			entity_added.emit(ent)
 	func get_entities() -> Array[PECSEntityMarker]:
 		## TODO, checks for dirty looker.
 		return list
@@ -78,9 +82,9 @@ var relevant_lenses: Dictionary[Script, Array] = {}
 var blackboard: Dictionary[StringName,Variant] = {}
 var _immediate_observers: Array[PECSObserver] = []
 var _deferred_observers: Array[PECSObserver] = []
+var _core_relationships: Dictionary[Script,PECSEntityMarker] = {}
 var _in_run: bool = false
 var _began: bool = false
-
 
 func _get_configuration_warnings() -> PackedStringArray:
 	var warns = []
@@ -99,7 +103,16 @@ func _set(property: StringName, value: Variant) -> bool:
 		update_configuration_warnings()
 	return false
 
-func _enter_tree() -> void:
+func print_core_state():
+	note.info("Core State [b]%s[/b] with the following Systems/Observers:" % name, "PECS")
+	for sys in systems:
+		sys.setup(self)
+		note.info("[b]%s[/b]" % sys.name, "SYS")
+	for obs in observers:
+		obs.setup(self)
+		note.info("[b]%s[/b]" % obs.name, "OBS")
+
+func _ready() -> void:
 	if Engine.is_editor_hint(): return
 	for asset in prewarm_assets:
 		if !note.loading_screen.is_cached(asset):
@@ -111,17 +124,18 @@ func _enter_tree() -> void:
 			system_add_via_node(i)
 		if i is PECSObserver:
 			observer_add_via_node(i)
-	print("\n")
-	note.info("Beginning [b]%s[/b] with the following Systems/Observers:" % name, "PECS")
 	for sys in systems:
 		sys.setup(self)
-		note.info("[b]%s[/b]" % sys.name, "SYS")
 	for obs in observers:
 		obs.setup(self)
-		note.info("[b]%s[/b]" % obs.name, "OBS")
-	print("\n")
 	_began = true
 
+func instantiate_blank_entity(root_override: StringName = &"") -> PECSEntityMarker:
+	var destination = default_root if root_override.is_empty() else root_override
+	var inst = PECSEntityMarker.new()
+	notify_new_entity(inst)
+	root_nodes[destination].call_deferred("add_child", inst)
+	return inst
 func instantiate_entity(scene: PackedScene, root_override: StringName = &"") -> PECSEntityMarker:
 	var destination = default_root if root_override.is_empty() else root_override
 	var parent = root_nodes[destination]
@@ -147,6 +161,7 @@ func _comb(ent: PECSEntityMarker, node: Node):
 			ent.add_side_effect(c)
 func notify_new_entity(ent: PECSEntityMarker):
 	var ind = len(entities)
+	ent.core = self
 	entities.append(ent)
 	entity_index[ent] = ind
 	var true_node = ent.node
@@ -238,6 +253,13 @@ func refresh_lens(lens: Lens):
 	for e in entities:
 		lens.consider(e)
 	lens.dirty_lens = false
+
+func set_core_relationship(relationship: Script, target: PECSEntityMarker):
+	_core_relationships[relationship] = target
+func get_core_relationship(relationship: Script) -> PECSEntityMarker:
+	return _core_relationships.get(relationship, null)
+func remove_core_relationship(relationship: Script):
+	_core_relationships.erase(relationship)
 
 func _sort_systems(l: PECSSystem, r: PECSSystem) -> bool:
 	if l.priority == r.priority:

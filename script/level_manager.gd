@@ -23,6 +23,7 @@ func _load_done_callback(path: String):
 				_load_awaiting = ""
 
 var transition_time: float = 0.6
+var log_info: bool = false
 
 func _internal_swap_logic(new_scene, with_loading_screen: bool) -> Node:
 	if !_load_awaiting.is_empty():
@@ -74,11 +75,14 @@ func _internal_swap_logic(new_scene, with_loading_screen: bool) -> Node:
 ## - If new scene is a string, it is loaded and instantiated.[br]
 ## - If new scene is a packed scene, it is instantiated and loaded.[br]
 ## - If new scene is a node, it is placed into the tree and resumed.[br]
-func change_to(new_scene, with_loading_screen: bool = false):
+## Returns the new scene.
+func change_to(new_scene, with_loading_screen: bool = false) -> Node:
 	var old_scene = await _internal_swap_logic(new_scene, with_loading_screen)
 	if old_scene != null:
 		old_scene.queue_free()
-	_nt.info("Finished transition to new level %s" % get_tree().current_scene.name)
+	if note.settings.note_info_prints:
+		_nt.info("Finished transition to new level %s" % get_tree().current_scene.name)
+	return get_tree().current_scene
 
 ## Changes to the new scene with an optional load screen.[br]
 ## - If new scene is a string, it is loaded and instantiated.[br]
@@ -86,7 +90,8 @@ func change_to(new_scene, with_loading_screen: bool = false):
 ## - If new scene is a node, it is placed into the tree and resumed.[br]
 func swap(new_scene, with_loading_screen: bool = false) -> Node:
 	var old_scene = await _internal_swap_logic(new_scene, with_loading_screen)
-	_nt.info("Finished transition to new level %s" % get_tree().current_scene.name)
+	if note.settings.note_info_prints:
+		_nt.info("Finished transition to new level %s" % get_tree().current_scene.name)
 	return old_scene
 
 func _ready() -> void:

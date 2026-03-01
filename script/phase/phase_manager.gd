@@ -10,12 +10,10 @@ var lookup: Dictionary = {}
 var _awaiting_init: bool = false
 var _is_current_phase_instant: bool = false
 
-@onready var _nt = get_tree().root.get_node("note")
-
 var loads_remaining: PackedStringArray = []
 
 func _register(path: String):
-	var packed_scene = _nt.loading_screen.force_fetch(path)
+	var packed_scene = note.loading_screen.force_fetch(path)
 	var instance = packed_scene.instantiate()
 	lookup[instance.name] = packed_scene
 	lookup[packed_scene] = packed_scene
@@ -23,24 +21,24 @@ func _register(path: String):
 	lookup[path] = packed_scene
 	instance.queue_free()
 	if note.settings.note_info_prints:
-		_nt.info("Registered new phase -> [b]"+instance.name+"[/b]", "PHSMNGR")
+		note.info("Registered new phase -> [b]"+instance.name+"[/b]", "PHSMNGR")
 
 func _is_all_loaded() -> bool:
 	return loads_remaining.is_empty()
 
 
 func _ready() -> void:
-	if _nt.settings.test_mode:
+	if note.settings.test_mode:
 		return
-	_nt.loading_screen.loading_shadow_file_finished.connect(func(path):
+	note.loading_screen.loading_shadow_file_finished.connect(func(path):
 		if loads_remaining.is_empty(): return
 		if loads_remaining.has(path):
 			_register(path)
 			loads_remaining.erase(path)
 	)
-	for phase in _nt.settings.phases:
+	for phase in note.settings.phases:
 		loads_remaining.append(phase)
-		_nt.loading_screen.shadow_load(phase)
+		note.loading_screen.shadow_load(phase)
 
 ## Just incase the user tries to load a phase REALLY early,
 ## just force the whole load.
@@ -55,7 +53,7 @@ func begin(identity) -> Variant:
 		var new_phase: Phase = packed.instantiate()
 		current_phase = new_phase
 		if note.settings.note_info_prints:
-			_nt.info("Beginning phase: [b]"+new_phase.name+"[/b]", "PHSMNGR")
+			note.info("Beginning phase: [b]"+new_phase.name+"[/b]", "PHSMNGR")
 		add_child(new_phase)
 		new_phase.modulate.a = 0.0
 		_awaiting_init = true
@@ -66,7 +64,7 @@ func begin(identity) -> Variant:
 		
 		return new_phase
 	else:
-		_nt.error("note.phase.begin called with '%s' which doesnt exist. Is it in your note settings?" % str(identity))
+		note.error("note.phase.begin called with '%s' which doesnt exist. Is it in your note settings?" % str(identity))
 	return null
 
 ## Ends the current phase with no animation if it exists, and then, with
@@ -79,7 +77,7 @@ func begin_instant(identity) -> Variant:
 		var new_phase: Phase = packed.instantiate()
 		current_phase = new_phase
 		if note.settings.note_info_prints:
-			_nt.info("Beginning phase: [b]"+new_phase.name+"[/b]", "PHSMNGR")
+			note.info("Beginning phase: [b]"+new_phase.name+"[/b]", "PHSMNGR")
 		add_child(new_phase)
 		_awaiting_init = true
 		_is_current_phase_instant = true

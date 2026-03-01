@@ -18,7 +18,7 @@ func _init() -> void:
 		previous_fullscreen_mode = json["previous_fullscreen_mode"]
 func persist(_nt) -> void:
 	previous_fullscreen_mode = DisplayServer.window_get_mode()
-	previous_master_bus_volume = _nt.util.get_volume("Master")
+	previous_master_bus_volume = note.util.get_volume("Master")
 	var fi = FileAccess.open("user://__note.json", FileAccess.WRITE)
 	fi.store_string(JSON.stringify({
 		"stuck_save" = stuck_save,
@@ -36,5 +36,5 @@ func restore_soft_settings(_nt) -> void:
 		DisplayServer.WINDOW_MODE_WINDOWED:
 			note.util.set_windowed()
 	
-	_nt.util.set_fullscreen(previous_fullscreen_mode)
-	_nt.util.set_volume("Master", previous_master_bus_volume)
+	note.util.set_fullscreen(previous_fullscreen_mode)
+	note.util.set_volume("Master", previous_master_bus_volume)

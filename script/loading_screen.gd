@@ -28,16 +28,14 @@ var results: Dictionary[String,Variant] = {}
 ## Path : Error
 var errors: Dictionary[String,String] = {}
 
-@onready var _nt = get_tree().root.get_node("note")
-
 var _warn_trip: bool = false
 
 ## Pushes a path on the stack of things that should be loaded.
 func push_item(path: String):
 	if is_loading:
-		_nt.warn("Pushing new things to load while already loading can result in visual loading screen bugs.")
+		note.warn("Pushing new things to load while already loading can result in visual loading screen bugs.")
 	if results.has(path):
-		_nt.warn("Attempted to queue a loading screen for an already loaded item. Check cache first.")
+		note.warn("Attempted to queue a loading screen for an already loaded item. Check cache first.")
 	ResourceLoader.load_threaded_request(path)
 	statuses.append(path)
 
@@ -46,7 +44,7 @@ func push_item(path: String):
 func begin_loading():
 	is_loading = true
 	initial_load_quantity = len(statuses)
-	_nt.transition.trigger()
+	note.transition.trigger()
 	show()
 
 func get_load_progress(path:String) -> float:
@@ -77,7 +75,7 @@ func force_fetch(path: String) -> Variant:
 		return results[path]
 	else:
 		if !_warn_trip:
-			_nt.warn("A cache fetch was forced. Stutters may result from forcing a fetch.")
+			note.warn("A cache fetch was forced. Stutters may result from forcing a fetch.")
 			_warn_trip = true
 		var result
 		if !statuses.has(path) and !statuses_shadows.has(path):
@@ -111,7 +109,7 @@ func _process_path(path: String) -> float:
 			return loading_array[0]
 		ResourceLoader.ThreadLoadStatus.THREAD_LOAD_LOADED:
 			if note.settings.note_info_prints:
-				_nt.info("Finished loading file %s" % path)
+				note.info("Finished loading file %s" % path)
 			results[path] = ResourceLoader.load_threaded_get(path)
 			return 1.0005 # I fear floating point more than I should, sorry.
 	return -1.0

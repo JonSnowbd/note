@@ -11,8 +11,6 @@ extends Control
 signal selected
 signal deleting
 
-@onready var _nt = get_tree().root.get_node("note")
-
 func _ready() -> void:
 	face_slot.hide()
 	primary_button.pressed.connect(func():
@@ -25,7 +23,7 @@ func _ready() -> void:
 	pivot_offset = size*0.5
 
 func _physics_process(delta: float) -> void:
-	if _nt.controls.is_mouse_and_keyboard() and menu_button.disabled:
+	if note.controls.is_mouse_and_keyboard() and menu_button.disabled:
 		var distance = get_local_mouse_position().distance_to(size*0.5)
 		modulate.a = 1.0-clamp(distance/350.0, 0.0, 0.5)
 	else:

@@ -11,8 +11,6 @@ const PillType = preload("uid://pufbtr67lcto")
 @export var note_credit_logo: Control
 @export var your_credit_logo: Control
 
-@onready var _nt = get_tree().root.get_node("note")
-
 var countdown: float = 0.0
 var save_loaded: bool = false
 
@@ -22,8 +20,8 @@ func save_exists(profile_name: String) -> bool:
 func get_save_faceplate(profile_name: String) -> Control:
 	var base_folder = "user://profile_"+profile_name
 	var save_type = NoteSaveSession
-	if _nt.settings.save_session_type != null:
-		save_type = _nt.settings.save_session_type
+	if note.settings.save_session_type != null:
+		save_type = note.settings.save_session_type
 	
 	var new_save: NoteSaveSession = save_type.new(base_folder, false)
 	var result = new_save.get_fancy_pill()
@@ -48,52 +46,52 @@ func load_save(profile_name: String):
 	var meta_file = FileAccess.open(base_folder+"/__note_meta.json", FileAccess.READ)
 	
 	var save_type = NoteSaveSession
-	if _nt.settings.save_session_type != null:
-		save_type = _nt.settings.save_session_type
+	if note.settings.save_session_type != null:
+		save_type = note.settings.save_session_type
 	
 	var new_save: NoteSaveSession = save_type.new(base_folder)
-	_nt.begin_session(new_save)
+	note.begin_session(new_save)
 	save_loaded = true
 
 ## Finishes the load, moves onto the user's defined entry point.
 func post_load_action(skip_animation: bool = false):
-	if _nt.loading_screen.is_cached(_nt.settings.initial_scene):
-		_nt.level.change_to(_nt.settings.initial_scene)
+	if note.loading_screen.is_cached(note.settings.initial_scene):
+		note.level.change_to(note.settings.initial_scene)
 		return
 	if skip_animation:
-		_nt.loading_screen.show()
+		note.loading_screen.show()
 		await get_tree().process_frame
-		_nt.level.change_to(_nt.settings.initial_scene, true)
+		note.level.change_to(note.settings.initial_scene, true)
 	else:
-		_nt.level.change_to(_nt.settings.initial_scene, true)
+		note.level.change_to(note.settings.initial_scene, true)
 
 func end_splash_screen():
-	_nt.transition.trigger()
+	note.transition.trigger()
 	splash_screen.hide()
 func soft_settings_check():
 	## Restore soft settings if they are available.
-	if _nt.settings.save_soft_settings:
-		if !_nt.meta.first_launch:
-			_nt.info("Soft save settings restored.")
-			_nt.meta.restore_soft_settings(_nt)
+	if note.settings.save_soft_settings:
+		if !note.meta.first_launch:
+			note.info("Soft save settings restored.")
+			note.meta.restore_soft_settings(self)
 		else:
-			_nt.info("Soft save settings detected first launch. Not restoring settings.")
+			note.info("Soft save settings detected first launch. Not restoring settings.")
 func instant_load_check():
-	var is_simple = _nt.settings.save_strategy == NoteDeveloperSettings.NoteEntrySceneType.SIMPLE
-	var uses_stuck_save = _nt.settings.save_sticky
+	var is_simple = note.settings.save_strategy == NoteDeveloperSettings.NoteEntrySceneType.SIMPLE
+	var uses_stuck_save = note.settings.save_sticky
 	if is_simple:
 		if save_exists("simple_profile"):
-			_nt.info("Loading pre-existing simple profile")
+			note.info("Loading pre-existing simple profile")
 			load_save("simple_profile")
 		else:
-			_nt.info("Creating and loading first simple profile")
+			note.info("Creating and loading first simple profile")
 			create_save("simple_profile")
 			load_save("simple_profile")
-	if !_nt.meta.stuck_save.is_empty() and !is_simple and uses_stuck_save:
-		var stuck_save_exists = save_exists(_nt.meta.stuck_save)
+	if !note.meta.stuck_save.is_empty() and !is_simple and uses_stuck_save:
+		var stuck_save_exists = save_exists(note.meta.stuck_save)
 		if stuck_save_exists:
-			_nt.info("Automatically loading 'stuck save' profile <%s>"%_nt.meta.stuck_save)
-			load_save(_nt.meta.stuck_save)
+			note.info("Automatically loading 'stuck save' profile <%s>"%note.meta.stuck_save)
+			load_save(note.meta.stuck_save)
 
 func begin_save_screen():
 	if save_loaded:
@@ -113,16 +111,16 @@ func begin_save_screen():
 			pills[i].set_state_waiting_for(profile_name)
 		pills[i].selected.connect(func():
 			if exists:
-				_nt.info("Loading profile <%s>" % profile_name)
+				note.info("Loading profile <%s>" % profile_name)
 				load_save(profile_name)
 			else:
-				_nt.info("Creating and then loading profile <%s>" % profile_name)
+				note.info("Creating and then loading profile <%s>" % profile_name)
 				create_save(profile_name)
 				load_save(profile_name)
-			if _nt.settings.save_sticky:
-				_nt.info("'Sticking' save profile <%s>" % profile_name)
-				_nt.meta.stuck_save = profile_name
-				_nt.meta.persist(_nt)
+			if note.settings.save_sticky:
+				note.info("'Sticking' save profile <%s>" % profile_name)
+				note.meta.stuck_save = profile_name
+				note.meta.persist(self)
 			call_deferred("post_load_action")
 		)
 	
@@ -134,10 +132,13 @@ func _ready() -> void:
 		load_save("note_test_mode")
 		note.run_tests(true)
 		return
-	_nt.loading_screen.shadow_load(_nt.settings.initial_scene)
 	if note.settings.fast_boot:
-		post_load_action()
+		if !save_exists("note_fast_boot"):
+			create_save("note_fast_boot")
+		load_save("note_fast_boot")
+		note.level.change_to(note.settings.initial_scene, false, false)
 		return
+	note.loading_screen.shadow_load(note.settings.initial_scene)
 	instant_load_check()
 	countdown = splash_screen_duration
 	var t = create_tween()

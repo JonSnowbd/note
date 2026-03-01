@@ -17,8 +17,6 @@ var current_state: State = null
 var owned_states: Array[State] = []
 var alias_dictionary: Dictionary = {}
 
-@onready var _nt = get_tree().root.get_node("note")
-
 func _ready() -> void:
 	if initial_state != null:
 		transition_to(initial_state)
@@ -31,24 +29,24 @@ func _enter_tree() -> void:
 func introduce_state(state:State):
 	if !owned_states.has(state):
 		if debug:
-			_nt.info(name+" state machine has added a new state: "+state.name)
+			note.info(name+" state machine has added a new state: "+state.name)
 		state.machine = self
 		state.original_process_mode = state.process_mode
 		state.process_mode = Node.PROCESS_MODE_DISABLED
 		if state.get_parent() != self:
 			if debug:
-				_nt.info(name+" state machine has re-parented a node to exist under itself instead: "+state.name)
+				note.info(name+" state machine has re-parented a node to exist under itself instead: "+state.name)
 			state.get_parent().remove_child(state)
 			add_child(state)
 		owned_states.append(state)
 		if alias_dictionary.has(state.name):
-			_nt.warn("Potential state machine state name/alias clash: "+state.name)
+			note.warn("Potential state machine state name/alias clash: "+state.name)
 		alias_dictionary[state.name] = state
 		for alias in state.aliases:
 			alias_dictionary[alias] = state
 	else:
 		if debug:
-			_nt.info(name+" state machine has gone over a state that was already added: "+state.name)
+			note.info(name+" state machine has gone over a state that was already added: "+state.name)
 
 ## Transitions to a new state by node reference. Data can be passed as transition context, for example falling -> grounded
 ## can pass the velocity of the impact for the new state to handle stuff like falling damage. next_state can be null, to
@@ -58,17 +56,17 @@ func transition_to(next_state: State, data = null):
 	if current_state != null:
 		current_state.state_leave(next_state)
 		if debug:
-			_nt.info(name+" state machine has told "+current_state.name+" to exit")
+			note.info(name+" state machine has told "+current_state.name+" to exit")
 		current_state.process_mode = Node.PROCESS_MODE_DISABLED
 	current_state = next_state
 	if current_state != null:
 		current_state.state_enter(previous_state, data)
 		if debug:
-			_nt.info(name+" state machine has told "+current_state.name+" to enter")
+			note.info(name+" state machine has told "+current_state.name+" to enter")
 		current_state.process_mode = current_state.original_process_mode
 	else:
 		if debug:
-			_nt.info(name+" state machine is now not processing a state.")
+			note.info(name+" state machine is now not processing a state.")
 
 ## Looks up all state aliases, and node names, and transitions to the node it finds.
 func transition_to_named(state_name: String, data = null):
@@ -79,7 +77,7 @@ func transition_to_named(state_name: String, data = null):
 		if child.name == state_name and child is State:
 			transition_to(child, data)
 			return
-	_nt.warn("Failed to find and transition to alias/name: "+state_name)
+	note.warn("Failed to find and transition to alias/name: "+state_name)
 
 ## Stops all states, same as `transition_to(null)`
 func stop():

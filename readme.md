@@ -12,20 +12,24 @@ easy, I promise!) you get:
 
 - A built in per-project documentation journal with global(runtime) lookups for journal-specified
 variables. Create your own documentation with variable editing built in.
+- Simple test fixture structure, with the ability to list them all in your settings
+for a test driven run mode
 - Very flexible and customizable transition system that lets you trigger
-a transition anywhere anytime, even outside of loading a new level or changing view.
-- Simple Mouse+Keyboard and Gamepad coexistance with logic nodes to help organize
-very clean gamepad UI interactions.
+a transition anywhere anytime, without needing to change your level, it can be used
+to simply cover a teleport.
+- Simple Mouse+Keyboard and Gamepad shared UI input framework, made with embedded nodes
+and focus targets.
+- A pseudo ECS based on integration with nodes.
 - Automatic loading behaviours including loading screen and level changer, that all
 work together to make your game seamless, and handle better practices for you, such as
 asynchronous loading screens, and background pre-loading.
 - A new Godot tab with goodies such as a GDScript playground, a Note help page, the journal, and more
 to come.
-- An organized logic chain system for orchestrating your game interactions.
-- A collection of very commonplace UI Elements ready to use out of the box, such as
+- A logic chain system for orchestrating game interactions.
+- A collection of optional commonplace UI Elements ready to use out of the box, such as
 control guides and tooltips.
-- Oh, and an extremely easy and convenient way to modify your types to have custom editors.
-Realizing I could do this in Note and never have to make a EditorInspectorPlugin again was really fun.
+- And an extremely easy way to modify your types to have custom editors.
+Mever having to make a EditorInspectorPlugin again was really fun.
 - And lots of standalone node types and utility functions that cover, and much more.
 
 ![A picture of the in-editor journal that Note provides](/documentation/journal.png)
@@ -35,7 +39,7 @@ Realizing I could do this in Note and never have to make a EditorInspectorPlugin
 ## Project Status
 
 > [!CAUTION]
-> Note tracks with **Godot 4.6 Dev** cycle, awaiting Traits before settling on Stable.
+> Note tracks with **Godot 4.7 Dev** cycle, awaiting Traits before settling on Stable.
 Traits will be used extensively for some Note features and as such will be in flux prior to,
 and during the Traits dev release.
 
@@ -55,6 +59,11 @@ Note gets out of your way real quick so you should not be blocked by Note breaki
 > If you are experienced with installing Godot plugins, you can skip to the end of this
 category and read the last few steps! It's nothing new besides the use of a settings
 file in your project settings.
+
+> [!IMPORTANT]
+> Its normal to see a lot of errors when you first add the addon, this is due
+> to note using the `note` global inside its own code. They will all disappear when you
+> enable the plugin and restart.
 
 <details>
 
@@ -237,8 +246,8 @@ note.phase.begin_instant(id) -> Variant # Like above but without a fade-in anima
 note.phase.end(id) # Fades out the current phase, leaving nothing
 note.phase.end_instant(id)
 
-note.level.change_to(path_or_packed_scene, with_load_screen: bool = false)
-note.level.swap(path_or_packed_scene, with_load_screen: bool = false) -> Variant # Returns the old level rather than deleting it.
+note.level.change_to(path_or_packed_scene, with_load_screen: bool = false, with_transition: bool = true)
+note.level.swap(path_or_packed_scene, with_load_screen: bool = false, with_transition: bool = true) -> Variant # Returns the old level rather than deleting it.
 ```
 
 ## Doc Guides
@@ -269,5 +278,5 @@ Note wouldnt be what it is without the open source/MIT projects it stands on:
 
 ## License
 
-Note uses the MIT License as noted in the license file.
-Feel free to do whatever you want with it!
+Note uses the MIT License.
+Feel free to do whatever you want with it! Commercial or otherwise.

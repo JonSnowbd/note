@@ -113,7 +113,32 @@ func get_closest_node_2d(array, target: Node2D) -> Node2D:
 				closest_dist = dist
 				closest = i
 	return closest
-	
+## Scours an array of Node3Ds, and tracks which is closest to [code]target[/code],
+## and returns it. Can return null.
+func get_closest_node_3d(array, target: Node3D) -> Node2D:
+	var closest_dist = INF
+	var closest = null
+	for i in array:
+		if i is Node3D:
+			var dist = i.global_position.distance_to(target.global_position)
+			if dist < closest_dist:
+				closest_dist = dist
+				closest = i
+	return closest
+
+## Takes a stick input vector(eg Input.get_vector) and returns the true in world direction
+## it represents relative to the camera. Use this for character movement direction.
+func stick_to_world_dir_3d(stick: Vector2, camera: Camera3D, flattened: bool = true) -> Vector3:
+	var result = Vector3.ZERO
+	var magnitude = stick.length()
+	var transform = Transform3D.IDENTITY\
+	.rotated(Vector3(1.0, 0.0, 0.0), camera.global_rotation.x * (0.0 if flattened else 1.0))\
+	.rotated(Vector3(0.0, 1.0, 0.0), camera.global_rotation.y)\
+	.rotated(Vector3(0.0, 0.0, 1.0), camera.global_rotation.z)\
+	.translated(camera.global_position)
+	result += transform.basis.z * stick.y
+	result += transform.basis.x * stick.x
+	return result
 ## Using the relative positions of 2 nodes, moves [code]mover[/code] to be 
 ## [code]distance[/code] away from the [code]stator[/code], maintaining the angle.
 func set_distance_between_nodes_2d(stator: Node2D, mover: Node2D, distance: float):

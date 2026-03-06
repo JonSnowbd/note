@@ -28,7 +28,11 @@ func _is_all_loaded() -> bool:
 
 
 func _ready() -> void:
-	if note.settings.test_mode:
+	# Fast boot instantly loads, no time for shadow loading during boot
+	# screens.
+	if note.settings.fast_boot:
+		for phase in note.settings.phases:
+			_register(phase)
 		return
 	note.loading_screen.loading_shadow_file_finished.connect(func(path):
 		if loads_remaining.is_empty(): return

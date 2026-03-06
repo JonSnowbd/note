@@ -5,3 +5,4 @@ https://www.svgrepo.com/collection/denali-solid-interface-icons
 https://github.com/binogure-studio/godot-uuid/tree/master
 https://fonts.google.com/specimen/Stack+Sans+Text
 https://fonts.google.com/noto/specimen/Noto+Sans
+https://gist.github.com/mattogodoy/910ef7612950161f4a9871c09b62fec7

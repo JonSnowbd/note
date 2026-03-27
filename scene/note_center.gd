@@ -154,6 +154,53 @@ func execute(script, parameters = null):
 	game_script.tree = tree
 	game_script.execute(parameters)
 
+## Returns an empty string if it failed.
+## You should implement _export and _import on all your types related to this.
+## See the docs for more info.
+func serialize(object) -> Dictionary:
+	var payload = object
+	var value
+	
+	if payload is Resource:
+		var script: Script = payload.get_script()
+		var uid = ""
+		if !payload.resource_path.is_empty():
+			ResourceUID.path_to_uid(payload.resource_path)
+		var new_payload = {}
+		new_payload[&"resource_script"] = ResourceUID.path_to_uid(script.resource_path)
+		if payload.has_method(&"_export"):
+			new_payload[&"resource_content"] = payload._export() if payload.has_method(&"_export") else {}
+		if !payload.resource_path.is_empty():
+			new_payload[&"resource_path"] = ResourceUID.path_to_uid(payload.resource_path)
+		payload = new_payload
+	elif payload is Node:
+		var script: Script = payload.get_script()
+		
+	elif payload is Object:
+		pass
+	
+	if payload is Array:
+		value = []
+		for i in payload:
+			value.append(serialize(i))
+	elif payload is Dictionary:
+		value = {}
+		for k in payload.keys():
+			value[k] = serialize(payload[k])
+	return value
+	
+## Reconstructs the resource/node/object that was passed to serialize.
+## Returns null if it failed.
+## You should implement _export and _import on all your types related to this.
+## See the docs for more info.
+func deserialize(data_string: String) -> Variant:
+	var object = null
+	var decoded = JSON.parse_string(data_string)
+	if decoded is Dictionary:
+		if decoded.has(&"resource_path"):
+			pass
+	return object
+
 ## Makes it so the next time the game boots, save select will appear again.
 ## This has no impact if Sticky Saves are disabled.
 func unstick_save():

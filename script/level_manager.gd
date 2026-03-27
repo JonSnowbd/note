@@ -59,23 +59,18 @@ func _internal_swap_logic(new_scene, with_loading_screen: bool, with_transition:
 			note.warn("Instanced scene given to level load already belonged to a parent, removing it from the parent.")
 			new_scene.get_parent().remove_child(new_scene)
 		new_scene_instance = new_scene
+	else:
+		note.error("Failed to load the type of "+str(new_scene))
 		
 	
 	if with_transition:
 		note.transition.trigger(transition_time)
 	note.loading_screen.hide()
-	get_tree().root.call_deferred("remove_child",old_scene)
-	get_tree().root.call_deferred("add_child",new_scene_instance)
-	get_tree().set_deferred("current_scene", new_scene_instance)
+	get_tree().change_scene_to_node(new_scene_instance)
 	return [old_scene, new_scene_instance]
 
-## Changes to the new scene with an optional load screen. The old
-## scene is unloaded and deleted.[br]
-## - If new scene is a string, it is loaded and instantiated.[br]
-## - If new scene is a packed scene, it is instantiated and loaded.[br]
-## - If new scene is a node, it is placed into the tree and resumed.[br]
-## Returns the new scene.
-func change_to(new_scene, with_loading_screen: bool = false, with_transition: bool = true) -> Node:
+
+func _internal_change_to(new_scene, with_loading_screen: bool = false, with_transition: bool = true) -> Node:
 	var scene_data = await _internal_swap_logic(new_scene, with_loading_screen, with_transition)
 	var old_scene = scene_data[0]
 	if old_scene != null:
@@ -83,16 +78,28 @@ func change_to(new_scene, with_loading_screen: bool = false, with_transition: bo
 	if note.settings.note_info_prints:
 		note.info("Finished transition to new level %s" % get_tree().current_scene.name)
 	return scene_data[1]
+## Changes to the new scene with an optional load screen. The old
+## scene is unloaded and deleted.[br]
+## - If new scene is a string, it is loaded and instantiated.[br]
+## - If new scene is a packed scene, it is instantiated and loaded.[br]
+## - If new scene is a node, it is placed into the tree and resumed.[br]
+## Returns the new scene.
+func change_to(new_scene, with_loading_screen: bool = false, with_transition: bool = true):
+	call_deferred(&"_internal_change_to", new_scene, with_loading_screen, with_transition)
+
+
+func _swap_internal(new_scene, with_loading_screen: bool = false, with_transition: bool = true):
+	var scene_data = await _internal_swap_logic(new_scene, with_loading_screen, with_transition)
+	if note.settings.note_info_prints:
+		note.info("Finished transition to new level %s" % scene_data[1].name)
 
 ## Changes to the new scene with an optional load screen.[br]
 ## - If new scene is a string, it is loaded and instantiated.[br]
 ## - If new scene is a packed scene, it is instantiated and loaded.[br]
 ## - If new scene is a node, it is placed into the tree and resumed.[br]
 func swap(new_scene, with_loading_screen: bool = false, with_transition: bool = true) -> Node:
-	var scene_data = await _internal_swap_logic(new_scene, with_loading_screen, with_transition)
-	var old_scene = scene_data[0]
-	if note.settings.note_info_prints:
-		note.info("Finished transition to new level %s" % scene_data[1].name)
+	var old_scene = get_tree().current_scene
+	call_deferred(&"_swap_internal", new_scene, with_loading_screen, with_transition)
 	return old_scene
 
 func _ready() -> void:

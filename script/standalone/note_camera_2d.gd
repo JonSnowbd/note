@@ -30,7 +30,7 @@ class ShakeEffect extends Effect:
 @export_category("Settings")
 ## The camera will look for affectors on these layers. Its not necessary for affectors
 ## to be on their own layer, but it would be slightly more performant if so.
-@export_flags_2d_physics var affector_layer
+@export_flags_2d_physics var affector_layer: int
 ## The camera will maintain zoom to view this amount of pixels. if set to 1280,720, then
 ## there will always be 1280 pixels visible even as the window size changes.
 @export var virtual_size: Vector2 = Vector2(1280, 720):
@@ -84,6 +84,7 @@ func _notification(what: int) -> void:
 		_update_properties()
 
 func _get_affectors(world_position: Vector2) -> Array[NoteCameraAffector]:
+	if affector_layer == 0: return []
 	var affectors: Array[NoteCameraAffector] = []
 	var query = PhysicsPointQueryParameters2D.new()
 	query.position = world_position

@@ -110,6 +110,7 @@ var texture_stack: Array[AnimationItem] = []
 var effect_cache: Dictionary = {}
 
 var _current_effect: AnimationItem = null
+var _is_up: bool = false
 
 var heights: Array[float] = []
 
@@ -154,23 +155,20 @@ func _process(delta):
 			auto_mode_calculation()
 		apply_pose(delta)
 	
+	## Do steps on frame, instead of physics.
+	if Engine.is_editor_hint() == false and generate_steps:
+		if framedata.height > step_upper_bound:
+			_is_up = true
+		if framedata.height < step_lower_bound and _is_up:
+			_is_up = false
+			step.emit()
+	
 	queue_redraw()
 
 func _physics_process(delta: float) -> void:
 	delta *= time_scale
 	if Engine.is_editor_hint() == false and automatically_pose and use_physics_process:
 		feed(delta)
-	if Engine.is_editor_hint() == false and generate_steps:
-		heights.append(framedata.height)
-		while len(heights) > height_sample_frames:
-			heights.pop_front()
-		var raised_enough: bool = false
-		for h: float in heights:
-			if h > step_upper_bound:
-				raised_enough = true
-			if raised_enough and h <= step_lower_bound:
-				step.emit()
-				heights.clear()
 ## Like push texture, but for adding custom motion offsets. If duration is less than zero, the effect will not expire, if you assign it a keyword
 ## you can instead call for its deletion via that.
 func push_effect(effect: Callable, duration: float = -1.0, keyword: String = "", priority_offset: int = 0):

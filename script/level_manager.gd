@@ -2,6 +2,7 @@ extends Node
 
 signal async_load_finished
 
+# TODO redo all this, loading screen should not be this obtuse.
 var _load_awaiting: String = ""
 func _load_done_callback(path: String):
 	if _load_awaiting == path:

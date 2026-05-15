@@ -12,16 +12,22 @@ enum Type {
 signal input_method_changed(new_mode: Type)
 signal is_now_keyboard
 signal is_now_gamepad
+signal hovered_node_changed(old_node: Control, new_node: Control)
 
 var current_mode: Type = Type.MouseKeyboard
-
+var hovered_node: Control
 var change_mouse_mode_automatically: bool = true
 
 var __mouse_track: float = 0.0
 
-func _ready() -> void:
-	pass
-
+func _physics_process(delta: float) -> void:
+	var old_node = hovered_node
+	if is_mouse_and_keyboard():
+		hovered_node = get_viewport().gui_get_hovered_control()
+	elif is_gamepad():
+		hovered_node = note.focus.target
+	if old_node != hovered_node:
+		hovered_node_changed.emit(old_node, hovered_node)
 ## Note features a robust gamepad ui control scheme. If you disable
 ## note's automatic controller detection, this is how you toggle it.
 ## Not needed if you are letting note automatically detect changes.
@@ -34,7 +40,6 @@ func set_mode(new_mode: Type):
 				Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 		current_mode = new_mode
 		input_method_changed.emit(new_mode)
-		print("CHANGED TO "+str(new_mode))
 		match new_mode:
 			Type.MouseKeyboard:
 				is_now_keyboard.emit()

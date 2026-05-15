@@ -1,26 +1,30 @@
-[gd_scene load_steps=2 format=3 uid="uid://f4ll26okyq31"]
+[gd_scene format=3 uid="uid://f4ll26okyq31"]
 
 [ext_resource type="Script" uid="uid://dluqljome6kb" path="res://addons/note/prefab/default_tooltips/simple_tooltip.gd" id="1_d36n0"]
 
-[node name="SimpleTooltip" type="VBoxContainer" node_paths=PackedStringArray("title", "body")]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="SimpleTooltip" type="MarginContainer" unique_id=649558162 node_paths=PackedStringArray("title", "body")]
+offset_right = 156.0
+offset_bottom = 61.0
 size_flags_horizontal = 8
 size_flags_vertical = 8
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 script = ExtResource("1_d36n0")
-title = NodePath("Title")
-body = NodePath("RichTextLabel")
+title = NodePath("VBoxContainer/Title")
+body = NodePath("VBoxContainer/RichTextLabel")
 
-[node name="Title" type="Label" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1117172260]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="Title" type="Label" parent="VBoxContainer" unique_id=1890128343]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Example Title"
-horizontal_alignment = 1
 
-[node name="RichTextLabel" type="RichTextLabel" parent="."]
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer" unique_id=818138635]
 layout_mode = 2
 bbcode_enabled = true
 text = "[b]Wow look at this example![/b] It has BBCode enabled!"

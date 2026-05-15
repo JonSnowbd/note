@@ -7,6 +7,7 @@ signal save_unloaded
 
 const TypeLoadingScreen = preload("uid://dj5ae4svel0vv")
 const TypeControlGuide = preload("uid://b5urykf5xl2tp")
+const TypeNotifications = preload("uid://bd2xr6domuqt7")
 const TypePhaseManager = preload("uid://caty0hb5uijx2")
 const TypeTooltipManager = preload("uid://ej2vfmjw2dkq")
 const TypeUtil = preload("uid://bqvtnaowd8lta")
@@ -15,6 +16,7 @@ const TypeLevelManager = preload("uid://d1ghq77fsfx07")
 const TypeControlManager = preload("uid://dsuqhn7s348wn")
 const TypeMetadata = preload("uid://dpj8fxiopchxi")
 const TypeFocusGroup = preload("uid://4iwdim3cbvkf")
+const TypeUI = preload("uid://dqm1jcqmseeun")
 const _default_note_tests = [
 	"uid://df1tif6bomrwk"
 ]
@@ -22,6 +24,7 @@ const _default_note_tests = [
 @export_group("Internal References")
 @export var level: TypeLevelManager
 @export var controls: TypeControlManager
+@export var notifications: TypeNotifications
 @export var loading_screen: TypeLoadingScreen
 @export var transition: TypeTransitionManager
 @export var control_guide: TypeControlGuide
@@ -29,6 +32,7 @@ const _default_note_tests = [
 @export var phase: TypePhaseManager
 @export var focus: TypeFocusGroup
 @export var util: TypeUtil
+@export var ui: TypeUI
 
 ## This is the Note Dev Settings that you provide via your project settings.
 ## Do not edit this during runtime with the intention of it being saved!
@@ -154,31 +158,78 @@ func execute(script, parameters = null):
 	game_script.tree = tree
 	game_script.execute(parameters)
 
-## Returns an empty string if it failed.
-## You should implement _export and _import on all your types related to this.
-## See the docs for more info.
-func serialize(object) -> Dictionary:
+## Returns true if Note is using input, or if input should be
+## ignored. A Context can be provided so you can still use this
+## in your NoteWindow's and other places.
+func is_input_busy(for_context = null) -> bool:
+	if ui.current_window != null:
+		return for_context != ui.current_window
+	return false
+
+## Returns an empty dictionary if it failed.
+## You should implement _export and _import on all your types related to this, except
+## for resource types that you will load from disk.
+## See the docs for more info. When using to place data in your save file, this
+## does not need to be JSON.stringify'd.
+func serialize(object) -> Variant:
 	var payload = object
 	var value
 	
+	const ExcludedShortcuts = [
+		TYPE_ARRAY,
+		TYPE_DICTIONARY,
+		TYPE_OBJECT,
+		TYPE_STRING,
+		TYPE_STRING_NAME,
+		TYPE_INT,
+		TYPE_FLOAT,
+		TYPE_BOOL,
+		TYPE_NIL
+	]
+	
+	if object is Variant and !ExcludedShortcuts.has(typeof(object)):
+		return {
+			"_note_literal" = var_to_str(object)
+		}
+	
+	# Before turning structures into owned and serialized values,
+	# turn resources, objects, and nodes into their _exported values if they
+	# exist, and store their script/packed scene url
 	if payload is Resource:
 		var script: Script = payload.get_script()
 		var uid = ""
-		if !payload.resource_path.is_empty():
-			ResourceUID.path_to_uid(payload.resource_path)
 		var new_payload = {}
 		new_payload[&"resource_script"] = ResourceUID.path_to_uid(script.resource_path)
 		if payload.has_method(&"_export"):
-			new_payload[&"resource_content"] = payload._export() if payload.has_method(&"_export") else {}
+			new_payload[&"resource_content"] = payload._export()
 		if !payload.resource_path.is_empty():
 			new_payload[&"resource_path"] = ResourceUID.path_to_uid(payload.resource_path)
 		payload = new_payload
 	elif payload is Node:
 		var script: Script = payload.get_script()
-		
+		var new_payload = {}
+		if script == null:
+			note.warn("Note Serialize was given a regular node, and that is not yet supported.")
+			return null
+		new_payload[&"node_script"] = ResourceUID.path_to_uid(script.resource_path)
+		if !payload.scene_file_path.is_empty():
+			new_payload[&"node_path"] = ResourceUID.path_to_uid(payload.scene_file_path)
+		if payload.has_method(&"_export"):
+			new_payload[&"node_content"] = payload._export()
+		payload = new_payload
 	elif payload is Object:
-		pass
+		var script: Script = payload.get_script()
+		var new_payload = {}
+		if script == null:
+			note.warn("Note Serialize was given a regular non-scripted object, and that is not yet supported.")
+			return null
+		new_payload[&"object_script"] = ResourceUID.path_to_uid(script.resource_path)
+		if payload.has_method(&"_export"):
+			new_payload[&"object_content"] = payload._export()
+		payload = new_payload
 	
+	# Then after the payload is settled, make sure dictionaries and arrays get
+	# sanitized and processed.
 	if payload is Array:
 		value = []
 		for i in payload:
@@ -186,19 +237,71 @@ func serialize(object) -> Dictionary:
 	elif payload is Dictionary:
 		value = {}
 		for k in payload.keys():
-			value[k] = serialize(payload[k])
+			var ser_k = serialize(k)
+			value[ser_k] = serialize(payload[k])
+	else:
+		value = payload
+		
+	# Then return the value.
 	return value
 	
 ## Reconstructs the resource/node/object that was passed to serialize.
 ## Returns null if it failed.
 ## You should implement _export and _import on all your types related to this.
 ## See the docs for more info.
-func deserialize(data_string: String) -> Variant:
+func deserialize(data) -> Variant:
 	var object = null
-	var decoded = JSON.parse_string(data_string)
-	if decoded is Dictionary:
-		if decoded.has(&"resource_path"):
+	if data is Dictionary:
+		if data.has("_note_literal"):
+			return str_to_var(data["_note_literal"])
+		var is_resource = data.has(&"resource_script")
+		var is_node = data.has(&"node_script")
+		var is_object = data.has(&"object_script")
+		if is_resource:
+			var new_resource: Resource
+			# Try to rehydrate via the resource path
+			if data.has(&"resource_path"):
+				var resource_path = data[&"resource_path"]
+				if loading_screen.is_cached(resource_path):
+					new_resource = loading_screen.fetch(resource_path)
+				else:
+					new_resource = load(resource_path)
+			else: # Or create it manually.
+				new_resource = Resource.new()
+				var script = load(data[&"resource_script"])
+				new_resource.set_script(script)
+			if new_resource.has_method(&"_import") and data.has(&"resource_content"):
+				new_resource._import(deserialize(data[&"resource_content"]))
+			object = new_resource
+			
+		elif is_node:
+			var new_node: Node
+			if data.has(&"node_path"):
+				var node_path = data[&"node_path"]
+				if loading_screen.is_cached(node_path):
+					new_node = loading_screen.fetch(node_path).instantiate()
+				else:
+					new_node = load(node_path).instantiate()
+			else:
+				new_node = Node.new()
+				var script = load(data[&"node_script"])
+			if new_node.has_method(&"_import") and data.has(&"node_content"):
+				new_node._import(deserialize(data[&"node_content"]))
+			object = new_node
+		elif is_object:
 			pass
+		else:
+			object = {}
+			for k in data.keys():
+				var deser_k = deserialize(k)
+				object[deser_k] = deserialize(data[k])
+	elif data is Array:
+		object = []
+		for d in data:
+			object.append(deserialize(d))
+	else:
+		object = data
+		
 	return object
 
 ## Makes it so the next time the game boots, save select will appear again.
@@ -211,7 +314,7 @@ func unstick_save():
 func return_to_save_select():
 	unstick_save()
 	end_session()
-	var main_scene_prefab = load(ProjectSettings.get_setting("application/run/main_scene", "res://addons/note/ENTRY_SCENE.tscn"))
+	var main_scene_prefab = load(ProjectSettings.get_setting("application/run/main_scene", "uid://k7kf706i87f8"))
 	level.change_to(main_scene_prefab)
 
 ## Called internally to start saves, let note handle this unless you

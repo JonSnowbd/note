@@ -23,16 +23,19 @@
 [ext_resource type="PackedScene" uid="uid://b8vpfmxrxetcf" path="res://addons/note/prefab/control_guide/basic_guidelet.tscn" id="12_rsod3"]
 [ext_resource type="AudioStream" uid="uid://cu4ny8r1k1e5" path="res://addons/note/audio/failed_input.ogg" id="13_m2x0e"]
 [ext_resource type="Script" uid="uid://4iwdim3cbvkf" path="res://addons/note/script/focus_system/focus_root.gd" id="14_iouvy"]
+[ext_resource type="Script" uid="uid://bd2xr6domuqt7" path="res://addons/note/script/notifications.gd" id="17_bp8ye"]
 [ext_resource type="PackedScene" uid="uid://pjkhoomtso4a" path="res://addons/note/prefab/faux_keyboard.tscn" id="22_jlad3"]
+[ext_resource type="Script" uid="uid://dqm1jcqmseeun" path="res://addons/note/script/ui.gd" id="26_v0msp"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_arint"]
 atlas = ExtResource("10_3s5ow")
 region = Rect2(64, 64, 64, 64)
 
-[node name="NoteCenter" type="Node2D" unique_id=2080868149 node_paths=PackedStringArray("level", "controls", "loading_screen", "transition", "control_guide", "tooltip", "phase", "focus", "util")]
+[node name="NoteCenter" type="Node2D" unique_id=2080868149 node_paths=PackedStringArray("level", "controls", "notifications", "loading_screen", "transition", "control_guide", "tooltip", "phase", "focus", "util", "ui")]
 script = ExtResource("1_fmhej")
 level = NodePath("LevelManager")
 controls = NodePath("Controls")
+notifications = NodePath("NoteUISpace/Notifications")
 loading_screen = NodePath("NoteUISpace/LoadingScreen")
 transition = NodePath("NoteUISpace/Transition")
 control_guide = NodePath("NoteUISpace/ControlGuide")
@@ -40,6 +43,7 @@ tooltip = NodePath("NoteUISpace/Tooltip")
 phase = NodePath("PhaseSpace")
 focus = NodePath("NoteUISpace/Focus")
 util = NodePath("Utils")
+ui = NodePath("NoteUISpace/WindowNode")
 
 [node name="Utils" type="Node" parent="." unique_id=1998701117]
 script = ExtResource("2_yjr4s")
@@ -119,6 +123,20 @@ color = Color(0, 0, 0, 0.4745098)
 
 [node name="FauxKeyboard" parent="NoteUISpace" unique_id=429783762 instance=ExtResource("22_jlad3")]
 visible = false
+
+[node name="Notifications" type="MarginContainer" parent="NoteUISpace" unique_id=1709384188 node_paths=PackedStringArray("popup_audio")]
+anchors_preset = -1
+anchor_left = 0.075
+anchor_top = 0.5
+anchor_right = 0.075
+anchor_bottom = 0.5
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("17_bp8ye")
+popup_audio = NodePath("Ping")
+
+[node name="Ping" type="AudioStreamPlayer" parent="NoteUISpace/Notifications" unique_id=318923049]
 
 [node name="LoadingScreen" type="MarginContainer" parent="NoteUISpace" unique_id=1278017651 node_paths=PackedStringArray("spinner", "progress")]
 visible = false
@@ -216,6 +234,27 @@ theme_override_constants/margin_bottom = 6
 [node name="VBoxContainer" type="VBoxContainer" parent="NoteUISpace/ControlGuide/PanelContainer/MarginContainer" unique_id=1360276928]
 layout_mode = 2
 mouse_filter = 2
+
+[node name="WindowNode" type="MarginContainer" parent="NoteUISpace" unique_id=427159999 node_paths=PackedStringArray("ref_blackout", "ref_window_container")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("26_v0msp")
+col_window_blackout = Color(0.09, 0.09, 0.09, 0.6666667)
+col_window_fadeout = Color(0.34, 0.34, 0.34, 0)
+ref_blackout = NodePath("Blackout")
+ref_window_container = NodePath("WindowContainer")
+
+[node name="Blackout" type="ColorRect" parent="NoteUISpace/WindowNode" unique_id=1914925719]
+z_index = 10
+layout_mode = 2
+color = Color(0.03, 0.03, 0.03, 0.57254905)
+
+[node name="WindowContainer" type="CenterContainer" parent="NoteUISpace/WindowNode" unique_id=647313506]
+z_index = 31
+layout_mode = 2
 
 [node name="Transition" type="TextureRect" parent="NoteUISpace" unique_id=1380330631]
 material = ExtResource("5_cqyws")

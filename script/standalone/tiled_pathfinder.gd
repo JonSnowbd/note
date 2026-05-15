@@ -85,12 +85,28 @@ func is_ready_to_path() -> bool:
 func path_get_next_move(current: Vector2i, target: Vector2i) -> Vector2i:
 	return Vector2i.ZERO
 
+func notify_change(from: Vector2i, to: Vector2i):
+	_static_check(from, true)
+	_static_check(to, false)
+
 func _add_frontier(coord: Vector2i):
 	if walkable.has(coord):
 		return
 	if is_in_bounds(coord):
 		frontier.append(coord)
 
+func _static_check(coord:Vector2i, is_clear: bool):
+	if !walkable.has(coord): return
+	if is_clear:
+		if walkable[coord] == TileStatus.OCCUPIED:
+			walkable[coord] = TileStatus.FREE
+			finder.set_point_solid(coord, false)
+			queue_redraw()
+	else:
+		if walkable[coord] == TileStatus.FREE:
+			walkable[coord] = TileStatus.OCCUPIED
+			finder.set_point_solid(coord, true)
+			queue_redraw()
 func _dynamic_check(coord: Vector2i):
 	if !walkable.has(coord):
 		return

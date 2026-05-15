@@ -42,7 +42,9 @@ func _set_tooltip_package(prefab: PackedScene, data, priority: int):
 	_clear_tooltip_package()
 	_current_item = prefab.instantiate()
 	tip_container.add_child(_current_item)
-	if _current_item.has_method("tooltip"):
+	if _current_item is Representor:
+		_current_item.represent(data)
+	elif _current_item.has_method("tooltip"):
 		_current_item.tooltip(data)
 	_current_priority = priority
 	_current_data = data

@@ -33,10 +33,12 @@ func smooth_toward_v3(from: Vector3, to: Vector3, speed: float, delta: float) ->
 	return from.lerp(to, 1.0 - exp(-speed * delta))
 func smooth_toward_tform2(from: Transform2D, to: Transform2D, speed: float, delta: float) -> Transform2D:
 	return from.interpolate_with(to, 1.0-exp(-speed*delta))
+func smooth_toward_tform3(from: Transform3D, to: Transform3D, speed: float, delta: float) -> Transform3D:
+	return from.interpolate_with(to, 1.0-exp(-speed*delta))
 ## If a tween has been started from the same id, it will be stopped and removed before returning
 ## this new tween. Useful for avoiding overlaps with simple tweens without handling it yourself,
 ## if the code path is hot enough to have potential overlaps
-func clean_tween(id: String, smooth: bool = true) -> Tween:
+func clean_tween(id: String, smooth: bool = true, finish_previous: bool = true) -> Tween:
 	var t = create_tween()
 	if smooth:
 		t.set_trans(Tween.TRANS_CUBIC)
@@ -44,7 +46,11 @@ func clean_tween(id: String, smooth: bool = true) -> Tween:
 	if _tween_cache.has(id):
 		var prev = _tween_cache[id]
 		if prev.is_running():
-			prev.stop()
+			if finish_previous:
+				prev.pause()
+				while prev.custom_step(1.0): continue
+			else:
+				prev.stop()
 	_tween_cache[id] = t
 	return t
 func clean_tween_free(id: String):

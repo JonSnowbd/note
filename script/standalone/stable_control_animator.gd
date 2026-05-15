@@ -2,6 +2,7 @@
 extends Object
 class_name StableControlAnimator
 
+## NO LONGER NEEDED, godot now has control offset transform.
 ## This utility attaches to a control, and applies transformations smoothly
 ## and in a very stable manner, surviving re-layouts and resizes. Note this can
 ## have bad performance on controls that are in containers with many siblings.

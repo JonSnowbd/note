@@ -35,6 +35,4 @@ func restore_soft_settings(_nt) -> void:
 			note.util.set_fullscreen()
 		DisplayServer.WINDOW_MODE_WINDOWED:
 			note.util.set_windowed()
-	
-	note.util.set_fullscreen(previous_fullscreen_mode)
 	note.util.set_volume("Master", previous_master_bus_volume)

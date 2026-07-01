@@ -112,6 +112,7 @@ stream = ExtResource("12_p5oq1")
 volume_db = -23.0
 
 [node name="Blackout" type="ColorRect" parent="NoteUISpace" unique_id=1752373185]
+process_mode = 3
 visible = false
 anchors_preset = 15
 anchor_right = 1.0
@@ -236,6 +237,7 @@ layout_mode = 2
 mouse_filter = 2
 
 [node name="WindowNode" type="MarginContainer" parent="NoteUISpace" unique_id=427159999 node_paths=PackedStringArray("ref_blackout", "ref_window_container")]
+process_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

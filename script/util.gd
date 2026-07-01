@@ -31,31 +31,38 @@ func smooth_toward_v2(from: Vector2, to: Vector2, speed: float, delta: float) ->
 ## Smoothly move towards a value. Like a damped value lerp. Vector2 version.
 func smooth_toward_v3(from: Vector3, to: Vector3, speed: float, delta: float) -> Vector3:
 	return from.lerp(to, 1.0 - exp(-speed * delta))
+## Smoothly move towards a value. Like a damped value lerp. Transform2D version.
 func smooth_toward_tform2(from: Transform2D, to: Transform2D, speed: float, delta: float) -> Transform2D:
 	return from.interpolate_with(to, 1.0-exp(-speed*delta))
+## Smoothly move towards a value. Like a damped value lerp. Transform3D version.
 func smooth_toward_tform3(from: Transform3D, to: Transform3D, speed: float, delta: float) -> Transform3D:
 	return from.interpolate_with(to, 1.0-exp(-speed*delta))
-## If a tween has been started from the same id, it will be stopped and removed before returning
+## If a tween has been started from the same node+id, it will be stopped and removed before returning
 ## this new tween. Useful for avoiding overlaps with simple tweens without handling it yourself,
-## if the code path is hot enough to have potential overlaps
-func clean_tween(id: String, smooth: bool = true, finish_previous: bool = true) -> Tween:
+## if the code path is hot enough to have potential overlaps. Dead/stopped tweens will be culled every
+## 90 physics frames.
+func tween(source: Node, id: String, smooth: bool = true, finish_previous: bool = true) -> Tween:
 	var t = create_tween()
 	if smooth:
 		t.set_trans(Tween.TRANS_CUBIC)
 		t.set_ease(Tween.EASE_OUT)
-	if _tween_cache.has(id):
-		var prev = _tween_cache[id]
+	if source != null:
+		t.bind_node(source)
+	
+	var true_id = "%d::%s" % [source.get_instance_id(), id]
+	if _tween_cache.has(true_id):
+		var prev = _tween_cache[true_id]
 		if prev.is_running():
 			if finish_previous:
 				prev.pause()
 				while prev.custom_step(1.0): continue
 			else:
 				prev.stop()
-	_tween_cache[id] = t
+	_tween_cache[true_id] = t
 	return t
-func clean_tween_free(id: String):
-	_tween_cache.erase(id)
 
+## Sets the game to be fullscreen. Will shortcut disable maximized state
+## for you since setting fullscreen while maximized will not work some times.
 func set_fullscreen():
 	if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_MAXIMIZED:
 		set_windowed()
@@ -157,3 +164,12 @@ func spread_nodes_2d(node1: Node2D, node2: Node2D, spread: float, ratio: float =
 	var diff = (node2.global_position - node1.global_position).normalized()
 	node1.global_position -= diff*(spread*(1.0-ratio))
 	node2.global_position += diff*(spread*ratio)
+
+func _physics_process(delta: float) -> void:
+	if (Engine.get_physics_frames() % 90) == 0:
+		var remove_tweens = []
+		for k in _tween_cache.keys():
+			if !_tween_cache[k].is_valid() or !_tween_cache[k].is_running():
+				remove_tweens.append(k)
+		for k in remove_tweens:
+			_tween_cache.erase(k)

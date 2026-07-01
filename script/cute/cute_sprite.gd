@@ -3,6 +3,9 @@
 extends Node2D
 class_name CuteSprite2D
 
+## A sprite based around using velocity to drive math based 
+## animation. Uses a special texture type.
+
 static var identity_pool: int = 0
 
 class AnimationItem extends RefCounted:

@@ -2,6 +2,15 @@
 extends RefCounted
 class_name AutoStateCalculator
 
+## An AutoStateCalculator object helps organize a complex rpg system, and maintains
+## simplicity by simply wiping the block and bit by bit re-applying every effect.
+## Updates are a bit slow but completely fine until you need this updating every frame
+## on thousands of units.
+##
+## A statcore has an array of Effectors, and can each be literally anything, from
+## items equipped, to de/buffs, to character stat definitions.
+
+
 class QuickAddContextConstructor extends Object:
 	var effect_script: Script = null
 	var calculator: AutoStateCalculator = null
@@ -28,13 +37,6 @@ class QuickAddContextConstructor extends Object:
 			return effect
 		return null
 
-## An AutoStateCalculator object helps organize a complex rpg system, and maintains
-## simplicity by simply wiping the block and bit by bit re-applying every effect.
-## Updates are a bit slow but completely fine until you need this updating every frame
-## on thousands of units.
-##
-## A statcore has an array of Effectors, and can each be literally anything, from
-## items equipped, to de/buffs, to character stat definitions.
 
 ## Called when an effect is explicitly added to the calculator.
 signal effect_added(effect: AutoStateEffect)

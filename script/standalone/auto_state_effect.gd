@@ -2,6 +2,10 @@
 extends RefCounted
 class_name AutoStateEffect
 
+## The base type for all status effects inside of an Auto State Calculator.
+## By only implementing what is needed to apply an effect, an absolute clean
+## stack can be achieved very easily.
+
 ## Emitted when the effect is applied,
 signal raising_event(data)
 ## Emitted when the effect has determined it should be removed of its own accord,
@@ -16,9 +20,8 @@ var _effect_duration: float = -1.0
 ## How long this effect has currently been active for.
 var _effect_lifetime: float = -1.0
 var _effect_creation_date: int = 0
-## Ephemeral effects do not survive an effect purge, use this
-## for effects with node references, so that re-hydrating
-## saves are not subject to unintended behaviour.
+## A list of enum values applied to this effect. Use this to mark effects states such as
+## Temporary Effects, Identity Effects, Positive Effects, etc
 var _effect_tags: Array[int] = []
 
 func effect_raise(data = null):

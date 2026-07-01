@@ -24,8 +24,10 @@ func _enter_tree() -> void:
 	for c in get_children():
 		if c is State:
 			introduce_state(c)
+
 ## Takes a state object, and adds it to the state machine's internal state list,
 ## and claims ownership of the node if it is not already owned by this machine.
+## This isn't typically needed, unless you created a state in your script.
 func introduce_state(state:State):
 	if !owned_states.has(state):
 		if debug:

@@ -2,6 +2,8 @@
 extends Marker3D
 class_name Forwarder3Dto2D
 
+## Takes a 2d node and projects this position to its 2d viewport.
+
 @export var target_node: CanvasItem
 @export var on_physics: bool = false
 

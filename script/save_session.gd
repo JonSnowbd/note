@@ -130,7 +130,7 @@ func read_object(resource_name:String) -> Dictionary:
 	file.close()
 	return data
 
-## Reads a file as a string. This does not include the file type, so include this in the parameter.
+## Reads a file as a string. Include the file type.
 func read_file(file_name: String) -> String:
 	var file = FileAccess.open(current_path+file_name, FileAccess.READ)
 	var data = file.get_as_text()

@@ -18,10 +18,10 @@ func seconds_to_speedrun_stamp(time: float) -> String:
 ## UI animations and other visual effects that need to be free from timescale.
 func unscaled_dt() -> float:
 	return 1.0/Engine.max_fps
-
 ## Accurate, and constant. Perfect for use in any physics process that needs to be free from timescale.
 func unscaled_physics_dt() -> float:
 	return 1.0/Engine.physics_ticks_per_second
+
 ## Smoothly move towards a value. Like a damped value lerp. Float version.
 func smooth_toward(from: float, to: float, speed: float, delta: float) -> float:
 	return lerp(from, to, 1.0 - exp(-speed * delta))
@@ -37,6 +37,7 @@ func smooth_toward_tform2(from: Transform2D, to: Transform2D, speed: float, delt
 ## Smoothly move towards a value. Like a damped value lerp. Transform3D version.
 func smooth_toward_tform3(from: Transform3D, to: Transform3D, speed: float, delta: float) -> Transform3D:
 	return from.interpolate_with(to, 1.0-exp(-speed*delta))
+
 ## If a tween has been started from the same node+id, it will be stopped and removed before returning
 ## this new tween. Useful for avoiding overlaps with simple tweens without handling it yourself,
 ## if the code path is hot enough to have potential overlaps. Dead/stopped tweens will be culled every
@@ -126,6 +127,7 @@ func get_closest_node_2d(array, target: Node2D) -> Node2D:
 				closest_dist = dist
 				closest = i
 	return closest
+
 ## Scours an array of Node3Ds, and tracks which is closest to [code]target[/code],
 ## and returns it. Can return null.
 func get_closest_node_3d(array, target: Node3D) -> Node2D:
@@ -152,6 +154,7 @@ func stick_to_world_dir_3d(stick: Vector2, camera: Camera3D, flattened: bool = t
 	result += transform.basis.z * stick.y
 	result += transform.basis.x * stick.x
 	return result
+
 ## Using the relative positions of 2 nodes, moves [code]mover[/code] to be 
 ## [code]distance[/code] away from the [code]stator[/code], maintaining the angle.
 func set_distance_between_nodes_2d(stator: Node2D, mover: Node2D, distance: float):

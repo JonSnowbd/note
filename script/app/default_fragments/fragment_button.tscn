@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://d2eorjxlt1q4l"]
+
+[ext_resource type="Script" uid="uid://bfs533yd5agvi" path="res://addons/note/script/app/default_fragments/fragment_button.gd" id="1_bhnyj"]
+
+[node name="FragmentButton" type="MarginContainer" unique_id=1867439998]
+offset_right = 12.0
+offset_bottom = 12.0
+
+[node name="NoteAppFragment" type="Node" parent="." unique_id=772414449 node_paths=PackedStringArray("button_reference")]
+script = ExtResource("1_bhnyj")
+button_reference = NodePath("../Button")
+metadata/_custom_type_script = "uid://bmxa1virvesbb"
+
+[node name="Button" type="Button" parent="." unique_id=841924219]
+layout_mode = 2
+text = "Default Fragment Button"

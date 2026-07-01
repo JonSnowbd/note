@@ -169,8 +169,11 @@ class ShellNode extends RefCounted:
 		for i in range(len(children)):
 			target_root.move_child(children[i].instantiated_node, previous.get_index()+1)
 			previous = children[i].instantiated_node
+
 @export var root_node: Node
 @export var root_socket: NoteAppSocket
+## If assigned, this node will be the root for floating controls
+@export var floating_root: Node
 ## When the root node changes, trigger a note transition. Recommended only for
 ## uses of shell that covers the whole screen, such as applications.
 @export var transition_root_changes: bool = false
@@ -192,10 +195,6 @@ func _ready() -> void:
 	_updating = true
 	view()
 
-@abstract
-func initialize()
-@abstract
-func view()
 
 func _raised_event(event_name: StringName, event_args: Array, fragment: NoteAppFragment, node: ShellNode):
 	if node.reactions.has(event_name):
@@ -205,6 +204,18 @@ func _raised_event(event_name: StringName, event_args: Array, fragment: NoteAppF
 		evt.source_node = node
 		evt.arguments = event_args
 		node.reactions[event_name].call(evt)
+
+
+## Called when everything is good to go.
+@abstract
+func initialize()
+
+## This is the update function that calls layout to put together
+## the shell's controls.
+@abstract
+func view()
+
+
 func layout(layout_data):
 	var proposition: ShellNode = ShellNode.from_data(layout_data, self)
 	## Handle root changes
@@ -260,3 +271,6 @@ func trigger_relayout(_dummy1 = null, _dummy2 = null, _dummy3 = null, _dummy4 = 
 ## Triggers a re-layout every time the provided signal goes off.
 func add_relayout_trigger(relayout_signal: Signal):
 	relayout_signal.connect(trigger_relayout)
+
+func process_floating(delta: float, control: Control):
+	control.position.x -= 60.0*delta

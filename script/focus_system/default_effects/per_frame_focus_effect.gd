@@ -1,6 +1,9 @@
 extends FocusEffect
 class_name PerFrameFocusEffect
 
+## Emits signal [code]on_process[/code] every single frame this is hovered with
+## note.focus
+
 @export var include_mouse_over:bool = false
 
 signal on_process

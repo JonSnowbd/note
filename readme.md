@@ -4,16 +4,13 @@
 <h1 align="center"> Note</h1>
 
 Note is a simple shim. By loading the Note entry scene first, and defining
-a settings file you get a buttload of dev QoL features and nodes at the cost
+a settings file you get a buttload of QoL features and nodes at the cost
 of slight freedom in the initialization of your app.
 
 For trading off some installation time and learning how to structure a save file(it's
 easy, I promise!) you get:
 
-- A built in per-project documentation journal with global(runtime) lookups for journal-specified
-variables. Create your own documentation with variable editing built in.
-- Simple test fixture structure, with the ability to list them all in your settings
-for a test driven run mode
+- A built in per-project documentation journal
 - Very flexible and customizable transition system that lets you trigger
 a transition anywhere anytime, without needing to change your level, it can be used
 to simply cover a teleport.
@@ -23,8 +20,7 @@ and focus targets.
 - Automatic loading behaviours including loading screen and level changer, that all
 work together to make your game seamless, and handle better practices for you, such as
 asynchronous loading screens, and background pre-loading.
-- A new Godot tab with goodies such as a GDScript playground, a Note help page, the journal, and more
-to come.
+- A new Godot tab with goodies such as a GDScript playground, a Note help page, and the journal.
 - A logic chain system for orchestrating game interactions.
 - A collection of optional commonplace UI Elements ready to use out of the box, such as
 control guides and tooltips.
@@ -39,8 +35,8 @@ Mever having to make a EditorInspectorPlugin again was really fun.
 ## Project Status
 
 > [!CAUTION]
-> Note tracks with **Godot 4.7 Dev** cycle, awaiting Traits before settling on Stable.
-Traits will be used extensively for some Note features and as such will be in flux prior to,
+> Note tracks with **Godot 4.8 Dev** cycle, awaiting Traits before settling on Stable.
+Traits will be used extensively for Note features and as such will be in flux prior to,
 and during the Traits dev release.
 
 I'm using Note right now to develop a game, and I'm adding new features and fixing bugs
@@ -117,7 +113,6 @@ detect(or set it manually in `ProjectSettings/Addons/Note`)
 - [ ] Set your Entry Scene to `res://addons/note/ENTRY.tscn`
 - [ ] Set your game's entry scene in your `NoteDeveloperSettings` file.
 - [ ] **(Optional)** Create a custom Save Script and set it in your Developer Settings
-- [ ] **(Optional)** ... Enjoy!
 
 ## Setup
 
@@ -228,8 +223,8 @@ note.save as YourSaveType
 # settings changing methods in your save type. Such as update_fullscreen_mode
 
 
-note.util.set_fullscreen(flag: note.util.FullscreenState)
-note.util.set_volume(linear_volume: float) # 0.0-1.0 expected, but below and above are valid.
+note.util.set_fullscreen()
+note.util.set_volume(bus_name: String, linear_volume: float) # 0.0-1.0 expected, but below and above are valid.
 
 note.info(message: String, custom_header: String?) # Custom header optional. Make your prints look like Note's, and get bbcodes aswell.
 note.warn(message: String, custom_header: String?) #
@@ -279,4 +274,3 @@ Note wouldnt be what it is without the open source/MIT projects it stands on:
 ## License
 
 Note uses the MIT License.
-Feel free to do whatever you want with it! Commercial or otherwise.

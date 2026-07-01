@@ -7,6 +7,8 @@ class_name NoteGameScript
 ## for things such as "Creation scripts", collections of scripts that can create
 ## things like levels, or players via script rather than resource management.
 
+## the scene tree is inserted during execution by note, so you do not need
+## a reference to a real node for the scene tree.
 var tree: SceneTree
 
 ## VIRTUAL: If implemented and returns a real string this game script
@@ -18,7 +20,7 @@ func script_name() -> String:
 func script_documentation() -> String:
 	return ""
 
-@abstract
 ## VIRTUAL: This is ran when [code]note.execute[/code] is called with
 ## this script referenced.
+@abstract
 func execute(param)

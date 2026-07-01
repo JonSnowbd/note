@@ -2,6 +2,9 @@
 extends Node
 class_name PECSEntityMarker
 
+## Add this as a child to your pre-existing and spawned entities to onboard them
+## into your PECSCore when they are added to the scene.
+
 const ENTMARK_METATAG = &"__pecs_entity_marker"
 
 @export var node: Node

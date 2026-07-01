@@ -3,6 +3,9 @@
 extends Node
 class_name PECSObserver
 
+## Extend this to create a system that reacts occasionally to events, rather than
+## being ran every tick.
+
 @export_enum("After All Systems", "When Raised") var event_bubble_behaviour: int = 0
 ## Higher = Ran first.
 @export var priority: int = 0

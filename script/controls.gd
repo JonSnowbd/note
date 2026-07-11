@@ -9,7 +9,7 @@ enum Type {
 }
 
 ## Called when input is changed from 
-signal input_method_changed(new_mode: Type)
+signal input_method_changed()
 signal is_now_keyboard
 signal is_now_gamepad
 signal hovered_node_changed(old_node: Control, new_node: Control)
@@ -24,7 +24,7 @@ func _physics_process(delta: float) -> void:
 	var old_node = hovered_node
 	if is_mouse_and_keyboard():
 		hovered_node = get_viewport().gui_get_hovered_control()
-	elif is_gamepad():
+	elif is_gamepad() and note.focus.target != null and is_instance_valid(note.focus.target):
 		hovered_node = note.focus.target
 	if old_node != hovered_node:
 		hovered_node_changed.emit(old_node, hovered_node)
@@ -39,7 +39,7 @@ func set_mode(new_mode: Type):
 			else:
 				Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 		current_mode = new_mode
-		input_method_changed.emit(new_mode)
+		input_method_changed.emit()
 		match new_mode:
 			Type.MouseKeyboard:
 				is_now_keyboard.emit()

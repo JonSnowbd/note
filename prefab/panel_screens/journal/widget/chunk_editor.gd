@@ -28,6 +28,7 @@ signal swap_with(from: NoteJournalResource.Piece, to: NoteJournalResource.Piece)
 var source: NoteJournalResource.Piece
 var document: NoteJournalDocument
 var is_editing: bool = false
+var edit_button_visible: bool = false
 var _tween: Tween
 
 func _ready() -> void:
@@ -127,3 +128,15 @@ func set_source(new_source: NoteJournalResource.Piece):
 		chunk_content_root.hide()
 		chunk_editor_root.hide()
 	is_editing = false
+
+func _physics_process(delta: float) -> void:
+	if !is_part_of_edited_scene():
+		var rect = Rect2(Vector2.ZERO, size)
+		if rect.has_point(get_local_mouse_position()):
+			if !edit_button_visible:
+				show_edit_button()
+			edit_button_visible = true
+		else:
+			if edit_button_visible:
+				hide_edit_button()
+			edit_button_visible = false

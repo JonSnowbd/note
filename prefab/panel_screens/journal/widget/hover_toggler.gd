@@ -3,7 +3,6 @@ extends Control
 
 @export var target: Control
 
-var stable: StableControlAnimator
 var tween: Tween
 var trip: bool = false
 var stop_listening: bool = false
@@ -11,9 +10,7 @@ func _ready() -> void:
 	if is_part_of_edited_scene(): return
 	if target == null:
 		return
-	stable = StableControlAnimator.new(target)
-	stable.offset.x = target.size.x + 20.0
-	stable.hard_refresh()
+	offset_transform_position.x = target.size.x+20.0
 
 func open():
 	if target == null:
@@ -21,7 +18,7 @@ func open():
 	if tween != null:
 		tween.stop()
 	tween = create_tween()
-	tween.tween_property(stable, "offset:x", 0.0, 0.25)\
+	tween.tween_property(self, "offset_transform_position:x", 0.0, 0.25)\
 	.set_trans(Tween.TRANS_CUBIC)\
 	.set_ease(Tween.EASE_OUT)
 	tween.tween_callback(func():
@@ -33,7 +30,7 @@ func close():
 	if tween != null:
 		tween.stop()
 	tween = create_tween()
-	tween.tween_property(stable, "offset:x", target.size.x + 20.0, 0.4)\
+	tween.tween_property(self, "offset_transform_position:x", target.size.x + 20.0, 0.4)\
 	.set_trans(Tween.TRANS_CUBIC)\
 	.set_ease(Tween.EASE_IN)
 	stop_listening = false

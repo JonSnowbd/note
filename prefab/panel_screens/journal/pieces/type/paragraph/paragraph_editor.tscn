@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://curfgujfpvfe4"]
+[gd_scene format=3 uid="uid://curfgujfpvfe4"]
 
 [ext_resource type="Script" uid="uid://n8ee08g3bgnb" path="res://addons/note/prefab/panel_screens/journal/pieces/type/paragraph/paragraph_editor.gd" id="1_h1ke6"]
 
@@ -50,3 +50,4 @@ custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_horizontal = 3
 color = Color(1, 1, 1, 1)
+edit_intensity = false

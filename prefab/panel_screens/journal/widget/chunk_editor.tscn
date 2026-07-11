@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://ckof76baydwrj"]
+[gd_scene format=3 uid="uid://ckof76baydwrj"]
 
 [ext_resource type="Script" uid="uid://cwfd3k4c5ishh" path="res://addons/note/prefab/panel_screens/journal/widget/chunk_editor.gd" id="1_3wq0a"]
 [ext_resource type="Theme" uid="uid://s8avb4vk6ef6" path="res://addons/note/resource/note_ui/note_ui.tres" id="2_c3jt4"]
@@ -11,6 +11,7 @@ custom_minimum_size = Vector2(175, 0)
 offset_right = 450.0
 offset_bottom = 185.0
 size_flags_horizontal = 3
+theme = ExtResource("2_c3jt4")
 script = ExtResource("1_3wq0a")
 drag_theme = ExtResource("2_c3jt4")
 viewer_slot = NodePath("Background/InnerPadding/HBoxContainer/VBoxContainer/ChunkViewerPanel")
@@ -44,6 +45,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="ChunkLabel" type="Label" parent="Background/InnerPadding/HBoxContainer/VBoxContainer" unique_id=874493671]
+visible = false
 self_modulate = Color(1, 1, 1, 0.5019608)
 layout_mode = 2
 text = "Label of the Chunk"
@@ -54,7 +56,6 @@ visible = false
 layout_mode = 2
 
 [node name="ChunkEditorTools" type="MarginContainer" parent="Background/InnerPadding/HBoxContainer/VBoxContainer" unique_id=1449057743]
-visible = false
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 4
@@ -76,7 +77,7 @@ theme_override_constants/margin_bottom = 6
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Background/InnerPadding/HBoxContainer/VBoxContainer/ChunkEditorTools/PanelContainer/MarginContainer" unique_id=1242534823]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 8
 
 [node name="TitleEdit" type="LineEdit" parent="Background/InnerPadding/HBoxContainer/VBoxContainer/ChunkEditorTools/PanelContainer/MarginContainer/VBoxContainer" unique_id=1933135842]
 layout_mode = 2

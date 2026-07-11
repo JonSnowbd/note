@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-@export var transition_time: float = 0.33
+@export var transition_time: float = 0.66
 ## If true, _process and _input will be killed on phases during the leave
 ## animation.
 @export var kill_processes_on_end: bool = false

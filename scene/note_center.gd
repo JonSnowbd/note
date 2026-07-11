@@ -159,8 +159,8 @@ func execute(script, parameters = null):
 	game_script.execute(parameters)
 
 ## Returns true if Note is using input, or if input should be
-## ignored. A Context can be provided so you can still use this
-## in your NoteWindow's and other places.
+## ignored. Providing a context allows for note to return false
+## if called from the object blocking input.
 func is_input_busy(for_context = null) -> bool:
 	if ui.current_window != null:
 		return for_context != ui.current_window

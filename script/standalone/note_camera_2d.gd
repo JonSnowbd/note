@@ -43,22 +43,7 @@ class ShakeEffect extends Effect:
 	set(val):
 		scaling_mode = val
 		_update_properties()
-@export var reserved_left_space: float = 0: 
-	set(val):
-		reserved_left_space = val
-		_update_properties()
-@export var reserved_right_space: float = 0: 
-	set(val):
-		reserved_right_space = val
-		_update_properties()
-@export var reserved_top_space: float = 0: 
-	set(val):
-		reserved_top_space = val
-		_update_properties()
-@export var reserved_bottom_space: float = 0: 
-	set(val):
-		reserved_bottom_space = val
-		_update_properties()
+
 
 @export_category("Effects")
 @export var process_effects_in_physics: bool = false
@@ -70,10 +55,12 @@ class ShakeEffect extends Effect:
 ## How strong the affectors affect this camera. If you want to disable affectors entirely,
 ## set this to 0.
 @export var affector_strength: float = 1.0
+@export var offset_smoothing_speed: float = 4.0
 
 var effect_stack: Array[Effect] = []
 var following: Node2D
 var window_size: Vector2
+var affector_offset_cache: Vector2
 
 ## TODO: Make this bulletproof to changing parent.
 
@@ -89,8 +76,8 @@ func _get_affectors(world_position: Vector2) -> Array[NoteCameraAffector]:
 	var query = PhysicsPointQueryParameters2D.new()
 	query.position = world_position
 	query.collision_mask = affector_layer
-	query.collide_with_bodies = false
-	query.collide_with_areas = true
+	query.collide_with_bodies = true
+	query.collide_with_areas = false
 	
 	var space = get_world_2d().direct_space_state
 	var hits = space.intersect_point(query)
@@ -107,13 +94,17 @@ func _reset(delta: float):
 		global_position = following.global_position
 	offset = Vector2.ZERO
 	var affectors = _get_affectors(global_position)
+	var local_affector_offset = Vector2.ZERO
 	for aff: NoteCameraAffector in affectors:
 		var affector_offset = aff.get_offset(global_position)
-		global_position -= affector_offset * affector_strength
+		local_affector_offset -= affector_offset * affector_strength
+	affector_offset_cache = note.util.smooth_toward_v2(affector_offset_cache, local_affector_offset, offset_smoothing_speed, delta)
+	offset += affector_offset_cache
 	_process_effects(delta)
 	var delta_position = previous_pos-(global_position+offset)
-	global_position.x = snapped(global_position.x, 1.0)
-	global_position.y = snapped(global_position.y, 1.0)
+	
+	#global_position.x = snapped(global_position.x, 1.0)
+	#global_position.y = snapped(global_position.y, 1.0)
 	
 func _process_effects(delta: float):
 	for i in range(effect_stack.size() - 1, -1, -1):
@@ -146,9 +137,10 @@ func _process(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	if process_effects_in_physics:
 		_reset(delta)
+		
 
 func follow(target: Node2D):
 	following = target
-	global_position = initial_follow_target.global_position
+	global_position = following.global_position
 	reset_smoothing()
 	reset_physics_interpolation()

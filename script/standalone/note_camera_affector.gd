@@ -1,4 +1,4 @@
-extends Area2D
+extends StaticBody2D
 class_name NoteCameraAffector
 
 @export_category("Biases")

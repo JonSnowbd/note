@@ -277,9 +277,11 @@ func _change(new_target: Control):
 	changed_control.emit(target)
 func _has_long_press() -> bool:
 	for fx in _loaded_effects:
+		if fx == null or !is_instance_valid(fx): continue
 		if fx.has_long_press:
 			return true
 	for fx in _stacked_effects:
+		if fx == null or !is_instance_valid(fx): continue
 		if fx.has_long_press:
 			return true
 	return false

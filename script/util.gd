@@ -42,7 +42,7 @@ func smooth_toward_tform3(from: Transform3D, to: Transform3D, speed: float, delt
 ## this new tween. Useful for avoiding overlaps with simple tweens without handling it yourself,
 ## if the code path is hot enough to have potential overlaps. Dead/stopped tweens will be culled every
 ## 90 physics frames.
-func tween(source: Node, id: String, smooth: bool = true, finish_previous: bool = true) -> Tween:
+func tween(source: Node, id: String = "default", smooth: bool = true, finish_previous: bool = true) -> Tween:
 	var t = create_tween()
 	if smooth:
 		t.set_trans(Tween.TRANS_CUBIC)
@@ -127,7 +127,18 @@ func get_closest_node_2d(array, target: Node2D) -> Node2D:
 				closest_dist = dist
 				closest = i
 	return closest
-
+## Scours an array of Node2Ds, and tracks which is closest to [code]target[/code],
+## and returns it. Can return null. Same as non_v version but takes a raw vector2.
+func get_closest_node_2d_v(array, global_target: Vector2) -> Node2D:
+	var closest_dist = INF
+	var closest = null
+	for i in array:
+		if i is Node2D:
+			var dist = i.global_position.distance_to(global_target)
+			if dist < closest_dist:
+				closest_dist = dist
+				closest = i
+	return closest
 ## Scours an array of Node3Ds, and tracks which is closest to [code]target[/code],
 ## and returns it. Can return null.
 func get_closest_node_3d(array, target: Node3D) -> Node2D:

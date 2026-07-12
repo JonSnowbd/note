@@ -210,6 +210,7 @@ func _raised_event(event_name: StringName, event_args: Array, fragment: NoteAppF
 @abstract
 func initialize()
 
+
 ## This is the update function that calls layout to put together
 ## the shell's controls.
 @abstract

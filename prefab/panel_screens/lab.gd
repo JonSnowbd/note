@@ -6,26 +6,25 @@ extends PanelContainer
 @export var run_button: Button
 @export var clear_button: Button
 
-var expression: Expression
+const default_source = """extends Node
 
-func _init() -> void:
-	expression = Expression.new()
+func _work():
+	# Do stuff here
+	print("Hello world!")"""
 
 func _ready() -> void:
+	code.text = default_source
 	run_button.pressed.connect(func():
 		run_code()
 	)
 	clear_button.pressed.connect(func():
-		code.text = ""
+		code.text = default_source
 	)
 	code.syntax_highlighter = GDScriptSyntaxHighlighter.new()
 
 func run_code():
-	var err = expression.parse(code.text)
-	if err != OK:
-		push_error("Note lab script error: "+expression.get_error_text())
-		return
-	var result = expression.execute()
-	if expression.has_execute_failed():
-		push_error("Note lab script error: "+expression.get_error_text())
-		return
+	var run_script = GDScript.new()
+	run_script.source_code = code.text
+	run_script.reload()
+	var instance = run_script.new()
+	instance._work()

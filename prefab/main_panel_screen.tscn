@@ -4,7 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://dthkt8pfqui48" path="res://addons/note/prefab/panel_screens/lab.tscn" id="1_ynbih"]
 [ext_resource type="Script" uid="uid://da3jaydjx53je" path="res://addons/note/prefab/panel_screens/journal/editor_journal_manager.gd" id="1_ysu3v"]
 [ext_resource type="PackedScene" uid="uid://b06cv7xb1pnpj" path="res://addons/note/prefab/panel_screens/journal/widget/journal_viewer.tscn" id="2_dppm4"]
-[ext_resource type="PackedScene" uid="uid://cshopuvfrlqae" path="res://addons/note/prefab/panel_screens/help.tscn" id="2_o66sy"]
 
 [node name="MainPanelScreen" type="TabContainer" unique_id=1003540411]
 anchors_preset = 15
@@ -32,8 +31,3 @@ include_editor_widgets = true
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
-
-[node name="Help" parent="." unique_id=719916253 instance=ExtResource("2_o66sy")]
-visible = false
-layout_mode = 2
-metadata/_tab_index = 2

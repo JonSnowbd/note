@@ -7,10 +7,16 @@ class_name NoteAppShell
 const NoProps: Dictionary[StringName,Variant] = {}
 
 class Event extends RefCounted:
+	var app_shell: NoteAppShell
 	var source_fragment: NoteAppFragment = null
 	var source_node: ShellNode = null
 	var event_name: StringName
 	var arguments: Array = []
+	func relayout():
+		if app_shell != null:
+			app_shell.trigger_relayout()
+		elif source_node != null and source_node.shell != null:
+			source_node.shell.trigger_relayout()
 
 class ShellNode extends RefCounted:
 	var key: StringName = &""
@@ -199,6 +205,7 @@ func _ready() -> void:
 func _raised_event(event_name: StringName, event_args: Array, fragment: NoteAppFragment, node: ShellNode):
 	if node.reactions.has(event_name):
 		var evt = Event.new()
+		evt.app_shell = self
 		evt.event_name = event_name
 		evt.source_fragment = fragment
 		evt.source_node = node

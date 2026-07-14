@@ -249,7 +249,7 @@ func serialize(object) -> Variant:
 ## Returns null if it failed.
 ## You should implement _export and _import on all your types related to this.
 ## See the docs for more info.
-func deserialize(data) -> Variant:
+func deserialize(data, parent=null) -> Variant:
 	var object = null
 	if data is Dictionary:
 		if data.has("_note_literal"):
@@ -285,6 +285,8 @@ func deserialize(data) -> Variant:
 			else:
 				new_node = Node.new()
 				var script = load(data[&"node_script"])
+			if parent != null:
+				parent.add_child(new_node)
 			if new_node.has_method(&"_import") and data.has(&"node_content"):
 				new_node._import(deserialize(data[&"node_content"]))
 			object = new_node

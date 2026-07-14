@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://b674weyj11a28"]
+
+[ext_resource type="Script" uid="uid://k5fhrelaoogb" path="res://addons/note/script/app/misc/note_popup_shell.gd" id="1_3q3tb"]
+[ext_resource type="Script" uid="uid://6oa6b52dasjw" path="res://addons/note/script/app/misc/note_popup_shell_window.gd" id="1_ry1w6"]
+[ext_resource type="Script" uid="uid://s6c202iv8dpu" path="res://addons/note/script/app/socket.gd" id="2_ry1w6"]
+
+[node name="NotePopupShell" type="PanelContainer" unique_id=1253410314 node_paths=PackedStringArray("shell")]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -3.0
+offset_top = -3.0
+offset_right = 3.0
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ry1w6")
+shell = NodePath("Shell")
+
+[node name="Shell" type="Node" parent="." unique_id=880404028 node_paths=PackedStringArray("root_node", "root_socket", "floating_root")]
+script = ExtResource("1_3q3tb")
+root_node = NodePath("..")
+root_socket = NodePath("../MarginContainer/NoteAppSocket")
+floating_root = NodePath("..")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1314886141]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="NoteAppSocket" type="Node" parent="MarginContainer" unique_id=1217646836]
+script = ExtResource("2_ry1w6")
+metadata/_custom_type_script = "uid://s6c202iv8dpu"

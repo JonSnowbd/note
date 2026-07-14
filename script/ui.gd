@@ -54,3 +54,10 @@ func popup_window(window_scene, fade_in: float = 0.8, interrupt_focus: bool = tr
 	current_window = new_window
 	new_window.closed.connect(_close)
 	return new_window
+
+func popup_shell(shell_cb: Callable, background: Color = Color(0.0, 0.0, 0.0, 0.2), fade_in: float = 0.8, interrupt_focus: bool = true) -> NoteWindow:
+	const shell_prefab = preload("uid://b674weyj11a28")
+	var window: NoteWindow = shell_prefab.instantiate()
+	window.blackout_color = background
+	window.shell.callback = shell_cb
+	return popup_window(window, fade_in, interrupt_focus)

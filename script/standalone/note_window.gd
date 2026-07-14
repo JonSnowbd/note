@@ -13,6 +13,8 @@ signal closed
 
 @export var blackout_color: Color = Color(0.0,0.0,0.0,0.7)
 
+var close_action: StringName
+
 func _ready() -> void:
 	if note.controls.is_gamepad() and auto_focus_for_gamepad != null:
 		note.focus.activate(auto_focus_for_gamepad)
@@ -22,3 +24,10 @@ func _ready() -> void:
 		close_button.pressed.connect(close_window)
 func close_window():
 	closed.emit()
+
+func _input(event: InputEvent) -> void:
+	if note.is_input_busy(self): return
+	if !close_action.is_empty():
+		if event.is_action_pressed(close_action):
+			close_window()
+			get_viewport().set_input_as_handled()

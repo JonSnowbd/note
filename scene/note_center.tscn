@@ -125,6 +125,29 @@ color = Color(0, 0, 0, 0.4745098)
 [node name="FauxKeyboard" parent="NoteUISpace" unique_id=429783762 instance=ExtResource("22_jlad3")]
 visible = false
 
+[node name="WindowNode" type="MarginContainer" parent="NoteUISpace" unique_id=427159999 node_paths=PackedStringArray("ref_blackout", "ref_window_container")]
+process_mode = 3
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("26_v0msp")
+col_window_blackout = Color(0.09, 0.09, 0.09, 0.6666667)
+col_window_fadeout = Color(0.34, 0.34, 0.34, 0)
+ref_blackout = NodePath("Blackout")
+ref_window_container = NodePath("WindowContainer")
+
+[node name="Blackout" type="ColorRect" parent="NoteUISpace/WindowNode" unique_id=1914925719]
+z_index = 10
+layout_mode = 2
+color = Color(0.03, 0.03, 0.03, 0.57254905)
+
+[node name="WindowContainer" type="CenterContainer" parent="NoteUISpace/WindowNode" unique_id=647313506]
+z_index = 31
+layout_mode = 2
+
 [node name="Notifications" type="MarginContainer" parent="NoteUISpace" unique_id=1709384188 node_paths=PackedStringArray("popup_audio")]
 anchors_preset = -1
 anchor_left = 0.075
@@ -235,28 +258,6 @@ theme_override_constants/margin_bottom = 6
 [node name="VBoxContainer" type="VBoxContainer" parent="NoteUISpace/ControlGuide/PanelContainer/MarginContainer" unique_id=1360276928]
 layout_mode = 2
 mouse_filter = 2
-
-[node name="WindowNode" type="MarginContainer" parent="NoteUISpace" unique_id=427159999 node_paths=PackedStringArray("ref_blackout", "ref_window_container")]
-process_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("26_v0msp")
-col_window_blackout = Color(0.09, 0.09, 0.09, 0.6666667)
-col_window_fadeout = Color(0.34, 0.34, 0.34, 0)
-ref_blackout = NodePath("Blackout")
-ref_window_container = NodePath("WindowContainer")
-
-[node name="Blackout" type="ColorRect" parent="NoteUISpace/WindowNode" unique_id=1914925719]
-z_index = 10
-layout_mode = 2
-color = Color(0.03, 0.03, 0.03, 0.57254905)
-
-[node name="WindowContainer" type="CenterContainer" parent="NoteUISpace/WindowNode" unique_id=647313506]
-z_index = 31
-layout_mode = 2
 
 [node name="Transition" type="TextureRect" parent="NoteUISpace" unique_id=1380330631]
 material = ExtResource("5_cqyws")

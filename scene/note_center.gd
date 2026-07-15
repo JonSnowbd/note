@@ -291,7 +291,10 @@ func deserialize(data, parent=null) -> Variant:
 				new_node._import(deserialize(data[&"node_content"]))
 			object = new_node
 		elif is_object:
-			pass
+			var new_object: Object = load(data[&"object_script"]).new()
+			if new_object.has_method(&"_import") and data.has(&"object_content"):
+				new_object._import(deserialize(data[&"object_content"]))
+			object = new_object
 		else:
 			object = {}
 			for k in data.keys():

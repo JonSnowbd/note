@@ -56,10 +56,16 @@ func popup_window(window_scene, fade_in: float = 0.8, interrupt_focus: bool = tr
 	return new_window
 
 ## Same as popup_window but instead takes a callback in the form of [code]func(shell: NoteAppShell)[/code]
-## and uses that to populate a VM-U shell in the window. Extremely convenient for 
+## and uses that to populate a VM-U shell in the window. Extremely convenient for quick GUI's that need
+## to be highly reactive and distinct. [br][br]Raise an event named &"close_window" to close from the VM-U Shell
 func popup_window_shell(shell_cb: Callable, background: Color = Color(0.0, 0.0, 0.0, 0.2), fade_in: float = 0.8, interrupt_focus: bool = true) -> NoteWindow:
 	const shell_prefab = preload("uid://b674weyj11a28")
 	var window: NoteWindow = shell_prefab.instantiate()
+	var shell: NoteAppShell = window.shell
+	shell.event_raised.connect(func(evt: NoteAppShell.Event):
+		if evt.event_name == &"close_window":
+			window.close_window()
+	)
 	window.blackout_color = background
-	window.shell.callback = shell_cb
+	shell.callback = shell_cb
 	return popup_window(window, fade_in, interrupt_focus)

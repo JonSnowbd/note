@@ -3,6 +3,8 @@
 extends Node
 class_name NoteAppShell
 
+signal event_raised(event: Event)
+
 ## Helper for godot's stricter type checking re: dictionary and array subtypes
 const NoProps: Dictionary[StringName,Variant] = {}
 
@@ -140,6 +142,7 @@ class ShellNode extends RefCounted:
 					root_fragment = c
 					root_fragment.triggered_event.connect(shell._raised_event.bind(root_fragment, self))
 					root_fragment.fragment_init(shell)
+					root_fragment.fragment_update(shell, props)
 					break
 			
 			# If parent is null, this is a root shell node, and must be added
@@ -203,14 +206,15 @@ func _ready() -> void:
 
 
 func _raised_event(event_name: StringName, event_args: Array, fragment: NoteAppFragment, node: ShellNode):
+	var evt = Event.new()
+	evt.app_shell = self
+	evt.event_name = event_name
+	evt.source_fragment = fragment
+	evt.source_node = node
+	evt.arguments = event_args
 	if node.reactions.has(event_name):
-		var evt = Event.new()
-		evt.app_shell = self
-		evt.event_name = event_name
-		evt.source_fragment = fragment
-		evt.source_node = node
-		evt.arguments = event_args
 		node.reactions[event_name].call(evt)
+	event_raised.emit(evt)
 
 
 ## Called when everything is good to go.

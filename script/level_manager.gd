@@ -28,7 +28,7 @@ var log_info: bool = false
 func _internal_swap_logic(new_scene, with_loading_screen: bool, with_transition: bool = true) -> Array[Node]:
 	if !_load_awaiting.is_empty():
 		note.error("Scene change was requested during a loading screen, skipping request.")
-		return []
+		return [null,null]
 	
 	var old_scene: Node = get_tree().current_scene
 	var new_scene_instance: Node
@@ -42,13 +42,13 @@ func _internal_swap_logic(new_scene, with_loading_screen: bool, with_transition:
 			var packed: PackedScene = note.loading_screen.force_fetch(new_scene)
 			if packed == null:
 				note.error("Note failed to load path %s."%new_scene)
-				return []
+				return [null,null]
 			new_scene_instance = packed.instantiate()
 		else:
 			var prefab = load(new_scene) as PackedScene
 			if prefab == null: 
-				note.error("Provided string to load was not a packed scene.")
-				return []
+				note.error("Provided string to load was not a packed scene. <%s>" % new_scene)
+				return [null,null]
 			new_scene_instance = prefab.instantiate()
 	elif new_scene is PackedScene:
 		if with_loading_screen:

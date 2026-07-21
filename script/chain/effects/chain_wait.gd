@@ -1,19 +1,17 @@
-extends ChainFX
+extends ChainNode
 class_name ChainWait
 
-## This chain node simply waits for a bit.
+## This chain node simply waits for a set amount of time before being finished.
+## Useful for Sequential type chains to add spacing between events.
 
 @export var duration: float = 1.0
 
-var timeout: float = 0.0
-
-func _process(delta: float) -> void:
-	if timeout > 0.0:
-		timeout -= (delta*time_scale)
-		if timeout <= 0.0:
-			on_finish.emit()
-func _start(data):
-	timeout = duration
-	on_start.emit()
-func _done() -> bool:
-	return timeout <= 0.0
+func _chain_start(instance: RunInstance):
+	instance.data.set(&"wait_chain_timer", duration)
+func _chain_work(instance: RunInstance, delta: float) -> Response:
+	var t = instance.data.get(&"wait_chain_timer", duration)
+	t -= delta
+	if t <= 0.0:
+		return Response.DONE
+	instance.data.set(&"wait_chain_timer", t)
+	return Response.WORKING

@@ -1,5 +1,5 @@
 extends ChainNode
-class_name ChainFXTransition_String
+class_name ChainFXTransition_PackedScene
 
 ## Due to the nature of changing scenes, this is the logical end of a chain.
 ## Useful for scene transitions where the level loads after the player
@@ -7,7 +7,7 @@ class_name ChainFXTransition_String
 ## via the [code]note.load_level[/code] functions. This chain node is never
 ## considered "finished", so the chain halts while loading happens.
 
-@export_file("*.tscn", "*.scn") var scene: String
+@export var scene: PackedScene
 @export var transition_time: float = 0.75
 @export var loading_screen: bool = true
 

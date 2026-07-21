@@ -1,37 +1,38 @@
-extends ChainFX
-class_name NoteChainEffectVacuum
+extends ChainNode
+class_name ChainFXVacuum
 
 ## If the context of the chain is a node2D of some kind, this will suck it up.
 ## Useful for zone transitions, or entering vehicles.
 
 ## Needed, assign this and the context will be sucked into the center of this node
-@export var suction_center_node: Node2D
+@export var vacuum_destination: Node
+@export_group("Tuning")
+@export var vacuum_speed: float = 4.0
+@export var snap_distance: float = 0.005
+@export var snap_after_threshold: bool = true
 
-@export_subgroup("Motion", "motion_")
-## Set to 0.0 to disable the motion part of the vacuum effect.
-@export var motion_duration: float = 0.0
-## The transition function used for the tween
-@export var motion_transition_type: Tween.TransitionType
-## Which parts of the ease the function is used on, in the tween.
-@export var motion_transition_ease: Tween.EaseType
-
-var tween: Tween
-
-
-func _start(data):
-	tween = create_tween()
-	tween.set_parallel(true)
+func _chain_start(instance: RunInstance):
+	pass
+func _chain_work(instance: RunInstance, delta: float) -> Response:
+	# 2D
+	if vacuum_destination is Node2D and instance.context is Node2D:
+		var n = instance.context as Node2D
+		n.global_position = note.util.smooth_toward_v2(n.global_position, vacuum_destination.global_position, vacuum_speed, delta)
+		if n.global_position.distance_to(vacuum_destination.global_position) < snap_distance:
+			if snap_after_threshold:
+				n.global_position = vacuum_destination.global_position
+			return Response.DONE
+		return Response.WORKING
 	
-	var dest = suction_center_node.global_position
-	tween.tween_property(data, "global_position", dest, motion_duration*time_scale)\
-	.set_ease(motion_transition_ease)\
-	.set_trans(motion_transition_type)
+	# 3D
+	if vacuum_destination is Node3D and instance.context is Node3D:
+		var n = instance.context as Node3D
+		n.global_position = note.util.smooth_toward_v3(n.global_position, vacuum_destination.global_position, vacuum_speed, delta)
+		if n.global_position.distance_to(vacuum_destination.global_position) < snap_distance:
+			if snap_after_threshold:
+				n.global_position = vacuum_destination.global_position
+			return Response.DONE
+		return Response.WORKING
 	
-	tween.tween_callback(on_finish.emit)
-	
-	on_start.emit()
-
-func _done() -> bool:
-	if tween == null:
-		return true
-	return !tween.is_running()
+	# If neither type match, just end the chain node.
+	return Response.DONE

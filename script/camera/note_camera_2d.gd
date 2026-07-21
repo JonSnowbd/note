@@ -24,9 +24,6 @@ class ShakeEffect extends Effect:
 		target.offset += Vector2(randf_range(-shake_strength, shake_strength), randf_range(-shake_strength, shake_strength))
 		return Response.OK
 
-@export_category("On-Start References")
-## follow is called on this node on ready.
-@export var initial_follow_target: Node2D
 @export_category("Settings")
 ## The camera will look for affectors on these layers. Its not necessary for affectors
 ## to be on their own layer, but it would be slightly more performant if so.
@@ -58,7 +55,6 @@ class ShakeEffect extends Effect:
 @export var offset_smoothing_speed: float = 4.0
 
 var effect_stack: Array[Effect] = []
-var following: Node2D
 var window_size: Vector2
 var affector_offset_cache: Vector2
 
@@ -90,8 +86,6 @@ func _get_affectors(world_position: Vector2) -> Array[NoteCameraAffector]:
 
 func _reset(delta: float):
 	var previous_pos = global_position+offset
-	if following != null:
-		global_position = following.global_position
 	offset = Vector2.ZERO
 	var affectors = _get_affectors(global_position)
 	var local_affector_offset = Vector2.ZERO
@@ -102,9 +96,6 @@ func _reset(delta: float):
 	offset += affector_offset_cache
 	_process_effects(delta)
 	var delta_position = previous_pos-(global_position+offset)
-	
-	#global_position.x = snapped(global_position.x, 1.0)
-	#global_position.y = snapped(global_position.y, 1.0)
 	
 func _process_effects(delta: float):
 	for i in range(effect_stack.size() - 1, -1, -1):
@@ -126,8 +117,6 @@ func _update_properties():
 		zoom.x = zoom.y
 
 func _ready() -> void:
-	if initial_follow_target != null:
-		follow(initial_follow_target)
 	ignore_rotation = false
 	_update_properties()
 	get_viewport().size_changed.connect(_update_properties)
@@ -137,10 +126,3 @@ func _process(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	if process_effects_in_physics:
 		_reset(delta)
-		
-
-func follow(target: Node2D):
-	following = target
-	global_position = following.global_position
-	reset_smoothing()
-	reset_physics_interpolation()

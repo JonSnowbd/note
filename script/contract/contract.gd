@@ -1,13 +1,12 @@
 extends RefCounted
 class_name Contract
 
-
-## A Contract is a convenient data structure that I typically use
-## in phases, where the beginning of a phase, eg "InventoryPhase" receives a contract
-## loaded with clauses that will notify the phase that its over, such as the
-## Inventory Control being hidden/deleted, player taking damage, etc, and when
-## the contract is expired, the phase will return to "PlayerControllerPhase".
-## This structure has many uses, but this is one example.
+## A Contract is a convenient data structure that has several clauses to check
+## every frame, with a break function to call if any clause is invalidated.
+## Very useful for things such as creation
+## You do not [i]need[/i] to store this anywhere, on init this contract will upload to note
+## for validation per process frame. Though you will need to keep a reference if you wish
+## to cancel a contract.
 
 
 ## Emits when any clause is void during [code]Contract.update()[/code]

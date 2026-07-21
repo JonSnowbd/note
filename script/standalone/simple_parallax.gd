@@ -2,15 +2,18 @@
 extends Node2D
 class_name SimpleParallax2D
 
-const MetaTag = "__note_simple_parallax_meta_id"
-
 ## An extremely simple parallax alternative, you just define an anchor(the level)
 ## and a view node(the camera) and then set your parallax and offset, and youre set.
 ## Visible in editor for fast previewing
 
+## Typically this is the camera
 @export var view_node: Node2D
+## This is applied as a flat offset view nodes position. Treats view node as if it
+## was positioned at [code]view_node.global_position+view_offset[/code]
 @export var view_offset: Vector2
+## Typically this is your level's root, or its terrain/tilemap node.
 @export var anchor_node: Node2D
+## -1.0 to 1.0, with negatives being foreground, and positive being background.
 @export var parallax: float = 0.0
 
 func _process(delta: float) -> void:

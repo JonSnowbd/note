@@ -78,7 +78,8 @@ func _internal_change_to(new_scene, with_loading_screen: bool = false, with_tran
 	if old_scene != null:
 		old_scene.queue_free()
 	if note.settings.note_info_prints:
-		note.info("Finished transition to new level %s" % get_tree().current_scene.name)
+		if get_tree().current_scene != null:
+			note.info("Finished transition to new level %s" % get_tree().current_scene.name)
 	level_change_done.emit()
 	return scene_data[1]
 ## Changes to the new scene with an optional load screen. The old

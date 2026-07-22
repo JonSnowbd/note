@@ -11,6 +11,7 @@ class_name ChainParallel
 
 func _chain_start(instance: RunInstance):
 	var queue: Array[ChainNode] = []
+	var awaiting: Array[ChainNode.RunInstance] = []
 	var root: Node
 	if external_sequence_root == null or !is_instance_valid(external_sequence_root):
 		root = self
@@ -20,22 +21,21 @@ func _chain_start(instance: RunInstance):
 	for c in root.get_children():
 		if c is ChainNode:
 			queue.append(c)
+			awaiting.append(c.activate_chain(instance.context))
 	
 	instance.data.set(&"sequence", queue)
-
+	instance.data.set(&"awaiting", awaiting)
+func _chain_cancel(instance: RunInstance):
+	var awaiting: Array[RunInstance] = instance.data.get(&"awaiting", [])
+	for inst in awaiting:
+		inst.cancel()
+	awaiting.clear()
+	instance.data.set(&"awaiting", [])
 func _chain_work(instance: RunInstance, delta: float) -> Response:
-	var queue: Array[ChainNode] = instance.data.get(&"sequence")
-	
-	while !queue.is_empty():
-		var current: RunInstance = instance.data.get(&"awaiting", null)
-		if current != null:
-			if current.instance_finished:
-				queue.pop_front()
-				continue
-			else:
-				break
-		var item: ChainNode = queue[0]
-		instance.data.set(&"awaiting", item)
-		break
-	
-	return Response.WORKING
+	var awaiting: Array[RunInstance] = instance.data.get(&"awaiting", [])
+	var done: bool = true
+	for inst in awaiting:
+		if !inst.instance_finished:
+			done = false
+			break
+	return Response.DONE if done else Response.WORKING

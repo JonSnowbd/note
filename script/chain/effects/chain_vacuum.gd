@@ -7,8 +7,8 @@ class_name ChainFXVacuum
 ## Needed, assign this and the context will be sucked into the center of this node
 @export var vacuum_destination: Node
 @export_group("Tuning")
-@export var vacuum_speed: float = 4.0
-@export var snap_distance: float = 0.005
+@export var vacuum_speed: float = 9.5
+@export var snap_distance: float = 0.05
 @export var snap_after_threshold: bool = true
 
 func _chain_start(instance: RunInstance):

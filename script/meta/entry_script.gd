@@ -126,12 +126,6 @@ func begin_save_screen():
 	
 
 func _ready() -> void:
-	if note.settings.test_mode:
-		if !save_exists("note_test_mode"):
-			create_save("note_test_mode")
-		load_save("note_test_mode")
-		note.run_tests(true)
-		return
 	if note.settings.fast_boot:
 		if !save_exists("note_fast_boot"):
 			create_save("note_fast_boot")

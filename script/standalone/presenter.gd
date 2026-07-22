@@ -6,7 +6,7 @@ class_name Presenter
 
 ## The variable name inside the parent that is checked, basically set this to what
 ## you'd give to [code]get_parent().get(/here/)[/code]
-@export var data_name: StringName
+@export var target_variable_name: StringName
 ## The uid/path of the representor that will pop up in a tooltip.
 @export_file("*.tscn", "*.scn") var representor_prefab: String
 ## Optional, set this to override what node gets checked for hover/data.
@@ -22,4 +22,6 @@ func _enter_tree() -> void:
 
 func _physics_process(delta: float) -> void:
 	if note.controls.hovered_node == _current_source and _current_source != null:
-		note.tooltip.request_string(representor_prefab, _current_source.get(data_name))
+		var value = _current_source.get(target_variable_name)
+		if value != null:
+			note.tooltip.request_string(representor_prefab, value)

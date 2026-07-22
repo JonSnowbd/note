@@ -1,3 +1,4 @@
+@tool
 extends Resource
 class_name NoteDeveloperSettings
 
@@ -11,7 +12,6 @@ enum NoteEntrySceneType {
 	PROFILE_SELECTOR,
 }
 
-
 ## The initial scene that will be opened after a save is selected/created, or
 ## the scene that will be immediately presented to users with sticky saves, or
 ## the simple save strategy selected
@@ -20,6 +20,7 @@ enum NoteEntrySceneType {
 ## with their UID, their path, the base node name, or the class name of the script they inherit.
 @export_file("*.tscn", "*.scn") var phases: Array[String]
 ## If true, the intro scene will be skipped and no animations will play.
+## Only recommended for development, set to simple for release builds.
 @export var fast_boot: bool = false
 ## If true, note subsystems will print information regarding their function.
 @export var note_info_prints: bool = false
@@ -29,7 +30,7 @@ enum NoteEntrySceneType {
 ## will change the startup scene that note uses to present the save file to
 ## the user.
 @export var save_strategy: NoteEntrySceneType
-## This script will be instantiated as the save type for every session.
+## This script will be instantiated as the save for every session.
 @export var save_session_type: Script
 ## If true, and using a profile selector save strategy, the save created/selected
 ## will be 'stuck' and auto-loaded as if strategy was set to simple, highly recommended
@@ -45,25 +46,45 @@ enum NoteEntrySceneType {
 ## to your save session that you don't want every frame.
 @export var save_pulse_duration: float = 1.0
 
-@export_group("Tests")
-@export_file("*.tscn", "*.scn") var tests: Array[String]
-## If you suspect any modifications you made to Note may have caused an issue,
-## you can include all the note test fixtures.
-@export var include_note_tests: bool = false
-## When this action is pressed, test fixtures are all ran one after the other.
-@export var run_tests_action: StringName
-## If true, the boot process is instead running every test then closing.
-## Disable before exporting, or when you want to resume the real game.
-@export var test_mode: bool = false
+@export_group("Loading Screen")
+## This is displayed at the center of the loading screen 
+@export var loading_screen_centerpiece: PackedScene
+## If your loading screens are too fast its actually kinda bad, so you want this
+## safe guard, and to just not load scenes that are that fast, just send it instead.
+@export var loading_screen_minimum_time: float = 1.0
+## This is flashed for a few seconds in the bottom right
+## when note detects modified save files.
+@export var autosave_piece: PackedScene
+
+@export_group("VMU Library")
+@export var disable_library_generation: bool = false
+## The name of the class that will store all the fragment listings.
+@export var generated_library_name: StringName = &"UILib" : 
+	set(val):
+		generated_library_name = val
+		emit_changed()
+		regenerate_library()
+@export var container_fragments: Array[NoteAppLibraryEntry] = [] : 
+	set(val):
+		container_fragments = val
+		emit_changed()
+		regenerate_library()
+@export var control_fragments: Array[NoteAppLibraryEntry] = [] : 
+	set(val):
+		control_fragments = val
+		emit_changed()
+		regenerate_library()
+@export var include_note_fragments: bool = true : 
+	set(val):
+		include_note_fragments = val
+		emit_changed()
+		regenerate_library()
+@export_tool_button("Force Regenerate Library") var _regen = regenerate_library
+
 
 @export_storage var developer_journal: NoteJournalResource
 
 
-# TODO
-#@export_group("Hoist Mods")
-## Mods are disabled by default!! If enabled, every .pck in the mod folder, in the user path,
-## will be opened, and then their content fed to the provided script. From there it is only needed
-## that the introduction script read packed scenes, and scripts.
-#@export var enable_mods: bool = false
-#@export var mod_folder: String = "_note_mods"
-#@export var mod_introduction_script: Script
+func regenerate_library():
+	var gen = NoteUILibraryGenerator.new()
+	gen.run(self)

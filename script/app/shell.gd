@@ -3,6 +3,8 @@
 extends Node
 class_name NoteAppShell
 
+static var currently_running_shell: NoteAppShell
+
 signal event_raised(event: Event)
 
 ## Helper for godot's stricter type checking re: dictionary and array subtypes
@@ -37,6 +39,11 @@ class ShellNode extends RefCounted:
 	static func from_data(user_data, shell: NoteAppShell) -> ShellNode:
 		var root:ShellNode = ShellNode.new()
 		root.reactions = {}
+		
+		var injected_node = user_data.get(&"injected_shell_node", null)
+		if injected_node != null and injected_node is ShellNode:
+			user_data = injected_node
+		
 		if user_data is ShellNode:
 			root.parent = user_data.parent
 			root.source = user_data.source
@@ -202,7 +209,7 @@ func _ready() -> void:
 	initialize()
 	_hookup(root_node)
 	_updating = true
-	view()
+	perform_layout()
 
 
 func _raised_event(event_name: StringName, event_args: Array, fragment: NoteAppFragment, node: ShellNode):
@@ -221,6 +228,10 @@ func _raised_event(event_name: StringName, event_args: Array, fragment: NoteAppF
 @abstract
 func initialize()
 
+## Calls view on the shell and lays out the UI.
+func perform_layout():
+	currently_running_shell = self
+	view()
 
 ## This is the update function that calls layout to put together
 ## the shell's controls.
@@ -278,7 +289,7 @@ func quick_btn(label: String, on_press: Callable) -> ShellNode:
 
 ## Dummy arguments do nothing, they are for signal compatibility.
 func trigger_relayout(_dummy1 = null, _dummy2 = null, _dummy3 = null, _dummy4 = null, _dummy5 = null, _dummy6 = null):
-	view()
+	perform_layout()
 
 ## Triggers a re-layout every time the provided signal goes off.
 func add_relayout_trigger(relayout_signal: Signal):

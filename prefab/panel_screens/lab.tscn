@@ -1,10 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://dthkt8pfqui48"]
+[gd_scene format=3 uid="uid://dthkt8pfqui48"]
 
 [ext_resource type="Script" uid="uid://c16iagl3fqh0k" path="res://addons/note/prefab/panel_screens/lab.gd" id="1_8iqhi"]
+[ext_resource type="Theme" uid="uid://s8avb4vk6ef6" path="res://addons/note/resource/note_ui/note_ui.tres" id="1_12l4a"]
+[ext_resource type="FontVariation" uid="uid://bha8jfuuf8aei" path="res://addons/note/resource/note_ui/font/note_ui_code.tres" id="3_0y6w3"]
 
-[sub_resource type="GDScriptSyntaxHighlighter" id="GDScriptSyntaxHighlighter_308xs"]
+[sub_resource type="GDScriptSyntaxHighlighter" id="GDScriptSyntaxHighlighter_12l4a"]
 
-[node name="GDLab" type="PanelContainer" unique_id=1339672251 node_paths=PackedStringArray("code", "run_button", "clear_button")]
+[node name="GDLab" type="MarginContainer" unique_id=2008702263 node_paths=PackedStringArray("code", "run_button", "clear_button")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -12,6 +14,11 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = ExtResource("1_12l4a")
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
 script = ExtResource("1_8iqhi")
 code = NodePath("VBoxContainer2/CodeEdit")
 run_button = NodePath("VBoxContainer2/HBoxContainer/Button")
@@ -24,7 +31,20 @@ size_flags_vertical = 3
 [node name="CodeEdit" type="CodeEdit" parent="VBoxContainer2" unique_id=569521688]
 layout_mode = 2
 size_flags_vertical = 3
-syntax_highlighter = SubResource("GDScriptSyntaxHighlighter_308xs")
+theme_override_fonts/font = ExtResource("3_0y6w3")
+theme_override_font_sizes/font_size = 14
+text = "extends Node
+
+func _work():
+	# Do stuff here
+	print(\"Hello world!\")"
+minimap_draw = true
+syntax_highlighter = SubResource("GDScriptSyntaxHighlighter_12l4a")
+highlight_all_occurrences = true
+highlight_current_line = true
+draw_control_chars = true
+draw_tabs = true
+draw_spaces = true
 gutters_draw_line_numbers = true
 code_completion_enabled = true
 
@@ -32,9 +52,11 @@ code_completion_enabled = true
 layout_mode = 2
 
 [node name="Button" type="Button" parent="VBoxContainer2/HBoxContainer" unique_id=1790847009]
+custom_minimum_size = Vector2(175, 0)
 layout_mode = 2
 text = "Run"
 
 [node name="Button2" type="Button" parent="VBoxContainer2/HBoxContainer" unique_id=454989937]
+custom_minimum_size = Vector2(175, 0)
 layout_mode = 2
-text = "Clear"
+text = "Reset"

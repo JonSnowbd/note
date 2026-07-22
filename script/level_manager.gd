@@ -82,6 +82,7 @@ func _internal_change_to(new_scene, with_loading_screen: bool = false, with_tran
 			note.info("Finished transition to new level %s" % get_tree().current_scene.name)
 	level_change_done.emit()
 	return scene_data[1]
+
 ## Changes to the new scene with an optional load screen. The old
 ## scene is unloaded and deleted.[br]
 ## - If new scene is a string, it is loaded and instantiated.[br]
@@ -101,7 +102,7 @@ func _swap_internal(new_scene, with_loading_screen: bool = false, with_transitio
 ## - If new scene is a string, it is loaded and instantiated.[br]
 ## - If new scene is a packed scene, it is instantiated and loaded.[br]
 ## - If new scene is a node, it is placed into the tree and resumed.[br]
-func swap(new_scene, with_loading_screen: bool = false, with_transition: bool = true) -> Node:
+func swap_to(new_scene, with_loading_screen: bool = false, with_transition: bool = true) -> Node:
 	var old_scene = get_tree().current_scene
 	call_deferred(&"_swap_internal", new_scene, with_loading_screen, with_transition)
 	return old_scene

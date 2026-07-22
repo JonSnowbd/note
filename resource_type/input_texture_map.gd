@@ -117,7 +117,6 @@ class_name InputTextureMap
 @export var mouse_left_click: Texture
 @export var mouse_right_click: Texture
 
-
 @export_category("Xbox")
 @export var xbox_lstick: Texture
 @export var xbox_h_lstick: Texture

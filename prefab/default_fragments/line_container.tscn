@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://dcqnendhfk7pj"]
+
+[ext_resource type="Script" uid="uid://dvn4su2biy1mx" path="res://addons/note/prefab/default_fragments/line_container.gd" id="1_4lhxy"]
+[ext_resource type="Script" uid="uid://s6c202iv8dpu" path="res://addons/note/script/app/socket.gd" id="2_4lhxy"]
+
+[node name="LineContainer" type="MarginContainer" unique_id=469132313]
+
+[node name="NoteAppFragment" type="Node" parent="." unique_id=1924840371 node_paths=PackedStringArray("box", "margin", "inner_socket")]
+script = ExtResource("1_4lhxy")
+box = NodePath("../BoxContainer")
+margin = NodePath("..")
+inner_socket = NodePath("../BoxContainer/NoteAppSocket")
+metadata/_custom_type_script = "uid://bmxa1virvesbb"
+
+[node name="BoxContainer" type="BoxContainer" parent="." unique_id=1618917166]
+layout_mode = 2
+
+[node name="NoteAppSocket" type="Node" parent="BoxContainer" unique_id=1962134329]
+script = ExtResource("2_4lhxy")
+metadata/_custom_type_script = "uid://s6c202iv8dpu"

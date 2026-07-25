@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://disyk2tok5m37"]
+
+[ext_resource type="Script" uid="uid://blgccaq4h7bli" path="res://addons/note/prefab/default_fragments/root_card.gd" id="1_b3dp0"]
+[ext_resource type="Script" uid="uid://s6c202iv8dpu" path="res://addons/note/script/app/socket.gd" id="2_hecll"]
+
+[node name="RootCard" type="PanelContainer" unique_id=270204381]
+
+[node name="NoteAppFragment" type="Node" parent="." unique_id=1723403563 node_paths=PackedStringArray("scroll", "margin", "inner_socket")]
+script = ExtResource("1_b3dp0")
+scroll = NodePath("../ScrollContainer")
+margin = NodePath("../ScrollContainer/MarginContainer")
+inner_socket = NodePath("../ScrollContainer/MarginContainer/NoteAppSocket")
+metadata/_custom_type_script = "uid://bmxa1virvesbb"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=135252481]
+custom_minimum_size = Vector2(0, 18.06)
+layout_mode = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
+scroll_hint_mode = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer" unique_id=670817422]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="NoteAppSocket" type="Node" parent="ScrollContainer/MarginContainer" unique_id=164660487]
+script = ExtResource("2_hecll")
+metadata/_custom_type_script = "uid://s6c202iv8dpu"

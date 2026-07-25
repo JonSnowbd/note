@@ -40,9 +40,10 @@ class ShellNode extends RefCounted:
 		var root:ShellNode = ShellNode.new()
 		root.reactions = {}
 		
-		var injected_node = user_data.get(&"injected_shell_node", null)
-		if injected_node != null and injected_node is ShellNode:
-			user_data = injected_node
+		if user_data is Object:
+			var injected_node = user_data.get(&"_injected_shell_node")
+			if injected_node != null and injected_node is ShellNode:
+				user_data = injected_node
 		
 		if user_data is ShellNode:
 			root.parent = user_data.parent
@@ -155,7 +156,9 @@ class ShellNode extends RefCounted:
 			# If parent is null, this is a root shell node, and must be added
 			# to the shell's root node.
 			if parent == null:
-				if shell.root_socket != null:
+				if shell._subview_root_override != null:
+					shell._subview_root_override.add_child(instantiated_node)
+				elif shell.root_socket != null:
 					shell.root_socket.get_parent().add_child(instantiated_node)
 			else:
 				# Otherwise, we probe for the parent's root fragment.
@@ -180,11 +183,18 @@ class ShellNode extends RefCounted:
 	## below the socket, and then descends down the children. This is called for you internally.
 	func sort_children():
 		if root_fragment == null or root_fragment.inner_socket == null or children.is_empty(): return
+		if shell._subview_root_override != null: return
 		var target_root = root_fragment.inner_socket.get_parent()
 		var previous = root_fragment.inner_socket
 		for i in range(len(children)):
 			target_root.move_child(children[i].instantiated_node, previous.get_index()+1)
 			previous = children[i].instantiated_node
+	
+	func post_update():
+		if hydrated:
+			root_fragment.fragment_post_update(shell, self)
+		for c in children:
+			c.post_update()
 
 @export var root_node: Node
 @export var root_socket: NoteAppSocket
@@ -197,6 +207,7 @@ class ShellNode extends RefCounted:
 var _current_tree: ShellNode = null
 var _shell_fragments: Array[NoteAppFragment] = []
 var _updating: bool = false
+var _subview_root_override: Control = null
 
 func _hookup(node: Node):
 	if node is NoteAppFragment:
@@ -238,6 +249,25 @@ func perform_layout():
 @abstract
 func view()
 
+## Creates a subdomain. Pass null for the first run and then keep track of the node it returns.
+## Notify the shell when the new tree branch is done with via clean_subview().[br]
+## Use this if your fragment needs total control of how the children are generated.
+## See Note's tabs container for a good example.
+func subview(tree: ShellNode, new_root: Control, view_function: Callable) -> ShellNode:
+	currently_running_shell = self
+	var old_tree = _current_tree
+	_current_tree = tree
+	_subview_root_override = new_root
+	view_function.call(self)
+	var new_tree = _current_tree
+	_current_tree = old_tree
+	_subview_root_override = null
+	
+	return new_tree
+
+func clean_subview(tree: ShellNode):
+	pass
+
 
 func layout(layout_data):
 	var proposition: ShellNode = ShellNode.from_data(layout_data, self)
@@ -261,6 +291,9 @@ func layout(layout_data):
 	
 	for piece in _shell_fragments:
 		piece.fragment_update(self, NoProps)
+	
+	if _current_tree != null:
+		_current_tree.post_update()
 
 ## Quick way to start the chain methods, simple shell node constructor.
 func with(prefab) -> ShellNode:

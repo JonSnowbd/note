@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://dvlarwb6y26v3"]
+
+[ext_resource type="Script" uid="uid://dfelb1djuiq1q" path="res://addons/note/prefab/default_fragments/tabs_container.gd" id="1_stuq1"]
+
+[node name="TabsContainer" type="TabContainer" unique_id=1701884576]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+use_hidden_tabs_for_min_size = true
+
+[node name="NoteAppFragment" type="Node" parent="." unique_id=321502216 node_paths=PackedStringArray("root_control")]
+script = ExtResource("1_stuq1")
+root_control = NodePath("..")
+metadata/_custom_type_script = "uid://bmxa1virvesbb"

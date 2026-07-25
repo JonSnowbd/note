@@ -14,6 +14,8 @@ func fragment_init(shell: NoteAppShell):
 	pass
 func fragment_update(shell: NoteAppShell, props: Dictionary[StringName,Variant]):
 	pass
+func fragment_post_update(shell: NoteAppShell, self_node: NoteAppShell.ShellNode):
+	pass
 
 func raise_event(event: StringName, arguments: Array = []):
 	triggered_event.emit(event, arguments)

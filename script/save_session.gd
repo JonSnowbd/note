@@ -89,7 +89,7 @@ func write_resource(resource_name: String, resource: Resource):
 ## So use just the name, eg "misc/stats" or "profile"
 func write_object(resource_name: String, object: Dictionary):
 	var file = FileAccess.open(current_path+resource_name+".json", FileAccess.WRITE)
-	file.store_string(JSON.stringify(object))
+	file.store_string(JSON.stringify(JSON.from_native(object)))
 	file.close()
 
 ## Writes a texture to the save folder, do not include the file type. Saves the texture to
@@ -126,7 +126,7 @@ func read_resource(resource_name: String) -> Resource:
 ## So use just the name, eg "misc/stats" or "profile"
 func read_object(resource_name:String) -> Dictionary:
 	var file = FileAccess.open(current_path+resource_name+".json", FileAccess.READ)
-	var data = JSON.parse_string(file.get_as_text())
+	var data = JSON.to_native(JSON.parse_string(file.get_as_text()))
 	file.close()
 	return data
 

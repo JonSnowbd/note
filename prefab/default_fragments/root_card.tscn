@@ -10,6 +10,7 @@ script = ExtResource("1_b3dp0")
 scroll = NodePath("../ScrollContainer")
 margin = NodePath("../ScrollContainer/MarginContainer")
 inner_socket = NodePath("../ScrollContainer/MarginContainer/NoteAppSocket")
+major_focus = true
 metadata/_custom_type_script = "uid://bmxa1virvesbb"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=135252481]

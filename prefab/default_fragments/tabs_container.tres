@@ -11,6 +11,8 @@ frag_description = "Use the dictionary prop to map String Names to a VMU Callbac
 frag_scene = ExtResource("1_gum3e")
 frag_script = ExtResource("2_7m1b7")
 props = Dictionary[StringName, Variant]({
+&"default_tab": 0,
 &"tabs": {}
 })
+events = Array[StringName]([&"tab_changed"])
 metadata/_custom_type_script = "uid://du85j7ntc5soe"

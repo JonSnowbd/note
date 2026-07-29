@@ -57,34 +57,43 @@ enum NoteEntrySceneType {
 @export var autosave_piece: PackedScene
 
 @export_group("VMU Library")
+@export_tool_button("Regenerate Library") var _regen = __regenerate_library
 @export var disable_library_generation: bool = false
 ## The name of the class that will store all the fragment listings.
-@export var generated_library_name: StringName = &"UILib" : 
+@export var generated_library_name: StringName = &"VMU" : 
 	set(val):
 		generated_library_name = val
 		emit_changed()
-		regenerate_library()
-@export var container_fragments: Array[NoteAppLibraryEntry] = [] : 
+		__warn_regen()
+@export var user_fragments: Array[NoteAppLibraryEntry] = [] : 
 	set(val):
-		container_fragments = val
+		for f in user_fragments:
+			if f == null: continue
+			if !val.has(f):
+				if f.changed.is_connected(__warn_regen):
+					f.changed.disconnect(__warn_regen)
+		user_fragments = val
 		emit_changed()
-		regenerate_library()
-@export var control_fragments: Array[NoteAppLibraryEntry] = [] : 
-	set(val):
-		control_fragments = val
-		emit_changed()
-		regenerate_library()
+		for f in user_fragments:
+			if f == null: continue
+			if !f.changed.is_connected(__warn_regen):
+				f.changed.connect(__warn_regen)
+		__warn_regen()
 @export var include_note_fragments: bool = true : 
 	set(val):
 		include_note_fragments = val
 		emit_changed()
-		regenerate_library()
-@export_tool_button("Force Regenerate Library") var _regen = regenerate_library
+		__warn_regen()
 
 
 @export_storage var developer_journal: NoteJournalResource
+var _vmu_library_dirty: bool = false
 
-
-func regenerate_library():
+func __warn_regen():
+	if !_vmu_library_dirty and Engine.is_editor_hint():
+		NoteUtil.print_clickable("[color=yellow]Note VMU Library may be outdated. Click to regenerate.[/color]", __regenerate_library)
+		_vmu_library_dirty = true
+func __regenerate_library():
 	var gen = NoteUILibraryGenerator.new()
 	gen.run(self)
+	_vmu_library_dirty = false

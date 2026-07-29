@@ -65,16 +65,19 @@ class %s extends Object:
 	
 	return bit
 func run(settings: NoteDeveloperSettings):
+	const lib_path = "res://addons/note/_library.gd"
 	if !Engine.is_editor_hint(): return
+	var scr: GDScript = load("res://addons/note/_library.gd")
+	var code = EditorInterface.get_script_editor()
+	if code.get_open_scripts().has(scr):
+		code.close_file(lib_path)
+		print("Closed _library.gd in your code editor to cleanly update.")
 	if settings.include_note_fragments:
 		fragments.append_array(default_fragments)
-	fragments.append_array(settings.container_fragments)
-	fragments.append_array(settings.control_fragments)
+	fragments.append_array(settings.user_fragments)
 	fragments = fragments.filter(_validate)
-	
-	print(str(fragments))
 	if settings.disable_library_generation or fragments.is_empty():
-		var libfile = FileAccess.open("res://addons/note/_library.gd",FileAccess.WRITE)
+		var libfile = FileAccess.open(lib_path,FileAccess.WRITE)
 		if libfile == null:
 			push_error("Failed to generate note VMU library: %s" % FileAccess.get_open_error())
 		libfile.store_string("""extends Object
@@ -103,8 +106,7 @@ class _private extends Object:
 %s
 %s\n""" % [settings.generated_library_name, private_body, main_body]
 	
-	var scr: GDScript = load("res://addons/note/_library.gd")
 	scr.source_code = file
 	scr.reload()
 	ResourceSaver.save(scr)
-	print("Note UI Library: %s script fully regenerated" % settings.generated_library_name)
+	print("Note VMU Library regenerated.\nNamespace: %s\nFilepath: %s" % [settings.generated_library_name, lib_path])

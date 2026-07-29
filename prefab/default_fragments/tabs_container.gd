@@ -5,6 +5,13 @@ extends NoteAppFragment
 var roots: Dictionary[StringName, Container] = {}
 var view_fns: Dictionary[StringName, Callable] = {}
 var trees: Dictionary[StringName, NoteAppShell.ShellNode]
+var default_tab: int = 0
+
+func fragment_init(shell: NoteAppShell):
+	root_control.tab_changed.connect(func(tab_index):
+		var target = roots.find_key(root_control.get_tab_control(tab_index))
+		raise_event(&"tab_changed", [tab_index, target])
+	)
 
 func fragment_update(shell: NoteAppShell, props: Dictionary[StringName,Variant]):
 	var callables: Dictionary[StringName, Callable] = {}

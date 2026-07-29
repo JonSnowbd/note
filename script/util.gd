@@ -1,8 +1,31 @@
+@tool
 extends Node
+class_name NoteUtil
 
 signal fullscreen_changed
 
 var _tween_cache: Dictionary[String,Tween] = {}
+static var _click_cache: Dictionary[String,Callable]
+static func _output_meta_clicked(meta):
+	if _click_cache.has(meta):
+		var callable: Callable = _click_cache.get(meta)
+		if callable.is_valid():
+			callable.call()
+	else:
+		print("Invalidated clickable print call. Clickable print callbacks are reset every 2048 links.")
+
+## DOES NOT WORK INGAME! Use this only for your @tool scripts
+static func print_clickable(message: String, callable: Callable):
+	var base = EditorInterface.get_base_control()
+	if base != null:
+		var p: RichTextLabel = base.find_child("Output", true, false).get_child(1).find_child("*RichTextLabel*", true, false)
+		if p != null and !p.meta_clicked.is_connected(_output_meta_clicked):
+			p.meta_clicked.connect(_output_meta_clicked)
+	if len(_click_cache) > 2048:
+		_click_cache.clear()
+	var uid = UUID.v4()
+	_click_cache[uid] = callable
+	print_rich("[color=#FFFFFFFF][b][url=\"%s\"]%s[/url][/b][/color]" % [uid,message])
 
 ## Takes time as a float, and returns a speedrun style format, `HH:MM:SS.MS`
 ## with appropriate padding/truncating to ensure its always
@@ -16,6 +39,7 @@ func seconds_to_speedrun_stamp(time: float) -> String:
 
 ## Not at all accurate enough for precise requirements, but otherwise perfect for
 ## UI animations and other visual effects that need to be free from timescale.
+## Only accurate if a Max FPS has been set.
 func unscaled_dt() -> float:
 	return 1.0/Engine.max_fps
 ## Accurate, and constant. Perfect for use in any physics process that needs to be free from timescale.
@@ -65,18 +89,21 @@ func tween(source: Node, id: String = "default", smooth: bool = true, finish_pre
 ## Sets the game to be fullscreen. Will shortcut disable maximized state
 ## for you since setting fullscreen while maximized will not work some times.
 func set_fullscreen():
+	if Engine.is_editor_hint(): return
 	if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_MAXIMIZED:
 		set_windowed()
 		await get_tree().process_frame
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 	fullscreen_changed.emit()
 func set_exclusive_fullscreen():
+	if Engine.is_editor_hint(): return
 	if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_MAXIMIZED:
 		set_windowed()
 		await get_tree().process_frame
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 	fullscreen_changed.emit()
 func set_windowed(fix_borderless: bool = true):
+	if Engine.is_editor_hint(): return
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 	if fix_borderless:
 		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, false)
@@ -92,6 +119,7 @@ func get_volume(bus_name: String) -> float:
 ## Takes a number from 0.0 -> 1.0 and sets that buses volume. Converts to DB for you.
 ## You can set it beyond 1.0, or allow users to if they wish, but it is not recommended.
 func set_volume(bus_name: String, linear_volume: float):
+	if Engine.is_editor_hint(): return
 	var vol_db = linear_to_db(linear_volume)
 	if linear_volume <= 0.0 or vol_db == NAN:
 		vol_db = -80.0
@@ -100,6 +128,7 @@ func set_volume(bus_name: String, linear_volume: float):
 
 ## Mutes the target bus.
 func mute_volume(bus_name: String):
+	if Engine.is_editor_hint(): return
 	set_volume(bus_name, 0.0)
 
 ## Returns an integer for use in [code]profiler_end[/code].
@@ -180,6 +209,7 @@ func spread_nodes_2d(node1: Node2D, node2: Node2D, spread: float, ratio: float =
 	node2.global_position += diff*(spread*ratio)
 
 func _physics_process(delta: float) -> void:
+	if Engine.is_editor_hint(): return
 	if (Engine.get_physics_frames() % 90) == 0:
 		var remove_tweens = []
 		for k in _tween_cache.keys():

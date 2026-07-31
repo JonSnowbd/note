@@ -1,0 +1,268 @@
+[gd_scene format=3 uid="uid://b6rrb216vfjay"]
+
+[ext_resource type="Script" uid="uid://ow7brajv5vuq" path="res://addons/note/note_center.gd" id="1_gtcng"]
+[ext_resource type="Script" uid="uid://bqvtnaowd8lta" path="res://addons/note/script/util.gd" id="2_pw84e"]
+[ext_resource type="Script" uid="uid://dsuqhn7s348wn" path="res://addons/note/script/controls.gd" id="3_jw4si"]
+[ext_resource type="Script" uid="uid://dj5ae4svel0vv" path="res://addons/note/script/loading_screen.gd" id="5_2b8on"]
+[ext_resource type="Script" uid="uid://dqm1jcqmseeun" path="res://addons/note/script/ui.gd" id="6_basvj"]
+[ext_resource type="Script" uid="uid://caty0hb5uijx2" path="res://addons/note/script/phase/phase_manager.gd" id="7_2rlwf"]
+[ext_resource type="Script" uid="uid://4iwdim3cbvkf" path="res://addons/note/script/focus_system/focus_root.gd" id="8_6ht7x"]
+[ext_resource type="StyleBox" uid="uid://c0dpaf201wta7" path="res://addons/note/resource/note_ui/stylebox/panel_controller_focus.tres" id="9_qb4ap"]
+[ext_resource type="AudioStream" uid="uid://cjkq5qho04woa" path="res://addons/note/audio/move.ogg" id="10_sbkf1"]
+[ext_resource type="AudioStream" uid="uid://bk1fgovjsn1l8" path="res://addons/note/audio/activate.ogg" id="11_tj48b"]
+[ext_resource type="AudioStream" uid="uid://m5mkm0lykjvl" path="res://addons/note/audio/up.ogg" id="12_b6w6i"]
+[ext_resource type="AudioStream" uid="uid://bnjja41oa15mo" path="res://addons/note/audio/down.ogg" id="13_20te4"]
+[ext_resource type="AudioStream" uid="uid://d647xcga8ayn" path="res://addons/note/audio/charge_click.ogg" id="14_48wpp"]
+[ext_resource type="AudioStream" uid="uid://bmgstvn7rmu0n" path="res://addons/note/audio/press.ogg" id="15_x22r1"]
+[ext_resource type="AudioStream" uid="uid://cu4ny8r1k1e5" path="res://addons/note/audio/failed_input.ogg" id="16_0ldse"]
+[ext_resource type="AudioStream" uid="uid://ddpgtvjs717hg" path="res://addons/note/audio/long_press.ogg" id="17_5spxk"]
+[ext_resource type="Script" uid="uid://bd2xr6domuqt7" path="res://addons/note/script/notifications.gd" id="18_b57bt"]
+[ext_resource type="Script" uid="uid://ej2vfmjw2dkq" path="res://addons/note/script/tooltip_manager.gd" id="19_t3omw"]
+[ext_resource type="Script" uid="uid://b5urykf5xl2tp" path="res://addons/note/script/control_guide/control_guide_manager.gd" id="20_inqon"]
+[ext_resource type="Resource" uid="uid://dvj8sljw217df" path="res://addons/note/resource/default_filled_texture_map.tres" id="21_umuds"]
+[ext_resource type="PackedScene" uid="uid://b8vpfmxrxetcf" path="res://addons/note/prefab/control_guide/basic_guidelet.tscn" id="22_doc3j"]
+[ext_resource type="Material" uid="uid://dk5oqc43jlalx" path="res://addons/note/material/perlin_transition.tres" id="23_0c46g"]
+[ext_resource type="Script" uid="uid://b53sh8bwtjj8g" path="res://addons/note/script/transition_panel.gd" id="24_41llv"]
+
+[node name="NoteCenter" type="Node2D" unique_id=2080868149 node_paths=PackedStringArray("controls", "loading", "transition", "phase", "util", "ui")]
+script = ExtResource("1_gtcng")
+controls = NodePath("Controls")
+loading = NodePath("LoadingManager")
+transition = NodePath("NoteUISpace/Transition")
+phase = NodePath("PhaseSpace")
+util = NodePath("Utils")
+ui = NodePath("UIManager")
+
+[node name="Utils" type="Node" parent="." unique_id=1998701117]
+script = ExtResource("2_pw84e")
+metadata/_custom_type_script = "uid://bqvtnaowd8lta"
+
+[node name="Controls" type="Node" parent="." unique_id=219723937]
+script = ExtResource("3_jw4si")
+metadata/_custom_type_script = "uid://dsuqhn7s348wn"
+
+[node name="LoadingManager" type="Node" parent="." unique_id=328063850 node_paths=PackedStringArray("loading_screen_root", "loading_screen_visual_root", "centerpiece_container", "loading_screen_blackout", "loading_screen_tip")]
+script = ExtResource("5_2b8on")
+loading_screen_root = NodePath("../NoteUISpace/LoadingScreen")
+loading_screen_visual_root = NodePath("../NoteUISpace/LoadingScreen/LoadingVisual")
+centerpiece_container = NodePath("../NoteUISpace/LoadingScreen/LoadingVisual/CenterPieceContainer")
+loading_screen_blackout = NodePath("../NoteUISpace/LoadingScreen/LoadingVisual/Blackout")
+loading_screen_tip = NodePath("../NoteUISpace/LoadingScreen/LoadingVisual/MarginContainer/Tip")
+
+[node name="UIManager" type="Node" parent="." unique_id=441034187 node_paths=PackedStringArray("_blackout", "_window_container", "_window_root", "_internal_tooltip", "_internal_notifications", "_internal_controlguide", "focus")]
+script = ExtResource("6_basvj")
+_blackout = NodePath("../NoteUISpace/WindowNode/Blackout")
+_window_container = NodePath("../NoteUISpace/WindowNode/WindowContainer")
+_window_root = NodePath("../NoteUISpace/WindowNode")
+_internal_tooltip = NodePath("../NoteUISpace/Tooltip")
+_internal_notifications = NodePath("../NoteUISpace/Notifications")
+_internal_controlguide = NodePath("../NoteUISpace/ControlGuide")
+focus = NodePath("../NoteUISpace/Focus")
+
+[node name="PhaseSpace" type="CanvasLayer" parent="." unique_id=265783555]
+layer = 64
+script = ExtResource("7_2rlwf")
+
+[node name="NoteUISpace" type="CanvasLayer" parent="." unique_id=1102055093]
+layer = 120
+
+[node name="Focus" type="Control" parent="NoteUISpace" unique_id=2029769993 node_paths=PackedStringArray("sfx_move", "sfx_activate", "sfx_charge", "sfx_long_press", "sfx_up", "sfx_down", "sfx_fail")]
+process_mode = 3
+visible = false
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("8_6ht7x")
+regular_box = ExtResource("9_qb4ap")
+sfx_pitch_variance = 0.075
+sfx_move = NodePath("Move")
+sfx_activate = NodePath("Activate")
+sfx_charge = NodePath("Charge")
+sfx_long_press = NodePath("LongPress")
+sfx_up = NodePath("Up")
+sfx_down = NodePath("Down")
+sfx_fail = NodePath("Fail")
+
+[node name="Move" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=1254488439]
+stream = ExtResource("10_sbkf1")
+volume_db = -25.0
+
+[node name="Activate" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=1803988019]
+stream = ExtResource("11_tj48b")
+volume_db = -23.0
+
+[node name="Up" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=391614181]
+stream = ExtResource("12_b6w6i")
+volume_db = -23.0
+
+[node name="Down" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=1862456944]
+stream = ExtResource("13_20te4")
+volume_db = -23.0
+
+[node name="Charge" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=1862946961]
+stream = ExtResource("14_48wpp")
+volume_db = -23.0
+
+[node name="Press" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=746006432]
+stream = ExtResource("15_x22r1")
+volume_db = -23.0
+
+[node name="Fail" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=683985785]
+stream = ExtResource("16_0ldse")
+volume_db = -25.0
+
+[node name="LongPress" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=722230450]
+stream = ExtResource("17_5spxk")
+volume_db = -23.0
+
+[node name="Notifications" type="MarginContainer" parent="NoteUISpace" unique_id=1709384188 node_paths=PackedStringArray("popup_audio")]
+process_mode = 3
+visible = false
+anchors_preset = -1
+anchor_left = 0.075
+anchor_top = 0.5
+anchor_right = 0.075
+anchor_bottom = 0.5
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("18_b57bt")
+popup_audio = NodePath("Ping")
+
+[node name="Ping" type="AudioStreamPlayer" parent="NoteUISpace/Notifications" unique_id=318923049]
+
+[node name="Tooltip" type="MarginContainer" parent="NoteUISpace" unique_id=745445436 node_paths=PackedStringArray("tip_container")]
+visible = false
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+script = ExtResource("19_t3omw")
+tip_container = NodePath("PanelContainer")
+
+[node name="PanelContainer" type="PanelContainer" parent="NoteUISpace/Tooltip" unique_id=1732081680]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ControlGuide" type="MarginContainer" parent="NoteUISpace" unique_id=901242925 node_paths=PackedStringArray("container")]
+visible = false
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+script = ExtResource("20_inqon")
+input_icon_theme = ExtResource("21_umuds")
+guidelet_prefab = ExtResource("22_doc3j")
+container = NodePath("PanelContainer/MarginContainer/VBoxContainer")
+
+[node name="PanelContainer" type="PanelContainer" parent="NoteUISpace/ControlGuide" unique_id=1204775590]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="NoteUISpace/ControlGuide/PanelContainer" unique_id=399212283]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NoteUISpace/ControlGuide/PanelContainer/MarginContainer" unique_id=1360276928]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="WindowNode" type="MarginContainer" parent="NoteUISpace" unique_id=427159999]
+process_mode = 3
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Blackout" type="ColorRect" parent="NoteUISpace/WindowNode" unique_id=1914925719]
+layout_mode = 2
+color = Color(0.03, 0.03, 0.03, 0.57254905)
+
+[node name="WindowContainer" type="CenterContainer" parent="NoteUISpace/WindowNode" unique_id=647313506]
+layout_mode = 2
+
+[node name="LoadingScreen" type="MarginContainer" parent="NoteUISpace" unique_id=1278017651]
+process_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="LoadingVisual" type="MarginContainer" parent="NoteUISpace/LoadingScreen" unique_id=851615815]
+layout_mode = 2
+
+[node name="Blackout" type="ColorRect" parent="NoteUISpace/LoadingScreen/LoadingVisual" unique_id=895536869]
+layout_mode = 2
+color = Color(0.09902569, 0.10470214, 0.16102284, 1)
+
+[node name="CenterPieceContainer" type="CenterContainer" parent="NoteUISpace/LoadingScreen/LoadingVisual" unique_id=926628799]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="NoteUISpace/LoadingScreen/LoadingVisual" unique_id=663547338]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+mouse_filter = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Tip" type="Label" parent="NoteUISpace/LoadingScreen/LoadingVisual/MarginContainer" unique_id=2081757162]
+visible = false
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 2
+text = "Did you know tips are displayed here while loading?"
+autowrap_mode = 3
+
+[node name="AutosavePiece" type="MarginContainer" parent="NoteUISpace/LoadingScreen" unique_id=1836155041]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+mouse_filter = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="Transition" type="TextureRect" parent="NoteUISpace" unique_id=1380330631]
+visible = false
+material = ExtResource("23_0c46g")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+script = ExtResource("24_41llv")
+metadata/_custom_type_script = "uid://b53sh8bwtjj8g"

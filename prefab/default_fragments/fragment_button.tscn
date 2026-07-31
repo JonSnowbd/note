@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://d2eorjxlt1q4l"]
 
-[ext_resource type="Script" uid="uid://bfs533yd5agvi" path="res://addons/note/script/app/default_fragments/fragment_button.gd" id="1_bhnyj"]
+[ext_resource type="Script" uid="uid://bfs533yd5agvi" path="res://addons/note/prefab/default_fragments/fragment_button.gd" id="1_bhnyj"]
 
 [node name="FragmentButton" type="MarginContainer" unique_id=1867439998]
 offset_right = 12.0

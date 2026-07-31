@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://ckwjl0ougs0m6"]
+
+[ext_resource type="Script" uid="uid://b32s3onrevj7v" path="res://addons/note/script/app/misc/note_tooltip_shell.gd" id="1_ifvmn"]
+[ext_resource type="Script" uid="uid://k5fhrelaoogb" path="res://addons/note/script/app/misc/note_popup_shell.gd" id="1_ii3rl"]
+[ext_resource type="Script" uid="uid://s6c202iv8dpu" path="res://addons/note/script/app/socket.gd" id="2_ifvmn"]
+
+[node name="NoteTooltipShell" type="MarginContainer" unique_id=560511510 node_paths=PackedStringArray("shell")]
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+script = ExtResource("1_ifvmn")
+shell = NodePath("Shell")
+
+[node name="Shell" type="Node" parent="." unique_id=853596969 node_paths=PackedStringArray("root_node", "root_socket", "floating_root")]
+script = ExtResource("1_ii3rl")
+root_node = NodePath("..")
+root_socket = NodePath("../NoteAppSocket")
+floating_root = NodePath("..")
+automatically_view_on_ready = false
+
+[node name="NoteAppSocket" type="Node" parent="." unique_id=489464629]
+script = ExtResource("2_ifvmn")
+metadata/_custom_type_script = "uid://s6c202iv8dpu"

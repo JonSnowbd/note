@@ -5,33 +5,19 @@ signal save_loaded
 ## Called [b]after[/b] a save is unloaded.
 signal save_unloaded
 
-const TypeLoadingScreen = preload("uid://dj5ae4svel0vv")
-const TypeControlGuide = preload("uid://b5urykf5xl2tp")
-const TypeNotifications = preload("uid://bd2xr6domuqt7")
+const TypeLoading = preload("uid://dj5ae4svel0vv")
 const TypePhaseManager = preload("uid://caty0hb5uijx2")
-const TypeTooltipManager = preload("uid://ej2vfmjw2dkq")
-const TypeUtil = preload("uid://bqvtnaowd8lta")
 const TypeTransitionManager = preload("uid://b53sh8bwtjj8g")
-const TypeLevelManager = preload("uid://d1ghq77fsfx07")
 const TypeControlManager = preload("uid://dsuqhn7s348wn")
 const TypeMetadata = preload("uid://dpj8fxiopchxi")
-const TypeFocusGroup = preload("uid://4iwdim3cbvkf")
 const TypeUI = preload("uid://dqm1jcqmseeun")
-const _default_note_tests = [
-	"uid://df1tif6bomrwk"
-]
 
 @export_group("Internal References")
-@export var level: TypeLevelManager
 @export var controls: TypeControlManager
-@export var notifications: TypeNotifications
-@export var loading_screen: TypeLoadingScreen
+@export var loading: TypeLoading
 @export var transition: TypeTransitionManager
-@export var control_guide: TypeControlGuide
-@export var tooltip: TypeTooltipManager
 @export var phase: TypePhaseManager
-@export var focus: TypeFocusGroup
-@export var util: TypeUtil
+@export var util: NoteUtil
 @export var ui: TypeUI
 
 ## This is the Note Dev Settings that you provide via your project settings.
@@ -57,8 +43,8 @@ func _ready() -> void:
 		meta.restore_soft_settings(self)
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST or what == NOTIFICATION_EXIT_TREE:
-		end_session()
 		meta.persist(self)
+		end_session()
 func _process(delta: float) -> void:
 	if save != null:
 		var timer = storage.get_or_add("save_session_timer", 0.0)
@@ -112,6 +98,23 @@ func time(header: String = ""):
 	else: # Non-empty string means starting a new timer
 		head_array.push_back(header)
 		time_array.push_back(util.profiler_start())
+
+## Shortcut for quick level in the loading namespace.
+func goto(level):
+	loading.quick_level(level)
+## Shortcut for quick level swap in the loading namespace.
+func goto_swap(level) -> Node:
+	return loading.quick_level_swap(level)
+## Shortcut for quick level, with a skipped loading screen(warning: forced sync loads).
+func goto_fast(level):
+	var session = loading.begin_loading_screen()
+	session.skip_loading = true
+	session.level(level)
+## Shortcut for quick level swap, with a skipped loading screen(warning: forced sync loads).
+func goto_fast_swap(level) -> Node:
+	var session = loading.begin_loading_screen()
+	session.skip_loading = true
+	return session.level_swap(level)
 
 ## Takes a script and runs through the virtual method. You
 ## can pass in variadic parameters through the second argument,
@@ -241,8 +244,8 @@ func deserialize(data, parent=null) -> Variant:
 			# Try to rehydrate via the resource path
 			if data.has(&"resource_path"):
 				var resource_path = data[&"resource_path"]
-				if loading_screen.is_cached(resource_path):
-					new_resource = loading_screen.fetch(resource_path)
+				if loading.is_cached(resource_path):
+					new_resource = loading.fetch(resource_path)
 				else:
 					new_resource = load(resource_path)
 			else: # Or create it manually.
@@ -257,8 +260,8 @@ func deserialize(data, parent=null) -> Variant:
 			var new_node: Node
 			if data.has(&"node_path"):
 				var node_path = data[&"node_path"]
-				if loading_screen.is_cached(node_path):
-					new_node = loading_screen.fetch(node_path).instantiate()
+				if loading.is_cached(node_path):
+					new_node = loading.fetch(node_path).instantiate()
 				else:
 					new_node = load(node_path).instantiate()
 			else:
@@ -299,7 +302,7 @@ func return_to_save_select():
 	unstick_save()
 	end_session()
 	var main_scene_prefab = load(ProjectSettings.get_setting("application/run/main_scene", "uid://k7kf706i87f8"))
-	level.change_to(main_scene_prefab)
+	goto_fast(main_scene_prefab)
 
 ## Called internally to start saves, let note handle this unless you
 ## know what you want from this! If you are intending to change saves,

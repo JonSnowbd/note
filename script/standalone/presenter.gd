@@ -24,4 +24,4 @@ func _physics_process(delta: float) -> void:
 	if note.controls.hovered_node == _current_source and _current_source != null:
 		var value = _current_source.get(target_variable_name)
 		if value != null:
-			note.tooltip.request_string(representor_prefab, value)
+			note.ui.tooltip(representor_prefab, value)

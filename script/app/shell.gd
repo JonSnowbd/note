@@ -56,7 +56,7 @@ class ShellNode extends RefCounted:
 		elif user_data is PackedScene:
 			root.source = user_data
 		elif user_data is String:
-			root.source = note.loading_screen.force_fetch(user_data)
+			root.source = note.loading.fetch(user_data)
 		root.hydrated = false
 		root.shell = shell
 		return root
@@ -203,6 +203,7 @@ class ShellNode extends RefCounted:
 ## When the root node changes, trigger a note transition. Recommended only for
 ## uses of shell that covers the whole screen, such as applications.
 @export var transition_root_changes: bool = false
+@export var automatically_view_on_ready: bool = true
 
 var _current_tree: ShellNode = null
 var _shell_fragments: Array[NoteAppFragment] = []
@@ -220,7 +221,8 @@ func _ready() -> void:
 	initialize()
 	_hookup(root_node)
 	_updating = true
-	perform_layout()
+	if automatically_view_on_ready:
+		perform_layout()
 
 
 func _raised_event(event_name: StringName, event_args: Array, fragment: NoteAppFragment, node: ShellNode):
@@ -230,7 +232,7 @@ func _raised_event(event_name: StringName, event_args: Array, fragment: NoteAppF
 	evt.source_fragment = fragment
 	evt.source_node = node
 	evt.arguments = event_args
-	if node.reactions.has(event_name):
+	if node.reactions.has(event_name) and node.reactions[event_name].is_valid():
 		node.reactions[event_name].call(evt)
 	event_raised.emit(evt)
 

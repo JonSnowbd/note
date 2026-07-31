@@ -49,12 +49,14 @@ enum NoteEntrySceneType {
 @export_group("Loading Screen")
 ## This is displayed at the center of the loading screen 
 @export var loading_screen_centerpiece: PackedScene
-## If your loading screens are too fast its actually kinda bad, so you want this
-## safe guard, and to just not load scenes that are that fast, just send it instead.
-@export var loading_screen_minimum_time: float = 1.0
 ## This is flashed for a few seconds in the bottom right
 ## when note detects modified save files.
 @export var autosave_piece: PackedScene
+## If your loading screens are too fast its actually kinda bad, so you want this
+## safe guard, and to just not load scenes that are that fast, just send it instead.
+@export var loading_screen_minimum_time: float = 1.0
+## Determines the background color of the loading screen.
+@export var loading_screen_blackout_color: Color = Color(0.1,0.1,0.15,1.0)
 
 @export_group("VMU Library")
 @export_tool_button("Regenerate Library") var _regen = __regenerate_library

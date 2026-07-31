@@ -11,15 +11,13 @@ signal closed
 ## If assigned, note.focus is begun on this if in mkb mode.
 @export var auto_focus_for_mkb: Control
 
-@export var blackout_color: Color = Color(0.0,0.0,0.0,0.7)
-
 var close_action: StringName
 
 func _ready() -> void:
 	if note.controls.is_gamepad() and auto_focus_for_gamepad != null:
-		note.focus.activate(auto_focus_for_gamepad)
+		note.ui.focus.activate(auto_focus_for_gamepad)
 	if note.controls.is_mouse_and_keyboard() and auto_focus_for_mkb != null:
-		note.focus.activate(auto_focus_for_mkb)
+		note.ui.focus.activate(auto_focus_for_mkb)
 	if close_button != null:
 		close_button.pressed.connect(close_window)
 func close_window():

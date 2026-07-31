@@ -10,6 +10,8 @@ signal triggered_event(event_name: String, arguments: Array)
 ## to an update call.
 @export var attempt_to_forward_props: bool = false
 
+
+## TODO: implement focus for vmu
 @export_group("Focus Settings")
 ## If true, focus will target this with a drill-in option, for containers that
 ## need to be clicked in order to focus on their children. If false, the children

@@ -18,9 +18,9 @@ static func _output_meta_clicked(meta):
 static func print_clickable(message: String, callable: Callable):
 	var base = EditorInterface.get_base_control()
 	if base != null:
-		var p: RichTextLabel = base.find_child("Output", true, false).get_child(1).find_child("*RichTextLabel*", true, false)
-		if p != null and !p.meta_clicked.is_connected(_output_meta_clicked):
-			p.meta_clicked.connect(_output_meta_clicked)
+		var output_log: RichTextLabel = base.find_child("Output", true, false).get_child(1).find_child("*RichTextLabel*", true, false)
+		if output_log != null and !output_log.meta_clicked.is_connected(_output_meta_clicked):
+			output_log.meta_clicked.connect(_output_meta_clicked)
 	if len(_click_cache) > 2048:
 		_click_cache.clear()
 	var uid = UUID.v4()
@@ -30,7 +30,7 @@ static func print_clickable(message: String, callable: Callable):
 ## Takes time as a float, and returns a speedrun style format, `HH:MM:SS.MS`
 ## with appropriate padding/truncating to ensure its always
 ## 8 characters long. Recommended to use with a mono font.
-func seconds_to_speedrun_stamp(time: float) -> String:
+static func seconds_to_speedrun_stamp(time: float) -> String:
 	var minutes: int = int(time/60.0)
 	var seconds = fmod(time, 60.0)
 	var ms: int = int(fmod(time, 1.0) * 1000.0)
@@ -40,26 +40,26 @@ func seconds_to_speedrun_stamp(time: float) -> String:
 ## Not at all accurate enough for precise requirements, but otherwise perfect for
 ## UI animations and other visual effects that need to be free from timescale.
 ## Only accurate if a Max FPS has been set.
-func unscaled_dt() -> float:
+static func unscaled_dt() -> float:
 	return 1.0/Engine.max_fps
 ## Accurate, and constant. Perfect for use in any physics process that needs to be free from timescale.
-func unscaled_physics_dt() -> float:
+static func unscaled_physics_dt() -> float:
 	return 1.0/Engine.physics_ticks_per_second
 
 ## Smoothly move towards a value. Like a damped value lerp. Float version.
-func smooth_toward(from: float, to: float, speed: float, delta: float) -> float:
+static func smooth_toward(from: float, to: float, speed: float, delta: float) -> float:
 	return lerp(from, to, 1.0 - exp(-speed * delta))
 ## Smoothly move towards a value. Like a damped value lerp. Vector2 version.
-func smooth_toward_v2(from: Vector2, to: Vector2, speed: float, delta: float) -> Vector2:
+static func smooth_toward_v2(from: Vector2, to: Vector2, speed: float, delta: float) -> Vector2:
 	return from.lerp(to, 1.0 - exp(-speed * delta))
 ## Smoothly move towards a value. Like a damped value lerp. Vector2 version.
-func smooth_toward_v3(from: Vector3, to: Vector3, speed: float, delta: float) -> Vector3:
+static func smooth_toward_v3(from: Vector3, to: Vector3, speed: float, delta: float) -> Vector3:
 	return from.lerp(to, 1.0 - exp(-speed * delta))
 ## Smoothly move towards a value. Like a damped value lerp. Transform2D version.
-func smooth_toward_tform2(from: Transform2D, to: Transform2D, speed: float, delta: float) -> Transform2D:
+static func smooth_toward_tform2(from: Transform2D, to: Transform2D, speed: float, delta: float) -> Transform2D:
 	return from.interpolate_with(to, 1.0-exp(-speed*delta))
 ## Smoothly move towards a value. Like a damped value lerp. Transform3D version.
-func smooth_toward_tform3(from: Transform3D, to: Transform3D, speed: float, delta: float) -> Transform3D:
+static func smooth_toward_tform3(from: Transform3D, to: Transform3D, speed: float, delta: float) -> Transform3D:
 	return from.interpolate_with(to, 1.0-exp(-speed*delta))
 
 ## If a tween has been started from the same node+id, it will be stopped and removed before returning
@@ -140,13 +140,13 @@ func profiler_start() -> int:
 func profiler_end(val: int) -> String:
 	var time = float(Time.get_ticks_msec() - val)
 	if time > 1000.0:
-		return "%.2fs"%(time*1000.0)
+		return "%.4fs"%(time*1000.0)
 	else:
 		return "%.2fms"%time
 
 ## Scours an array of Node2Ds, and tracks which is closest to [code]target[/code],
 ## and returns it. Can return null.
-func get_closest_node_2d(array, target: Node2D) -> Node2D:
+static func get_closest_node_2d(array, target: Node2D) -> Node2D:
 	var closest_dist = INF
 	var closest = null
 	for i in array:
@@ -158,7 +158,7 @@ func get_closest_node_2d(array, target: Node2D) -> Node2D:
 	return closest
 ## Scours an array of Node2Ds, and tracks which is closest to [code]target[/code],
 ## and returns it. Can return null. Same as non_v version but takes a raw vector2.
-func get_closest_node_2d_v(array, global_target: Vector2) -> Node2D:
+static func get_closest_node_2d_v(array, global_target: Vector2) -> Node2D:
 	var closest_dist = INF
 	var closest = null
 	for i in array:
@@ -170,7 +170,7 @@ func get_closest_node_2d_v(array, global_target: Vector2) -> Node2D:
 	return closest
 ## Scours an array of Node3Ds, and tracks which is closest to [code]target[/code],
 ## and returns it. Can return null.
-func get_closest_node_3d(array, target: Node3D) -> Node2D:
+static func get_closest_node_3d(array, target: Node3D) -> Node2D:
 	var closest_dist = INF
 	var closest = null
 	for i in array:
@@ -183,7 +183,7 @@ func get_closest_node_3d(array, target: Node3D) -> Node2D:
 
 ## Takes a stick input vector(eg Input.get_vector) and returns the true in world direction
 ## it represents relative to the camera. Use this for character movement direction.
-func stick_to_world_dir_3d(stick: Vector2, camera: Camera3D, flattened: bool = true) -> Vector3:
+static func stick_to_world_dir_3d(stick: Vector2, camera: Camera3D, flattened: bool = true) -> Vector3:
 	var result = Vector3.ZERO
 	var magnitude = stick.length()
 	var transform = Transform3D.IDENTITY\
@@ -197,7 +197,7 @@ func stick_to_world_dir_3d(stick: Vector2, camera: Camera3D, flattened: bool = t
 
 ## Using the relative positions of 2 nodes, moves [code]mover[/code] to be 
 ## [code]distance[/code] away from the [code]stator[/code], maintaining the angle.
-func set_distance_between_nodes_2d(stator: Node2D, mover: Node2D, distance: float):
+static func set_distance_between_nodes_2d(stator: Node2D, mover: Node2D, distance: float):
 	var diff = (mover.global_position - stator.global_position).normalized()
 	mover.global_position = stator.global_position+(diff*distance)
 	

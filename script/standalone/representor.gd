@@ -6,7 +6,7 @@ class_name Representor
 ## that can display the items icon, name, and description generically.
 
 static func show_tooltip(value, representor_uid: String):
-	note.tooltip.request_string(representor_uid, value)
+	note.ui.tooltip(representor_uid, value)
 
 @abstract
 func represent(value)

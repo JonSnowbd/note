@@ -28,8 +28,9 @@ func _physics_process(delta: float) -> void:
 		hovered_node = note.focus.target
 	if old_node != hovered_node:
 		hovered_node_changed.emit(old_node, hovered_node)
+
 ## Note features a robust gamepad ui control scheme. If you disable
-## note's automatic controller detection, this is how you toggle it.
+## note's automatic controller detection, this is how you change it.
 ## Not needed if you are letting note automatically detect changes.
 func set_mode(new_mode: Type):
 	if new_mode != current_mode:

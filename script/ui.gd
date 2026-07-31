@@ -1,17 +1,29 @@
-extends MarginContainer
+extends Node
 
-@export var col_window_blackout: Color
-@export var col_window_fadeout: Color
+const DefaultWindowBlackout = Color(0.0,0.0,0.0, 0.2)
+
+const TypeNotifications = preload("uid://bd2xr6domuqt7")
+const TypeTooltipManager = preload("uid://ej2vfmjw2dkq")
+const TypeFocusGroup = preload("uid://4iwdim3cbvkf")
+const TypeControlGuide = preload("uid://b5urykf5xl2tp")
+const TypeGuidelet = preload("uid://dautr48g47wu3")
 
 @export_group("Refs")
-@export var ref_blackout: ColorRect
-@export var ref_window_container: Container
+@export var _blackout: ColorRect
+@export var _window_container: Container
+@export var _window_root: Container
+@export var _internal_tooltip: TypeTooltipManager
+@export var _internal_notifications: TypeNotifications
+@export var _internal_controlguide: TypeControlGuide
+@export var focus: TypeFocusGroup # Focus gets a direct forward due to its size.
+
 
 var current_window: NoteWindow
+var window_fade_time: float = 0.25
 
 func _ready() -> void:
-	hide()
-	ref_blackout.hide()
+	_blackout.hide()
+	_window_root.hide()
 
 func _close(close_shutters: bool = true):
 	if current_window != null:
@@ -20,20 +32,28 @@ func _close(close_shutters: bool = true):
 		var t = create_tween()
 		t.tween_property(win, "modulate:a", 0.0, 0.4)
 		t.tween_callback(win.queue_free)
-		t.tween_callback(hide)
-	if close_shutters:
+	if close_shutters and _blackout.visible:
+		var fadeout_color = _blackout.color
+		fadeout_color.a = 0.0
 		var t = create_tween()
-		t.tween_property(ref_blackout, "color", col_window_fadeout, 0.4)
+		t.tween_property(_blackout, "color", fadeout_color, fadeout_color+0.4)
+		t.tween_callback(_blackout.hide)
 
-## Takes a window scene, which could be a path, a packed scene, or an already
-## created node, to popup into the viewport, blocking input. This will return
-## the window, before it appearsd.
-func popup_window(window_scene, fade_in: float = 0.8, interrupt_focus: bool = true) -> NoteWindow:
-	show()
-	ref_blackout.show()
-	ref_blackout.color = col_window_fadeout
-	if interrupt_focus:
-		note.focus.deactivate()
+## Takes a window scene, which could be a path, a packed scene, an already
+## created node, or a VMU callback to popup into the viewport, blocking input. 
+## This will return the window, before it appears.
+func window(window_scene, blackout_color: Color = DefaultWindowBlackout) -> NoteWindow:
+	_window_root.show()
+	if blackout_color.a > 0.0:
+		var blackout_t = create_tween()
+		blackout_t.set_ease(Tween.EASE_OUT)
+		blackout_t.set_trans(Tween.TRANS_QUAD)
+		_blackout.show()
+		_blackout.color = blackout_color
+		_blackout.color.a = 0.0
+		blackout_t.tween_property(_blackout, "color", blackout_color, window_fade_time)
+	else:
+		_blackout.hide()
 	var t = note.util.tween(self, "__WINDOW")
 	if current_window != null:
 		note.warn("Popup window called while window already exists, closing current window.")
@@ -47,25 +67,45 @@ func popup_window(window_scene, fade_in: float = 0.8, interrupt_focus: bool = tr
 		if window_scene.get_parent() != null:
 			window_scene.get_parent().remove_child(window_scene)
 		new_window = window_scene
-	ref_window_container.add_child(new_window)
+	elif window_scene is Callable:
+		if window_scene.get_argument_count() == 1:
+			new_window = note.loading.fetch("uid://b674weyj11a28").instantiate() as NoteWindow
+			var shell: NoteAppShell = new_window.shell
+			shell.event_raised.connect(func(evt: NoteAppShell.Event):
+				if evt.event_name == &"close_window":
+					new_window.close_window()
+			)
+			shell.callback = window_scene
+		else:
+			push_error("App VMU Style callback should have 1 argument, of type NoteAppShell")
+	_window_container.add_child(new_window)
 	new_window.modulate.a = 0.0
-	t.tween_property(ref_blackout, "color", new_window.blackout_color, fade_in*0.5)
-	t.parallel().tween_property(new_window, "modulate:a", 1.0, fade_in*0.5)
+	t.parallel().tween_property(new_window, "modulate:a", 1.0, window_fade_time)
 	current_window = new_window
 	new_window.closed.connect(_close)
 	return new_window
 
-## Same as popup_window but instead takes a callback in the form of [code]func(shell: NoteAppShell)[/code]
-## and uses that to populate a VM-U shell in the window. Extremely convenient for quick GUI's that need
-## to be highly reactive and distinct. [br][br]Raise an event named &"close_window" to close from the VM-U Shell
-func popup_window_shell(shell_cb: Callable, background: Color = Color(0.0, 0.0, 0.0, 0.2), fade_in: float = 0.8, interrupt_focus: bool = true) -> NoteWindow:
-	const shell_prefab = preload("uid://b674weyj11a28")
-	var window: NoteWindow = shell_prefab.instantiate()
-	var shell: NoteAppShell = window.shell
-	shell.event_raised.connect(func(evt: NoteAppShell.Event):
-		if evt.event_name == &"close_window":
-			window.close_window()
-	)
-	window.blackout_color = background
-	shell.callback = shell_cb
-	return popup_window(window, fade_in, interrupt_focus)
+## Summons a tooltip. [b]Call this per frame[/b].[br][br]
+## Tooltip scene can be a string path to load, a callable to use App VMU style creation, a packed scene,
+## or a node(that will be freed when the tooltip closes).[br][br]Data will be passed to the instantiated node
+## if it has a [code]tooltip(data)[/code] method. Priority can be used to overwrite active tooltip calls.
+func tooltip(tooltip_scene, data=null, priority:int=0):
+	_internal_tooltip.request(tooltip_scene, data, priority)
+
+## Gets the current input texture map being used by the control guide.
+## You can use this to get texture icons for your action guides.
+func control_guide_icons() -> InputTextureMap:
+	return _internal_controlguide.input_icon_theme
+## Clears the control guide, so you can add the updated guidelets with _add.
+## Calling begin but never adding a guidelet will leave the control guide hidden.
+## [br][br]My personal recommendation is to focus on using the control guide primarily
+## through the Phase system.
+func control_guide_begin():
+	_internal_controlguide.clear_controls()
+## Clears the control guide, so you can add the updated guidelets with _add.
+## Calling begin but never adding a guidelet will leave the control guide hidden.
+func control_guide_add(action_name: String, icons: Array[Texture2D] = []) -> TypeGuidelet:
+	var guidelet = _internal_controlguide.make_manual(action_name)
+	for i in icons:
+		guidelet.add_icon_manual(i)
+	return guidelet

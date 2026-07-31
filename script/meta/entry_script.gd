@@ -55,15 +55,7 @@ func load_save(profile_name: String):
 
 ## Finishes the load, moves onto the user's defined entry point.
 func post_load_action(skip_animation: bool = false):
-	if note.loading_screen.is_cached(note.settings.initial_scene):
-		note.level.change_to(note.settings.initial_scene)
-		return
-	if skip_animation:
-		note.loading_screen.show()
-		await get_tree().process_frame
-		note.level.change_to(note.settings.initial_scene, true)
-	else:
-		note.level.change_to(note.settings.initial_scene, true)
+	note.goto(note.settings.initial_scene)
 
 func end_splash_screen():
 	note.transition.trigger()
@@ -130,9 +122,9 @@ func _ready() -> void:
 		if !save_exists("note_fast_boot"):
 			create_save("note_fast_boot")
 		load_save("note_fast_boot")
-		note.level.change_to(note.settings.initial_scene, false, false)
+		note.goto_fast(note.settings.initial_scene)
 		return
-	note.loading_screen.shadow_load(note.settings.initial_scene)
+	note.loading.prewarm(note.settings.initial_scene)
 	instant_load_check()
 	countdown = splash_screen_duration
 	var t = create_tween()

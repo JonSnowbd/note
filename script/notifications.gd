@@ -18,6 +18,7 @@ var _timers: Dictionary[Control,float]
 func _ready() -> void:
 	child_entered_tree.connect(func(_c): _update_position())
 	child_exiting_tree.connect(func(_c): _update_position())
+	hide()
 
 func _prep_control(control: Control):
 	control.offset_transform_enabled = true
@@ -49,6 +50,7 @@ func send_basic(text: String, icon: Texture2D = null, duration: float = 2.0, ico
 	_timers[panel] = duration
 	popup_audio.play()
 	add_child(panel)
+	show()
 func send_representor(representor: String, data = null, duration: float = 2.0) -> Representor:
 	var prefab = note.loading_screen.force_fetch(representor) as PackedScene
 	if prefab != null:

@@ -3,6 +3,7 @@ class_name FocusDynamicEntrance
 
 const MetaTag = "__NOTE_FOCUS_DYNAMIC_ENTRANCE_METATAG"
 
+@export var list: Array[Control]
 @export var excludes: Array[Control]
 
 func _enter_tree() -> void:

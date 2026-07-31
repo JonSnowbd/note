@@ -38,9 +38,20 @@ func set_padding(left_px: float, right_px: float, top_px: float, bottom_px: floa
 	add_theme_constant_override("margin_bottom", bottom_px)
 	grow_horizontal = h_direction
 	grow_vertical = v_direction
-func _set_tooltip_package(prefab: PackedScene, data, priority: int):
+func _set_tooltip_package(prefab, data, priority: int):
+	var packed_scene: PackedScene = null
+	if prefab is PackedScene:
+		packed_scene = prefab
+	elif prefab is String:
+		packed_scene = note.loading.fetch(prefab)
+	elif prefab is Control:
+		packed_scene = null
+		_current_item = prefab
+		if _current_item.get_parent() != null:
+			_current_item.get_parent().remove_child(_current_item)
 	_clear_tooltip_package()
-	_current_item = prefab.instantiate()
+	if packed_scene != null:
+		_current_item = packed_scene.instantiate()
 	tip_container.add_child(_current_item)
 	if _current_item is Representor:
 		_current_item.represent(data)
@@ -62,28 +73,21 @@ func _clear_tooltip_package():
 	_current_item = null
 	_reset_pos()
 
-func request_simple(title:String = "", body:String = "", priority: int = 0):
-	request_packed(preload("res://addons/note/prefab/default_tooltips/simple_tooltip.tscn"), [title, body], priority)
-
-## Takes in a path or UID to load, and instantiates it as the tooltip. Data is passed in to a method
-## called "tooltip" if it exists.
-func request_string(prefabPath:String, data = null , priority: int = 0):
-	request_packed(note.loading_screen.force_fetch(prefabPath), data, priority)
-
-## Takes in an already loaded packed scene, and instantiates it as the tooltip. Data is passed in to a method
-## called "tooltip" if it exists.
-func request_packed(prefab:PackedScene, data = null, priority: int = 0):
+func request(tooltip_package, data = null, priority: int = 0):
+	if tooltip_package is Callable:
+		data = tooltip_package
+		tooltip_package = preload("uid://ckwjl0ougs0m6")
 	# If the data is potentially a refresh:
 	if _active:
 		# If the data is new:
-		if prefab != _current_package or data != _current_data:
+		if tooltip_package != _current_package or data != _current_data:
 			if priority >= _current_priority:
-				_set_tooltip_package(prefab, data, priority)
+				_set_tooltip_package(tooltip_package, data, priority)
 		# If the data is the same:
 		else:
 			_timer = 0.0
 	else:
-		_set_tooltip_package(prefab, data, priority)
+		_set_tooltip_package(tooltip_package, data, priority)
 
 func _process(delta: float) -> void:
 	if _active:

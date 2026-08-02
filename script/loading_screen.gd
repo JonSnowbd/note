@@ -136,6 +136,8 @@ signal loading_update(completion: float)
 
 var current_load_session: LoadingSession
 
+var center_piece_instance: Node
+
 ## Path : Status
 var statuses: PackedStringArray = []
 ## Path : Status
@@ -222,6 +224,7 @@ func _process_path(path: String) -> float:
 func _ready() -> void:
 	if note.settings.loading_screen_centerpiece != null:
 		var new_piece = note.settings.loading_screen_centerpiece.instantiate()
+		center_piece_instance = new_piece
 		centerpiece_container.add_child(new_piece)
 	loading_screen_blackout.color = note.settings.loading_screen_blackout_color
 func _process(delta: float) -> void:
@@ -250,3 +253,5 @@ func _process(delta: float) -> void:
 				note.transition.trigger()
 				current_load_session._finish()
 				current_load_session = null
+		else:
+			current_load_session = null

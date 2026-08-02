@@ -13,7 +13,7 @@ var _is_current_phase_instant: bool = false
 var loads_remaining: PackedStringArray = []
 
 func _register(path: String):
-	var packed_scene = note.loading_screen.force_fetch(path)
+	var packed_scene = note.loading.fetch(path)
 	var instance = packed_scene.instantiate()
 	lookup[instance.name] = packed_scene
 	lookup[packed_scene] = packed_scene
@@ -34,7 +34,7 @@ func _ready() -> void:
 		for phase in note.settings.phases:
 			_register(phase)
 		return
-	note.loading_screen.loading_shadow_file_finished.connect(func(path):
+	note.loading.prewarm_finished.connect(func(path):
 		if loads_remaining.is_empty(): return
 		if loads_remaining.has(path):
 			_register(path)
@@ -42,7 +42,7 @@ func _ready() -> void:
 	)
 	for phase in note.settings.phases:
 		loads_remaining.append(phase)
-		note.loading_screen.shadow_load(phase)
+		note.loading.prewarm(phase)
 
 ## Just incase the user tries to load a phase REALLY early,
 ## just force the whole load.

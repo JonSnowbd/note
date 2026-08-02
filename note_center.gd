@@ -123,10 +123,10 @@ func goto_fast_swap(level) -> Node:
 ## If script is a class name, it is instanced and ran.
 ## If script is a direct reference to the script of type GDScript,
 ## it is instanced and ran.
-func execute(script, parameters = null):
+func execute(script, parameters = []):
 	var tree = get_tree()
 	if script is String:
-		var real_script = load(script) as GDScript
+		var real_script = loading.fetch(script) as GDScript
 		var game_script = real_script.new() as NoteGameScript
 		game_script.tree = tree
 		game_script.execute(parameters)
@@ -136,14 +136,20 @@ func execute(script, parameters = null):
 		game_script.tree = tree
 		game_script.execute(parameters)
 		return
-	var game_script = script.new() as NoteGameScript
-	game_script.tree = tree
-	game_script.execute(parameters)
+	if script is NoteGameScript:
+		script.tree = tree
+		script.execute(parameters)
 
 ## Returns true if Note is using input, or if input should be
 ## ignored. Providing a context allows for note to return false
 ## if called from the object blocking input.
 func is_input_busy(for_context = null) -> bool:
+	# Input is busy for everything but the center piece minigame during
+	# loading
+	if loading.current_load_session != null:
+		if for_context != loading.center_piece_instance:
+			return true
+	# When a window is open, input is busy for everything but the window.
 	if ui.current_window != null:
 		return for_context != ui.current_window
 	return false

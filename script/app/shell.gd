@@ -268,7 +268,7 @@ func subview(tree: ShellNode, new_root: Control, view_function: Callable) -> She
 	return new_tree
 
 func clean_subview(tree: ShellNode):
-	pass
+	tree.destroy()
 
 
 func layout(layout_data):

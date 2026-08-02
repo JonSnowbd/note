@@ -5,5 +5,4 @@ class_name NotePreloader
 
 func _ready() -> void:
 	for f in files:
-		if !note.loading_screen.is_cached(f):
-			note.loading_screen.shadow_load(f)
+		note.loading.prewarm(f)

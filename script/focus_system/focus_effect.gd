@@ -5,7 +5,7 @@ class_name FocusEffect
 const ManagerType = preload("uid://4iwdim3cbvkf")
 const MetaTag = "__note_focus_effect_exists"
 
-@onready var manager: ManagerType = get_tree().root.get_node("note").focus
+@onready var manager: ManagerType = get_tree().root.get_node("note").ui.focus
 var has_long_press: bool = false
 
 func _enter_tree() -> void:

@@ -5,9 +5,11 @@ extends NoteAppFragment
 var roots: Dictionary[StringName, Container] = {}
 var view_fns: Dictionary[StringName, Callable] = {}
 var trees: Dictionary[StringName, NoteAppShell.ShellNode]
+var first_time_trip: bool = false
 var default_tab: int = 0
 
 func fragment_init(shell: NoteAppShell):
+	first_time_trip = false
 	root_control.tab_changed.connect(func(tab_index):
 		var target = roots.find_key(root_control.get_tab_control(tab_index))
 		raise_event(&"tab_changed", [tab_index, target])
@@ -16,6 +18,7 @@ func fragment_init(shell: NoteAppShell):
 func fragment_update(shell: NoteAppShell, props: Dictionary[StringName,Variant]):
 	var callables: Dictionary[StringName, Callable] = {}
 	callables.assign(props.get(&"tabs", {}))
+	default_tab = props.get(&"default_tab", 0)
 	
 	for k in view_fns:
 		if !callables.has(k):
@@ -38,3 +41,6 @@ func fragment_update(shell: NoteAppShell, props: Dictionary[StringName,Variant])
 func fragment_post_update(shell: NoteAppShell, self_node: NoteAppShell.ShellNode):
 	for k in view_fns.keys():
 		trees[k] = shell.subview(trees.get(k, null), roots[k], view_fns[k])
+	if !first_time_trip:
+		first_time_trip = true
+		root_control.current_tab = default_tab

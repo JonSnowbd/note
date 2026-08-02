@@ -21,6 +21,7 @@ const TypeGuidelet = preload("uid://dautr48g47wu3")
 var current_window: NoteWindow
 var window_fade_time: float = 0.25
 
+
 func _ready() -> void:
 	_blackout.hide()
 	_window_root.hide()
@@ -28,22 +29,24 @@ func _ready() -> void:
 func _close(close_shutters: bool = true):
 	if current_window != null:
 		var win = current_window
-		current_window = null
-		var t = create_tween()
+		var t = win.create_tween()
 		t.tween_property(win, "modulate:a", 0.0, 0.4)
 		t.tween_callback(win.queue_free)
-	if close_shutters and _blackout.visible:
+		current_window = null
+	if close_shutters:
 		var fadeout_color = _blackout.color
 		fadeout_color.a = 0.0
 		var t = create_tween()
-		t.tween_property(_blackout, "color", fadeout_color, fadeout_color+0.4)
+		t.tween_property(_blackout, "color", fadeout_color, window_fade_time+0.4)
 		t.tween_callback(_blackout.hide)
+		t.tween_callback(_window_root.hide)
 
 ## Takes a window scene, which could be a path, a packed scene, an already
 ## created node, or a VMU callback to popup into the viewport, blocking input. 
 ## This will return the window, before it appears.
 func window(window_scene, blackout_color: Color = DefaultWindowBlackout) -> NoteWindow:
 	_window_root.show()
+	_window_container.show()
 	if blackout_color.a > 0.0:
 		var blackout_t = create_tween()
 		blackout_t.set_ease(Tween.EASE_OUT)
@@ -54,13 +57,12 @@ func window(window_scene, blackout_color: Color = DefaultWindowBlackout) -> Note
 		blackout_t.tween_property(_blackout, "color", blackout_color, window_fade_time)
 	else:
 		_blackout.hide()
-	var t = note.util.tween(self, "__WINDOW")
 	if current_window != null:
 		note.warn("Popup window called while window already exists, closing current window.")
 		_close(false)
 	var new_window: NoteWindow = null
 	if window_scene is String:
-		new_window = note.loading_screen.force_fetch(window_scene).instantiate()
+		new_window = note.loading.fetch(window_scene).instantiate() as NoteWindow
 	elif window_scene is PackedScene:
 		new_window = window_scene.instantiate()
 	elif window_scene is NoteWindow:
@@ -79,10 +81,13 @@ func window(window_scene, blackout_color: Color = DefaultWindowBlackout) -> Note
 		else:
 			push_error("App VMU Style callback should have 1 argument, of type NoteAppShell")
 	_window_container.add_child(new_window)
-	new_window.modulate.a = 0.0
-	t.parallel().tween_property(new_window, "modulate:a", 1.0, window_fade_time)
 	current_window = new_window
 	new_window.closed.connect(_close)
+	
+	var t = _window_container.create_tween()
+	_window_container.modulate.a = 0.0
+	t.tween_property(_window_container, "modulate:a", 1.0, 0.4)
+	
 	return new_window
 
 ## Summons a tooltip. [b]Call this per frame[/b].[br][br]

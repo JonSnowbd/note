@@ -25,6 +25,7 @@
 [ext_resource type="Script" uid="uid://b53sh8bwtjj8g" path="res://addons/note/script/transition_panel.gd" id="24_41llv"]
 
 [node name="NoteCenter" type="Node2D" unique_id=2080868149 node_paths=PackedStringArray("controls", "loading", "transition", "phase", "util", "ui")]
+process_mode = 3
 script = ExtResource("1_gtcng")
 controls = NodePath("Controls")
 loading = NodePath("LoadingManager")
@@ -64,6 +65,7 @@ layer = 64
 script = ExtResource("7_2rlwf")
 
 [node name="NoteUISpace" type="CanvasLayer" parent="." unique_id=1102055093]
+process_mode = 3
 layer = 120
 
 [node name="Focus" type="Control" parent="NoteUISpace" unique_id=2029769993 node_paths=PackedStringArray("sfx_move", "sfx_activate", "sfx_charge", "sfx_long_press", "sfx_up", "sfx_down", "sfx_fail")]
@@ -191,7 +193,6 @@ mouse_filter = 2
 
 [node name="WindowNode" type="MarginContainer" parent="NoteUISpace" unique_id=427159999]
 process_mode = 3
-visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -219,6 +220,7 @@ theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 
 [node name="LoadingVisual" type="MarginContainer" parent="NoteUISpace/LoadingScreen" unique_id=851615815]
+visible = false
 layout_mode = 2
 
 [node name="Blackout" type="ColorRect" parent="NoteUISpace/LoadingScreen/LoadingVisual" unique_id=895536869]

@@ -24,8 +24,8 @@ func _physics_process(delta: float) -> void:
 	var old_node = hovered_node
 	if is_mouse_and_keyboard():
 		hovered_node = get_viewport().gui_get_hovered_control()
-	elif is_gamepad() and note.focus.target != null and is_instance_valid(note.focus.target):
-		hovered_node = note.focus.target
+	elif is_gamepad() and note.ui.focus.target != null and is_instance_valid(note.ui.focus.target):
+		hovered_node = note.ui.focus.target
 	if old_node != hovered_node:
 		hovered_node_changed.emit(old_node, hovered_node)
 

@@ -41,6 +41,12 @@ func _close(close_shutters: bool = true):
 		t.tween_callback(_blackout.hide)
 		t.tween_callback(_window_root.hide)
 
+func send_notification(scene: String, duration: float = 2.0):
+	_internal_notifications.send_advanced(scene, duration)
+
+func send_notification_basic(message: String, icon: Texture2D = null, duration: float = 2.0):
+	_internal_notifications.send_basic(message, icon, duration)
+
 ## Takes a window scene, which could be a path, a packed scene, an already
 ## created node, or a VMU callback to popup into the viewport, blocking input. 
 ## This will return the window, before it appears.

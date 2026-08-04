@@ -68,55 +68,6 @@ script = ExtResource("7_2rlwf")
 process_mode = 3
 layer = 120
 
-[node name="Focus" type="Control" parent="NoteUISpace" unique_id=2029769993 node_paths=PackedStringArray("sfx_move", "sfx_activate", "sfx_charge", "sfx_long_press", "sfx_up", "sfx_down", "sfx_fail")]
-process_mode = 3
-visible = false
-layout_mode = 3
-anchors_preset = 0
-mouse_filter = 2
-script = ExtResource("8_6ht7x")
-regular_box = ExtResource("9_qb4ap")
-sfx_pitch_variance = 0.075
-sfx_move = NodePath("Move")
-sfx_activate = NodePath("Activate")
-sfx_charge = NodePath("Charge")
-sfx_long_press = NodePath("LongPress")
-sfx_up = NodePath("Up")
-sfx_down = NodePath("Down")
-sfx_fail = NodePath("Fail")
-
-[node name="Move" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=1254488439]
-stream = ExtResource("10_sbkf1")
-volume_db = -25.0
-
-[node name="Activate" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=1803988019]
-stream = ExtResource("11_tj48b")
-volume_db = -23.0
-
-[node name="Up" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=391614181]
-stream = ExtResource("12_b6w6i")
-volume_db = -23.0
-
-[node name="Down" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=1862456944]
-stream = ExtResource("13_20te4")
-volume_db = -23.0
-
-[node name="Charge" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=1862946961]
-stream = ExtResource("14_48wpp")
-volume_db = -23.0
-
-[node name="Press" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=746006432]
-stream = ExtResource("15_x22r1")
-volume_db = -23.0
-
-[node name="Fail" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=683985785]
-stream = ExtResource("16_0ldse")
-volume_db = -25.0
-
-[node name="LongPress" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=722230450]
-stream = ExtResource("17_5spxk")
-volume_db = -23.0
-
 [node name="Notifications" type="MarginContainer" parent="NoteUISpace" unique_id=1709384188 node_paths=PackedStringArray("popup_audio")]
 process_mode = 3
 visible = false
@@ -205,6 +156,55 @@ color = Color(0.03, 0.03, 0.03, 0.57254905)
 
 [node name="WindowContainer" type="CenterContainer" parent="NoteUISpace/WindowNode" unique_id=647313506]
 layout_mode = 2
+
+[node name="Focus" type="Control" parent="NoteUISpace" unique_id=2029769993 node_paths=PackedStringArray("sfx_move", "sfx_activate", "sfx_charge", "sfx_long_press", "sfx_up", "sfx_down", "sfx_fail")]
+process_mode = 3
+visible = false
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("8_6ht7x")
+regular_box = ExtResource("9_qb4ap")
+sfx_pitch_variance = 0.075
+sfx_move = NodePath("Move")
+sfx_activate = NodePath("Activate")
+sfx_charge = NodePath("Charge")
+sfx_long_press = NodePath("LongPress")
+sfx_up = NodePath("Up")
+sfx_down = NodePath("Down")
+sfx_fail = NodePath("Fail")
+
+[node name="Move" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=1254488439]
+stream = ExtResource("10_sbkf1")
+volume_db = -25.0
+
+[node name="Activate" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=1803988019]
+stream = ExtResource("11_tj48b")
+volume_db = -23.0
+
+[node name="Up" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=391614181]
+stream = ExtResource("12_b6w6i")
+volume_db = -23.0
+
+[node name="Down" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=1862456944]
+stream = ExtResource("13_20te4")
+volume_db = -23.0
+
+[node name="Charge" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=1862946961]
+stream = ExtResource("14_48wpp")
+volume_db = -23.0
+
+[node name="Press" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=746006432]
+stream = ExtResource("15_x22r1")
+volume_db = -23.0
+
+[node name="Fail" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=683985785]
+stream = ExtResource("16_0ldse")
+volume_db = -25.0
+
+[node name="LongPress" type="AudioStreamPlayer" parent="NoteUISpace/Focus" unique_id=722230450]
+stream = ExtResource("17_5spxk")
+volume_db = -23.0
 
 [node name="LoadingScreen" type="MarginContainer" parent="NoteUISpace" unique_id=1278017651]
 process_mode = 3

@@ -51,6 +51,22 @@ func send_basic(text: String, icon: Texture2D = null, duration: float = 2.0, ico
 	popup_audio.play()
 	add_child(panel)
 	show()
+func send_advanced(scene, duration: float = 2.0):
+	var panel = PanelContainer.new()
+	if scene is PackedScene:
+		panel.add_child(scene.instantiate())
+	elif scene is String:
+		panel.add_child(note.loading.fetch(scene).instantiate())
+	elif scene is Control:
+		if scene.get_parent() != null:
+			scene.get_parent().remove_child(scene)
+		panel.add_child(scene)
+	_prep_control(panel)
+	
+	_timers[panel] = duration
+	popup_audio.play()
+	add_child(panel)
+	show()
 func send_representor(representor: String, data = null, duration: float = 2.0) -> Representor:
 	var prefab = note.loading_screen.force_fetch(representor) as PackedScene
 	if prefab != null:

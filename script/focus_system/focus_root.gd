@@ -69,6 +69,7 @@ func _input(event: InputEvent) -> void:
 	if locked: return
 	if automatic_gamepad_id < 0:
 		return
+	if target == null or !active: return
 	if event is InputEventJoypadButton:
 		if event.device != automatic_gamepad_id: return
 		if event.button_index == JOY_BUTTON_DPAD_UP and event.pressed:

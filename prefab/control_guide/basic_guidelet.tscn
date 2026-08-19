@@ -1,10 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://b8vpfmxrxetcf"]
+[gd_scene format=3 uid="uid://b8vpfmxrxetcf"]
 
 [ext_resource type="Script" uid="uid://dautr48g47wu3" path="res://addons/note/script/control_guide/control_guidelet.gd" id="1_2hiqv"]
 
 [node name="BasicGuidelet" type="PanelContainer" unique_id=1054365333 node_paths=PackedStringArray("icon_container", "label")]
-custom_minimum_size = Vector2(165, 0)
-offset_right = 200.0
+custom_minimum_size = Vector2(200, 0)
+offset_right = 190.0
+offset_bottom = 27.0
 script = ExtResource("1_2hiqv")
 icon_container = NodePath("MarginContainer/Layout/Icons")
 label = NodePath("MarginContainer/Layout/Label")

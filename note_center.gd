@@ -100,19 +100,19 @@ func time(header: String = ""):
 		time_array.push_back(util.profiler_start())
 
 ## Shortcut for quick level in the loading namespace.
-func goto(level):
-	loading.quick_level(level)
+func goto(level, duration: float = 1.0):
+	loading.quick_level(level, duration)
 ## Shortcut for quick level swap in the loading namespace.
-func goto_swap(level) -> Node:
+func goto_swap(level, duration: float = 1.0) -> Node:
 	return loading.quick_level_swap(level)
 ## Shortcut for quick level, with a skipped loading screen(warning: forced sync loads).
-func goto_fast(level):
-	var session = loading.begin_loading_screen()
+func goto_fast(level, duration: float = 1.0):
+	var session = loading.begin_loading_screen(duration)
 	session.skip_loading = true
 	session.level(level)
 ## Shortcut for quick level swap, with a skipped loading screen(warning: forced sync loads).
-func goto_fast_swap(level) -> Node:
-	var session = loading.begin_loading_screen()
+func goto_fast_swap(level, duration: float = 1.0) -> Node:
+	var session = loading.begin_loading_screen(duration)
 	session.skip_loading = true
 	return session.level_swap(level)
 

@@ -21,7 +21,7 @@
 [ext_resource type="Script" uid="uid://b5urykf5xl2tp" path="res://addons/note/script/control_guide/control_guide_manager.gd" id="20_inqon"]
 [ext_resource type="Resource" uid="uid://dvj8sljw217df" path="res://addons/note/resource/default_filled_texture_map.tres" id="21_umuds"]
 [ext_resource type="PackedScene" uid="uid://b8vpfmxrxetcf" path="res://addons/note/prefab/control_guide/basic_guidelet.tscn" id="22_doc3j"]
-[ext_resource type="Material" uid="uid://dk5oqc43jlalx" path="res://addons/note/material/perlin_transition.tres" id="23_0c46g"]
+[ext_resource type="Material" uid="uid://kflbxvtevmj2" path="res://addons/note/material/lcd_square_transition.tres" id="22_e7lii"]
 [ext_resource type="Script" uid="uid://b53sh8bwtjj8g" path="res://addons/note/script/transition_panel.gd" id="24_41llv"]
 
 [node name="NoteCenter" type="Node2D" unique_id=2080868149 node_paths=PackedStringArray("controls", "loading", "transition", "phase", "util", "ui")]
@@ -79,6 +79,7 @@ anchor_bottom = 0.5
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+mouse_filter = 2
 script = ExtResource("18_b57bt")
 popup_audio = NodePath("Ping")
 
@@ -257,7 +258,7 @@ theme_override_constants/margin_bottom = 30
 
 [node name="Transition" type="TextureRect" parent="NoteUISpace" unique_id=1380330631]
 visible = false
-material = ExtResource("23_0c46g")
+material = ExtResource("22_e7lii")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

@@ -130,6 +130,16 @@ func read_object(resource_name:String) -> Dictionary:
 	file.close()
 	return data
 
+## Same as read object, but will check if it exists first. If it does not exist,
+## a blank dictionary is returned instead.
+func try_read_object(resource_name:String) -> Dictionary:
+	if !exists(resource_name):
+		return {}
+	var file = FileAccess.open(current_path+resource_name+".json", FileAccess.READ)
+	var data = JSON.to_native(JSON.parse_string(file.get_as_text()))
+	file.close()
+	return data
+
 ## Reads a file as a string. Include the file type.
 func read_file(file_name: String) -> String:
 	var file = FileAccess.open(current_path+file_name, FileAccess.READ)

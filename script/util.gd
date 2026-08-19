@@ -46,6 +46,9 @@ static func unscaled_dt() -> float:
 static func unscaled_physics_dt() -> float:
 	return 1.0/Engine.physics_ticks_per_second
 
+## Smoothly move towards a value. Like a damped value lerp. Radian angle version.
+static func smooth_toward_angle(from: float, to: float, speed: float, delta: float) -> float:
+	return lerp_angle(from, to, 1.0 - exp(-speed * delta))
 ## Smoothly move towards a value. Like a damped value lerp. Float version.
 static func smooth_toward(from: float, to: float, speed: float, delta: float) -> float:
 	return lerp(from, to, 1.0 - exp(-speed * delta))
@@ -81,6 +84,7 @@ func tween(source: Node, id: String = "default", smooth: bool = true, finish_pre
 			if finish_previous:
 				prev.pause()
 				while prev.custom_step(1.0): continue
+				prev.stop()
 			else:
 				prev.stop()
 	_tween_cache[true_id] = t

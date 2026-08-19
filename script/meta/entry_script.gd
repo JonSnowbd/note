@@ -122,7 +122,7 @@ func _ready() -> void:
 		if !save_exists("note_fast_boot"):
 			create_save("note_fast_boot")
 		load_save("note_fast_boot")
-		note.goto_fast(note.settings.initial_scene)
+		note.goto_fast(note.settings.initial_scene, -1.0)
 		return
 	note.loading.prewarm(note.settings.initial_scene)
 	instant_load_check()

@@ -10,7 +10,7 @@ var editor_plugin
 var main_panel_inst: Control
 
 func _enable_plugin() -> void:
-	add_autoload_singleton("note", "uid://b6rrb216vfjay")
+	add_autoload_singleton("note", "note_center.tscn")
 
 func _disable_plugin() -> void:
 	remove_autoload_singleton("note")

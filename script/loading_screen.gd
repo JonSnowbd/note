@@ -2,6 +2,7 @@ extends Node
 
 class LoadingSession extends RefCounted:
 	var tree: SceneTree
+	var transition_duration: float = 1.0
 	var time_spent: float = 0.0
 	var items_to_load: Array[String] = []
 	var items_to_warm: Array[String] = []
@@ -119,7 +120,6 @@ class LoadingSession extends RefCounted:
 			scene = destination
 			if scene.get_parent() != null:
 				scene.get_parent().remove_child(scene)
-		
 		tree.change_scene_to_node.call_deferred(scene)
 
 ## The loading screens root, which contains the visuals, and the autosave piece.
@@ -150,18 +150,24 @@ var results: Dictionary[String,Variant] = {}
 ## the relevant assets, the loading screen will be skipped.
 ## [br][br] IMPORTANT! The current scene is unloaded after you finish
 ## configuring the load.
-func begin_loading_screen() -> LoadingSession:
-	note.transition.trigger()
+func begin_loading_screen(duration: float = 1.0) -> LoadingSession:
+	if duration > 0.0:
+		note.transition.trigger(duration)
 	loading_screen_visual_root.show()
 	var session = LoadingSession.new()
+	session.transition_duration = duration
 	session.tree = get_tree()
 	current_load_session = session
 	return session
 
-func quick_level(level_scene) -> void:
-	begin_loading_screen().level(level_scene)
-func quick_level_swap(level_scene) -> Node:
-	return begin_loading_screen().level_swap(level_scene)
+## Shortcut to starting just a level load rather than including asset loading.
+func quick_level(level_scene, duration: float = 1.0) -> void:
+	begin_loading_screen(duration).level(level_scene)
+## Shortcut to starting just a level load rather than including asset loading, but returns the old scene.
+func quick_level_swap(level_scene, duration: float = 1.0) -> Node:
+	return begin_loading_screen(duration).level_swap(level_scene)
+
+## Returns true if there is an active loading session happening.
 func is_loading() -> bool:
 	return current_load_session != null
 ## If there are too many loaded files for your liking you can clear the loaded cache.
@@ -250,7 +256,7 @@ func _process(delta: float) -> void:
 		current_load_session.time_spent += delta
 		if current_load_session.running:
 			if current_load_session._is_finished(delta):
-				note.transition.trigger()
+				note.transition.trigger(current_load_session.transition_duration)
 				current_load_session._finish()
 				current_load_session = null
 		else:

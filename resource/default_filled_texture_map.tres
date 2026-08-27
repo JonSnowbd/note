@@ -134,7 +134,6 @@
 [ext_resource type="Texture2D" uid="uid://cftnsv73dwmuo" path="res://addons/note/texture/xbox/xbox_stick_l_vertical.png" id="122_h0sbo"]
 [ext_resource type="Texture2D" uid="uid://dvjyjjeshrdak" path="res://addons/note/texture/xbox/xbox_stick_r_vertical.png" id="123_fv00a"]
 
-
 [resource]
 script = ExtResource("1_1yek8")
 key_1 = ExtResource("2_yyyu0")

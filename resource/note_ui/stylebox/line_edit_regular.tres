@@ -1,4 +1,4 @@
-[gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://dm7e5cjxksw2t"]
+[gd_resource type="StyleBoxTexture" format=3 uid="uid://dm7e5cjxksw2t"]
 
 [ext_resource type="Texture2D" uid="uid://b3yjflsro8n2b" path="res://addons/note/texture/note_ui_sheet.png" id="1_1ft7d"]
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://b0aww2yb021su"]
+[gd_scene format=3 uid="uid://b0aww2yb021su"]
 
 [ext_resource type="Script" uid="uid://pufbtr67lcto" path="res://addons/note/prefab/save_pill.gd" id="1_bta0g"]
 

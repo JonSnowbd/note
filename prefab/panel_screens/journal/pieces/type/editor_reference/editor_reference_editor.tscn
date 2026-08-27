@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://fbcnqfoikgkv"]
+[gd_scene format=3 uid="uid://fbcnqfoikgkv"]
 
 [ext_resource type="Script" uid="uid://cm8twmb7g0jjb" path="res://addons/note/prefab/panel_screens/journal/pieces/type/editor_reference/editor_reference_editor.gd" id="1_cvgfr"]
 

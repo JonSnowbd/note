@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://c52vtg71sbmwg"]
+[gd_scene format=3 uid="uid://c52vtg71sbmwg"]
 
 [ext_resource type="Script" uid="uid://cxj8y7idv21t" path="res://addons/note/prefab/panel_screens/journal/widget/journal_pick_up.gd" id="1_de2do"]
 

@@ -17,6 +17,7 @@ dest_files=["res://.godot/imported/keyboard_escape.png-30defea0ea8f9e39cb90994f6
 
 compress/mode=0
 compress/high_quality=false
+compress/high_quality_mode=0
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

@@ -17,6 +17,7 @@ dest_files=["res://.godot/imported/keyboard_tab.png-920b1a6fb90ade626a3f7460dc20
 
 compress/mode=0
 compress/high_quality=false
+compress/high_quality_mode=0
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

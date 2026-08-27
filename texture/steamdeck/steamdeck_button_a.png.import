@@ -17,6 +17,7 @@ dest_files=["res://.godot/imported/steamdeck_button_a.png-ae8d5b11b62b9112f7f53e
 
 compress/mode=0
 compress/high_quality=false
+compress/high_quality_mode=0
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

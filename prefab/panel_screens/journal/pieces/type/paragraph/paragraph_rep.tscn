@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://df36fneqf4q0b"]
+[gd_scene format=3 uid="uid://df36fneqf4q0b"]
 
 [ext_resource type="Script" uid="uid://c3fvkw7fv4q7l" path="res://addons/note/prefab/panel_screens/journal/pieces/type/paragraph/paragraph_rep.gd" id="1_8s7ok"]
 

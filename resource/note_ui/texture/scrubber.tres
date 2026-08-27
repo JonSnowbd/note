@@ -1,4 +1,4 @@
-[gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://bcwvhf08h833p"]
+[gd_resource type="AtlasTexture" format=3 uid="uid://bcwvhf08h833p"]
 
 [ext_resource type="Texture2D" uid="uid://b3yjflsro8n2b" path="res://addons/note/texture/note_ui_sheet.png" id="1_ijv8q"]
 

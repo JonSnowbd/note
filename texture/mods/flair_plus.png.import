@@ -17,6 +17,7 @@ dest_files=["res://.godot/imported/flair_plus.png-032414f3e82616d6ed01850970ef6d
 
 compress/mode=0
 compress/high_quality=false
+compress/high_quality_mode=0
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

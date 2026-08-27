@@ -17,6 +17,7 @@ dest_files=["res://.godot/imported/keyboard_alt.png-49e9987559b58db9d026d343ae72
 
 compress/mode=0
 compress/high_quality=false
+compress/high_quality_mode=0
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

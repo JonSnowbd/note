@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://yfjhr0jln6dp"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://yfjhr0jln6dp"]
 
 [ext_resource type="Shader" uid="uid://dv2lsbupta77y" path="res://addons/note/shader/slice.gdshader" id="1_nowir"]
 

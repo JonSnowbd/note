@@ -1,4 +1,4 @@
-[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://c5sliisjkpuqb"]
+[gd_resource type="FontVariation" format=3 uid="uid://c5sliisjkpuqb"]
 
 [ext_resource type="FontFile" uid="uid://d0yiymhskci02" path="res://addons/note/resource/note_ui/font/StackSansText.ttf" id="1_s1axd"]
 

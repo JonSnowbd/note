@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://dj5ae4svel0vv" path="res://addons/note/script/loading_screen.gd" id="5_2b8on"]
 [ext_resource type="Script" uid="uid://dqm1jcqmseeun" path="res://addons/note/script/ui.gd" id="6_basvj"]
 [ext_resource type="Script" uid="uid://caty0hb5uijx2" path="res://addons/note/script/phase/phase_manager.gd" id="7_2rlwf"]
+[ext_resource type="Texture2D" uid="uid://b3yjflsro8n2b" path="res://addons/note/texture/note_ui_sheet.png" id="7_gtcng"]
 [ext_resource type="Script" uid="uid://4iwdim3cbvkf" path="res://addons/note/script/focus_system/focus_root.gd" id="8_6ht7x"]
 [ext_resource type="StyleBox" uid="uid://c0dpaf201wta7" path="res://addons/note/resource/note_ui/stylebox/panel_controller_focus.tres" id="9_qb4ap"]
 [ext_resource type="AudioStream" uid="uid://cjkq5qho04woa" path="res://addons/note/audio/move.ogg" id="10_sbkf1"]
@@ -23,6 +24,10 @@
 [ext_resource type="PackedScene" uid="uid://b8vpfmxrxetcf" path="res://addons/note/prefab/control_guide/basic_guidelet.tscn" id="22_doc3j"]
 [ext_resource type="Material" uid="uid://kflbxvtevmj2" path="res://addons/note/material/lcd_square_transition.tres" id="22_e7lii"]
 [ext_resource type="Script" uid="uid://b53sh8bwtjj8g" path="res://addons/note/script/transition_panel.gd" id="24_41llv"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r7yvy"]
+atlas = ExtResource("7_gtcng")
+region = Rect2(96, 224, 184, 128)
 
 [node name="NoteCenter" type="Node2D" unique_id=2080868149 node_paths=PackedStringArray("controls", "loading", "transition", "phase", "util", "ui")]
 process_mode = 3
@@ -68,22 +73,52 @@ script = ExtResource("7_2rlwf")
 process_mode = 3
 layer = 120
 
-[node name="Notifications" type="MarginContainer" parent="NoteUISpace" unique_id=1709384188 node_paths=PackedStringArray("popup_audio")]
+[node name="ScreenDecorations" type="MarginContainer" parent="NoteUISpace" unique_id=2063509292]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="NotificationCornerDeco" type="TextureRect" parent="NoteUISpace/ScreenDecorations" unique_id=952303986]
+self_modulate = Color(0, 0, 0, 0.47843137)
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_r7yvy")
+
+[node name="Notifications" type="MarginContainer" parent="NoteUISpace" unique_id=1709384188 node_paths=PackedStringArray("popup_audio", "notification_corner_deco", "notification_container")]
 process_mode = 3
-visible = false
-anchors_preset = -1
-anchor_left = 0.075
-anchor_top = 0.5
-anchor_right = 0.075
-anchor_bottom = 0.5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
 script = ExtResource("18_b57bt")
+separation_flat = Vector2(0, 5)
 popup_audio = NodePath("Ping")
+notification_corner_deco = NodePath("../ScreenDecorations/NotificationCornerDeco")
+notification_container = NodePath("Container")
 
 [node name="Ping" type="AudioStreamPlayer" parent="NoteUISpace/Notifications" unique_id=318923049]
+stream = ExtResource("14_48wpp")
+volume_db = -10.0
+
+[node name="Container" type="MarginContainer" parent="NoteUISpace/Notifications" unique_id=1116195286]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+mouse_filter = 2
 
 [node name="Tooltip" type="MarginContainer" parent="NoteUISpace" unique_id=745445436 node_paths=PackedStringArray("tip_container")]
 visible = false
@@ -145,6 +180,7 @@ mouse_filter = 2
 
 [node name="WindowNode" type="MarginContainer" parent="NoteUISpace" unique_id=427159999]
 process_mode = 3
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -209,6 +245,7 @@ volume_db = -23.0
 
 [node name="LoadingScreen" type="MarginContainer" parent="NoteUISpace" unique_id=1278017651]
 process_mode = 3
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

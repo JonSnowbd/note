@@ -121,7 +121,7 @@ class ShellNode extends RefCounted:
 		# Then we record where other's additional children begin, and copy them over.
 		var extra_children = other.children.slice(max(len(children), 0))
 		while len(children) < len(other.children):
-			var new_child = ShellNode.from_data(extra_children.pop_front(), shell)
+			var new_child: ShellNode = ShellNode.from_data(extra_children.pop_front(), shell)
 			new_child.parent = self
 			if new_child.root_fragment != null:
 				new_child.root_fragment.fragment_update(shell, new_child.props)
@@ -204,6 +204,9 @@ class ShellNode extends RefCounted:
 ## uses of shell that covers the whole screen, such as applications.
 @export var transition_root_changes: bool = false
 @export var automatically_view_on_ready: bool = true
+## Should only be true if you want reactive fragments that already exist
+## outside of the root control.
+@export var scan_for_initial_fragments: bool = false
 
 var _current_tree: ShellNode = null
 var _shell_fragments: Array[NoteAppFragment] = []
@@ -219,7 +222,8 @@ func _hookup(node: Node):
 		_hookup(c)
 func _ready() -> void:
 	initialize()
-	_hookup(root_node)
+	if scan_for_initial_fragments:
+		_hookup(root_node)
 	_updating = true
 	if automatically_view_on_ready:
 		perform_layout()
@@ -317,8 +321,10 @@ func quick_map(prefab, items: Array = [], prop_name: StringName = &"value") -> A
 ## the given event.
 func quick_btn(label: String, on_press: Callable) -> ShellNode:
 	return (
-		ShellNode.from_data("uid://d2eorjxlt1q4l", self)
-		.with_props({&"text": label})
+		with("uid://d2eorjxlt1q4l")
+		.with_props({
+			&"text": label
+		})
 		.on(&"pressed", on_press)
 	)
 

@@ -5,6 +5,8 @@
 [node name="FragmentButton" type="MarginContainer" unique_id=1867439998]
 offset_right = 12.0
 offset_bottom = 12.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
 
 [node name="NoteAppFragment" type="Node" parent="." unique_id=772414449 node_paths=PackedStringArray("button_reference")]
 script = ExtResource("1_bhnyj")

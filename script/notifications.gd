@@ -1,108 +1,118 @@
 extends Control
 
-const DELETION_KEY = &"__note_notification_kill_key"
+const DELETION_KEY = &"note_notification_kill_key"
+const TIMER_KEY = &"note_notification_timer_key"
 
-@export var popup_audio: AudioStreamPlayer
-## 0.0 = far left of screen, top of screen, 1.0 = far right of screen, bottom of screen.
-## Set this to control where the anchor is for your notifications.
-@export var screen_ratio_position: Vector2 = Vector2(0.075, 0.5)
 ## Each control in the notification stack is offset by the previous controls
 ## size, multiplied by this. Setting x to 0.5 will have every control start
 ## midway through the previous one on the x axis.
 @export var separation_ratio: Vector2 = Vector2(0.0, 1.0)
 ## Same with ratio, but with flat pixel amounts added after each notification.
-@export var separation_flat: Vector2 = Vector2(3.0, 2)
+@export var separation_flat: Vector2 = Vector2(0, 3.0)
+@export var use_corner_decoration: bool = true
+@export var use_audio_notification: bool = true
 
-var _timers: Dictionary[Control,float]
+@export_group("Refs")
+@export var popup_audio: AudioStreamPlayer
+@export var notification_corner_deco: TextureRect
+@export var notification_container: Container
+
+var open_notifications: Array[Control] = []
 
 func _ready() -> void:
-	child_entered_tree.connect(func(_c): _update_position())
-	child_exiting_tree.connect(func(_c): _update_position())
 	hide()
 
-func _prep_control(control: Control):
+func _add_notification(control: Control, duration: float = 3.0):
 	control.offset_transform_enabled = true
+	control.offset_transform_visual_only = false
 	control.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	control.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
-func _update_position():
-	size = Vector2.ZERO
-	anchor_left = screen_ratio_position.x
-	anchor_right = screen_ratio_position.x
-	anchor_top = screen_ratio_position.y
-	anchor_bottom = screen_ratio_position.y
-func send_basic(text: String, icon: Texture2D = null, duration: float = 2.0, icon_zoom: float = 1.0):
+	control.set_meta(TIMER_KEY, duration)
+	notification_container.add_child(control)
+	open_notifications.append(control)
+	popup_audio.play()
+	var target_pos = Vector2.ZERO
+	for c in notification_container.get_children():
+		if c == control: continue
+		if c is Control:
+			target_pos += (c.size*separation_ratio)
+			target_pos += separation_flat
+	control.offset_transform_position = target_pos
+
+func send_basic(text: String, duration: float = 2.0, icon_zoom: float = 1.0):
 	var panel = PanelContainer.new()
 	var hbox = HBoxContainer.new()
-	var label = Label.new()
+	var label = RichTextLabel.new()
+	var margin = MarginContainer.new()
+	margin.add_theme_constant_override(&"margin_left", 8)
+	margin.add_theme_constant_override(&"margin_right", 8)
+	margin.add_theme_constant_override(&"margin_top", 8)
+	margin.add_theme_constant_override(&"margin_bottom", 8)
+	label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	label.fit_content = true
+	label.bbcode_enabled = true
 	label.text = text
-	if icon != null:
-		var tex = TextureRect.new()
-		tex.texture = icon
-		tex.custom_minimum_size = icon.get_size()*icon_zoom
-		tex.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-		tex.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-		tex.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		hbox.add_child(tex)
 	hbox.add_child(label)
-	panel.add_child(hbox)
-	_prep_control(panel)
-	
-	_timers[panel] = duration
-	popup_audio.play()
-	add_child(panel)
-	show()
+	margin.add_child(hbox)
+	panel.add_child(margin)
+	_add_notification(panel, duration)
 func send_advanced(scene, duration: float = 2.0):
-	var panel = PanelContainer.new()
+	var object = null
 	if scene is PackedScene:
-		panel.add_child(scene.instantiate())
+		object = scene.instantiate()
 	elif scene is String:
-		panel.add_child(note.loading.fetch(scene).instantiate())
+		object = note.loading.fetch(scene).instantiate()
 	elif scene is Control:
 		if scene.get_parent() != null:
 			scene.get_parent().remove_child(scene)
-		panel.add_child(scene)
-	_prep_control(panel)
+		object = scene
+	elif scene is Callable:
+		object = note.loading.fetch("uid://ckwjl0ougs0m6").instantiate()
+		object.tooltip(scene)
 	
-	_timers[panel] = duration
-	popup_audio.play()
-	add_child(panel)
-	show()
-func send_representor(representor: String, data = null, duration: float = 2.0) -> Representor:
-	var prefab = note.loading_screen.force_fetch(representor) as PackedScene
-	if prefab != null:
-		var rep = prefab.instantiate() as Representor
-		if rep != null:
-			rep.represent(data)
-			_prep_control(rep)
-			_timers[rep] = duration
-			popup_audio.play()
-			add_child(rep)
-			return rep
-		return null
-	else:
-		note.error("Failed to load file path/uid '%s'" % representor)
-		return null
+	if object != null:
+		_add_notification(object, duration)
 func _kill(control: Control):
+	control.set_meta(DELETION_KEY, true)
 	var t = control.create_tween()
 	t.tween_property(control, "modulate:a", 0.0, 0.45)\
 	.set_ease(Tween.EASE_OUT)\
 	.set_trans(Tween.TRANS_CUBIC)
 	t.tween_callback(control.queue_free)
-	t.tween_callback(_update_position)
 func _process(delta: float) -> void:
-	var free_keys = []
-	for k in _timers:
-		if _timers[k] > 0.0:
-			_timers[k] -= delta
-			if _timers[k] <= 0.0:
-				free_keys.append(k)
-				k.set_meta(DELETION_KEY, true)
-				_kill(k)
-	for k in free_keys:
-		_timers.erase(k)
+	var was_visible = visible
+	visible = notification_container.get_child_count() > 0
+	
+	if use_corner_decoration:
+		if was_visible and !visible:
+			notification_corner_deco.modulate.a = 1.0
+			notification_corner_deco.show()
+		if !was_visible and visible:
+			notification_corner_deco.modulate.a = 0.0
+			notification_corner_deco.show()
+		
+		notification_corner_deco.modulate.a = note.util.smooth_toward(
+			notification_corner_deco.modulate.a,
+			1.0 if visible else 0.0, 3.0, delta
+		)
+	else:
+		notification_corner_deco.hide()
+	
+	var mouse_inside_notifications = (
+		note.controls.hovered_node != null
+		and notification_container.is_ancestor_of(note.controls.hovered_node)
+	)
+	if !mouse_inside_notifications:
+		for notify in open_notifications:
+			var timer = notify.get_meta(TIMER_KEY, -1.0)
+			timer -= delta
+			if timer <= 0.0:
+				_kill(notify)
+				open_notifications.erase.call_deferred(notify)
+			notify.set_meta(TIMER_KEY, timer)
 	
 	var stamp: Vector2 = Vector2.ZERO
-	for c in get_children():
+	for c in notification_container.get_children():
 		if c.has_meta(DELETION_KEY): continue
 		if c is Control:
 			var cur_off = c.offset_transform_position

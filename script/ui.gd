@@ -41,11 +41,18 @@ func _close(close_shutters: bool = true):
 		t.tween_callback(_blackout.hide)
 		t.tween_callback(_window_root.hide)
 
-func send_notification(scene: String, duration: float = 2.0):
+
+## Sends a notification, depending on what you provide.[br]
+## [b]String[/b] = Uses note.loading.fetch, and instantiates.[br]
+## [b]PackedScene[/b] = Instantiates for you.[br]
+## [b]Callable(app: NoteAppShell)[/b] = Quick VMU package.[br]
+## [b]Control[/b] = Ripped from its parent and placed into the notification.
+func send_notification(scene, duration: float = 5.0):
 	_internal_notifications.send_advanced(scene, duration)
 
-func send_notification_basic(message: String, icon: Texture2D = null, duration: float = 2.0):
-	_internal_notifications.send_basic(message, icon, duration)
+## Sends a basic bb-code enabled string in a panel container.
+func send_notification_string(message: String, duration: float = 5.0):
+	_internal_notifications.send_basic(message, duration)
 
 ## Takes a window scene, which could be a path, a packed scene, an already
 ## created node, or a VMU callback to popup into the viewport, blocking input. 

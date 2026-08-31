@@ -62,6 +62,8 @@ class LoadingSession extends RefCounted:
 		running = true
 		
 		destination = level_scene
+		
+		note.loading.level_changing.emit()
 		if old_scene != null:
 			tree.current_scene = null
 			tree.root.remove_child.call_deferred(old_scene)
@@ -121,6 +123,7 @@ class LoadingSession extends RefCounted:
 			if scene.get_parent() != null:
 				scene.get_parent().remove_child(scene)
 		tree.change_scene_to_node.call_deferred(scene)
+		note.loading.level_changed.emit()
 
 ## The loading screens root, which contains the visuals, and the autosave piece.
 @export var loading_screen_root: Control
@@ -133,6 +136,10 @@ class LoadingSession extends RefCounted:
 signal prewarm_finished(path: String)
 signal prewarm_failed(path: String)
 signal loading_update(completion: float)
+## Called just before the current scene is unsocketed.
+signal level_changing
+## Called just after the new scene has been set.
+signal level_changed
 
 var current_load_session: LoadingSession
 

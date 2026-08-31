@@ -12,15 +12,21 @@ enum Type {
 signal input_method_changed()
 signal is_now_keyboard
 signal is_now_gamepad
-signal hovered_node_changed(old_node: Control, new_node: Control)
+signal hovered_node_changed(old_node, new_node)
 
 var current_mode: Type = Type.MouseKeyboard
 var hovered_node: Control
 var change_mouse_mode_automatically: bool = true
+var emit_notification_for_change: bool = true
 
 var __mouse_track: float = 0.0
 
-func _physics_process(delta: float) -> void:
+
+func _ready() -> void:
+	note.loading.level_changing.connect(func():
+		hovered_node = null
+	)
+func _process(delta: float) -> void:
 	var old_node = hovered_node
 	if is_mouse_and_keyboard():
 		hovered_node = get_viewport().gui_get_hovered_control()

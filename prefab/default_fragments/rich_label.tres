@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="NoteAppLibraryEntry" format=3 uid="uid://bnc1sphnjjr50"]
+
+[ext_resource type="Script" uid="uid://du85j7ntc5soe" path="res://addons/note/script/app/library_entry.gd" id="1_jrxad"]
+[ext_resource type="PackedScene" uid="uid://m0q5p1bt2t45" path="res://addons/note/prefab/default_fragments/rich_label.tscn" id="1_orc84"]
+[ext_resource type="Script" uid="uid://byuatuq2jwhcg" path="res://addons/note/prefab/default_fragments/rich_label_fragment.gd" id="2_d5v8a"]
+
+[resource]
+script = ExtResource("1_jrxad")
+frag_name = &"Rich Label"
+frag_description = "A simple BBCode enabled label. Prefer to use bb tags for size and color."
+frag_scene = ExtResource("1_orc84")
+frag_script = ExtResource("2_d5v8a")
+props = Dictionary[StringName, Variant]({
+&"text": "Default Text"
+})
+metadata/_custom_type_script = "uid://du85j7ntc5soe"

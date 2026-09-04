@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://m0q5p1bt2t45"]
+
+[ext_resource type="Script" uid="uid://byuatuq2jwhcg" path="res://addons/note/prefab/default_fragments/rich_label_fragment.gd" id="1_rwy4s"]
+
+[node name="RichLabel" type="MarginContainer" unique_id=877389301]
+offset_right = 75.0
+offset_bottom = 23.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+mouse_filter = 2
+
+[node name="RichLabelFragment" type="Node" parent="." unique_id=1966890151 node_paths=PackedStringArray("rich_text_label")]
+script = ExtResource("1_rwy4s")
+rich_text_label = NodePath("../RichTextLabel")
+metadata/_custom_type_script = "uid://bmxa1virvesbb"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=1298874948]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+bbcode_enabled = true
+text = "Test Text."
+fit_content = true
+scroll_active = false
+autowrap_mode = 0

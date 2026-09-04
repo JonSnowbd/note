@@ -5,7 +5,8 @@ class_name NoteUILibraryGenerator
 const default_fragments: Array[NoteAppLibraryEntry] = [
 	preload("uid://c2iasdqkl31b0"),
 	preload("uid://bg5kigat0i7qn"),
-	preload("uid://ckx1u4tcscw5a")
+	preload("uid://ckx1u4tcscw5a"),
+	preload("uid://bnc1sphnjjr50"),
 ]
 
 var fragments: Array[NoteAppLibraryEntry] = []

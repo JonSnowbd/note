@@ -32,6 +32,9 @@ static func add_to(ctrl: Control):
 @export var on_click_rotation_hit: Vector2 = Vector2(-0.1,0.1)
 
 func hover_changed(old: Control, new: Control):
+	var cancel = controls.get(&"disabled")
+	if cancel == null or cancel == true:
+		return
 	if new == controls:
 		if on_hover_sound != null: on_hover_sound.play()
 		controls.offset_transform_position.x = randf_range(on_hover_position_hit_x.x, on_hover_position_hit_x.y)

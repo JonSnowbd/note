@@ -8,7 +8,7 @@ class_name NoteAppThinShell
 @export var source_function: StringName
 
 func initialize():
-	trigger_relayout()
+	pass
 
 func view():
 	if source_node != null and !source_function.is_empty() and source_node.has_method(source_function):

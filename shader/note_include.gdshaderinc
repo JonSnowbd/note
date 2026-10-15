@@ -1,48 +1,41 @@
-float hash(float n) { return fract(sin(n) * 1e4); }
-float hash(vec2 p) { return fract(1e4 * sin(17.0 * p.x + p.y * 0.1) * (0.1 + abs(sin(p.y * 13.0 + p.x)))); }
+/**
+ * Voronoi shaped noise
+ * u 0.0 -> 1.0, where 0.0 is completely square, and 1.0 is voronoi shaped.
+ * v 0.0 -> 1.0, where 0.0 shows sharp lines and 1.0 is a smooth blurred noise.
+*/
+float voronoi_noise( in vec2 p, float u, float v ){
+	// source: https://www.shadertoy.com/view/Xd23Dh
+	float k = 1.0+63.0*pow(1.0-v,6.0);
 
-float noise(float x) {
-	float i = floor(x);
-	float f = fract(x);
-	float u = f * f * (3.0 - 2.0 * f);
-	return mix(hash(i), hash(i + 1.0), u);
+	vec2 i = floor(p);
+	vec2 f = fract(p);
+
+	vec2 a = vec2(0.0,0.0);
+	for( int y=-2; y<=2; y++ )
+	for( int x=-2; x<=2; x++ )
+	{
+		vec3 hash_inline = vec3( dot(p,vec2(127.1,311.7)), 
+				   dot(p,vec2(269.5,183.3)), 
+				   dot(p,vec2(419.2,371.9)) );
+		hash_inline = fract(sin(hash_inline)*43758.5453);
+		vec2  g = vec2( float(x), float(y) );
+		vec3  o = hash_inline*vec3(u,u,1.0);
+		vec2  d = g - f + o.xy;
+		float w = pow( 1.0-smoothstep(0.0,1.414,length(d)), k );
+		a += vec2(o.z*w,w);
+	}
+
+	return a.x/a.y;
 }
-
-float noise(vec2 x) {
-	vec2 i = floor(x);
-	vec2 f = fract(x);
-
-	// Four corners in 2D of a tile
-	float a = hash(i);
-	float b = hash(i + vec2(1.0, 0.0));
-	float c = hash(i + vec2(0.0, 1.0));
-	float d = hash(i + vec2(1.0, 1.0));
-
-	// Simple 2D lerp using smoothstep envelope between the values.
-	// return vec3(mix(mix(a, b, smoothstep(0.0, 1.0, f.x)),
-	//			mix(c, d, smoothstep(0.0, 1.0, f.x)),
-	//			smoothstep(0.0, 1.0, f.y)));
-
-	// Same code, with the clamps in smoothstep and common subexpressions
-	// optimized away.
-	vec2 u = f * f * (3.0 - 2.0 * f);
-	return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+float gold_noise(in vec2 xy, in float seed){
+	// source: https://stackoverflow.com/a/28095165
+	return fract(tan(distance(xy*1.61803398874989484820459, xy)*seed)*xy.x);
 }
-
-// This one has non-ideal tiling properties that I'm still tuning
-float noise(vec3 x) {
-	const vec3 step = vec3(110, 241, 171);
-
-	vec3 i = floor(x);
-	vec3 f = fract(x);
-
-	// For performance, compute the base input to a 1D hash from the integer part of the argument and the
-	// incremental change to the 1D based on the 3D -> 1D wrapping
-	float n = dot(i, step);
-
-	vec3 u = f * f * (3.0 - 2.0 * f);
-	return mix(mix(mix( hash(n + dot(step, vec3(0, 0, 0))), hash(n + dot(step, vec3(1, 0, 0))), u.x),
-				   mix( hash(n + dot(step, vec3(0, 1, 0))), hash(n + dot(step, vec3(1, 1, 0))), u.x), u.y),
-			   mix(mix( hash(n + dot(step, vec3(0, 0, 1))), hash(n + dot(step, vec3(1, 0, 1))), u.x),
-				   mix( hash(n + dot(step, vec3(0, 1, 1))), hash(n + dot(step, vec3(1, 1, 1))), u.x), u.y), u.z);
+highp float rand(vec2 co){
+	highp float a = 12.9898;
+	highp float b = 78.233;
+	highp float c = 43758.5453;
+	highp float dt= dot(co.xy ,vec2(a,b));
+	highp float sn= mod(dt,3.14);
+	return fract(sin(sn) * c);
 }

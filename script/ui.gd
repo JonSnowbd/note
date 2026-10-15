@@ -107,8 +107,10 @@ func window(window_scene, blackout_color: Color = DefaultWindowBlackout) -> Note
 ## Tooltip scene can be a string path to load, a callable to use App VMU style creation, a packed scene,
 ## or a node(that will be freed when the tooltip closes).[br][br]Data will be passed to the instantiated node
 ## if it has a [code]tooltip(data)[/code] method. Priority can be used to overwrite active tooltip calls.
-func tooltip(tooltip_scene, data=null, priority:int=0):
+func tooltip(tooltip_scene, data = null, priority:int = 0):
 	_internal_tooltip.request(tooltip_scene, data, priority)
+func tooltip_string(string: String, priority:int = 0):
+	_internal_tooltip.request("uid://f4ll26okyq31", string, priority)
 
 ## Gets the current input texture map being used by the control guide.
 ## You can use this to get texture icons for your action guides.

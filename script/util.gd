@@ -135,6 +135,11 @@ func mute_volume(bus_name: String):
 	if Engine.is_editor_hint(): return
 	set_volume(bus_name, 0.0)
 
+func index_1d_to_2d(index_1d: int, array_width: int) -> Vector2i:
+	return Vector2i(int(index_1d/array_width), index_1d % array_width)
+func index_2d_to_1d(index_2d: Vector2i, array_width: int) -> int:
+	return (index_2d.y*array_width)+index_2d.x
+
 ## Returns an integer for use in [code]profiler_end[/code].
 func profiler_start() -> int:
 	return Time.get_ticks_msec()

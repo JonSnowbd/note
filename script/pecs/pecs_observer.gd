@@ -17,6 +17,8 @@ func listen(event):
 func unlisten(event):
 	_listening_to[event] = false
 
+## Returns true if the observer is actively listening for the event
+## given.
 func is_interested_in(event) -> bool:
 	return _listening_to.get(event, false)
 

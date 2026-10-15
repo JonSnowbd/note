@@ -2,6 +2,8 @@
 extends Node
 class_name PECSEntityMarker
 
+signal mutated(component: Script)
+
 ## Add this as a child to your pre-existing and spawned entities to onboard them
 ## into your PECSCore when they are added to the scene.
 

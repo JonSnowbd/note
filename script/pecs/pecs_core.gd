@@ -19,11 +19,14 @@ const CORE_METATAG = &"__pecs_core_meta_marker"
 class Lens extends RefCounted:
 	signal entity_added(ent: PECSEntityMarker)
 	signal entity_lost(ent: PECSEntityMarker)
+	signal entity_mutated(ent: PECSEntityMarker, component: Script)
 	var filter_needs: Array[Script] = []
 	var filter_without: Array[Script] = []
 	var filter_with_relationship: Array[Script] = []
 	var dirty_lens: bool = true
 	var list: Array[PECSEntityMarker] = []
+	func _argfix(component: Script, ent: PECSEntityMarker):
+		entity_mutated.emit(ent,component)
 	func consider(ent: PECSEntityMarker):
 		var already_listening: bool = list.has(ent)
 		var is_valid: bool = true
@@ -36,13 +39,14 @@ class Lens extends RefCounted:
 				is_valid = false
 				break
 		if already_listening and !is_valid:
+			ent.mutated.disconnect(entity_mutated.emit)
 			list.erase(ent)
 			entity_lost.emit(ent)
 		if !already_listening and is_valid:
+			ent.mutated.connect(_argfix.bind(ent))
 			list.append(ent)
 			entity_added.emit(ent)
 	func get_entities() -> Array[PECSEntityMarker]:
-		## TODO, checks for dirty looker.
 		return list
 	func setup_with(components: Array[Script]):
 		filter_needs = components
@@ -68,11 +72,11 @@ class Lens extends RefCounted:
 var component_store: Dictionary[Script,Array] = {}
 var systems: Array[PECSSystem] = []
 var observers: Array[PECSObserver] = []
+var partitions: Array[PECSPartition] = []
 
 var entities: Array[PECSEntityMarker] = []
 var entity_index: Dictionary[PECSEntityMarker, int]
 
-var _update_pairs: Array = []
 var _component_holes: Dictionary[Script,Array] = {}
 var _queued_events: Array = []
 var _queued_event_values: Array = []
@@ -82,7 +86,6 @@ var relevant_lenses: Dictionary[Script, Array] = {}
 var blackboard: Dictionary[StringName,Variant] = {}
 var _immediate_observers: Array[PECSObserver] = []
 var _deferred_observers: Array[PECSObserver] = []
-var _core_relationships: Dictionary[Script,PECSEntityMarker] = {}
 var _in_run: bool = false
 var _began: bool = false
 
@@ -104,14 +107,19 @@ func _set(property: StringName, value: Variant) -> bool:
 	return false
 
 func print_core_state():
-	note.info("Core State [b]%s[/b] with the following Systems/Observers:" % name, "PECS")
+	note.info("Core State [b]%s[/b] with the following Systems/Observers/Partitions:" % name, "PECS")
 	for sys in systems:
-		sys.setup(self)
 		note.info("[b]%s[/b]" % sys.name, "SYS")
 	for obs in observers:
-		obs.setup(self)
 		note.info("[b]%s[/b]" % obs.name, "OBS")
+	for par in partitions:
+		note.info("[b]%s[/b]" % par.name, "PAR")
 
+func _find_entities(in_node: Node, accumulator: Array):
+	if in_node is PECSEntityMarker:
+		accumulator.append(in_node)
+	for c in in_node.get_children():
+		_find_entities(c, accumulator)
 func _ready() -> void:
 	if Engine.is_editor_hint(): return
 	for asset in prewarm_assets:
@@ -124,17 +132,38 @@ func _ready() -> void:
 			system_add_via_node(i)
 		if i is PECSObserver:
 			observer_add_via_node(i)
+		if i is PECSPartition:
+			partition_add_via_node(i)
 	for sys in systems:
 		sys.setup(self)
 	for obs in observers:
 		obs.setup(self)
+	for par in partitions:
+		par._initialize(self)
 	_began = true
+	
+	var pre_existing = []
+	for root_key in root_nodes.keys():
+		_find_entities(root_nodes[root_key], pre_existing)
+	for e in pre_existing:
+		if e is PECSEntityMarker:
+			notify_new_entity(e)
 
 func instantiate_blank_entity(root_override: StringName = &"") -> PECSEntityMarker:
 	var destination = default_root if root_override.is_empty() else root_override
 	var inst = PECSEntityMarker.new()
 	notify_new_entity(inst)
 	root_nodes[destination].call_deferred("add_child", inst)
+	return inst
+func instantiate_wrapped_entity(wrapper: Node, root_override: StringName = &"") -> PECSEntityMarker:
+	var destination = default_root if root_override.is_empty() else root_override
+	if wrapper.get_parent() != null:
+		wrapper.get_parent().remove_child(wrapper)
+	var inst = PECSEntityMarker.new()
+	wrapper.add_child(inst)
+	inst.node = wrapper
+	notify_new_entity(inst)
+	root_nodes[destination].call_deferred("add_child", wrapper)
 	return inst
 func instantiate_entity(scene: PackedScene, root_override: StringName = &"") -> PECSEntityMarker:
 	var destination = default_root if root_override.is_empty() else root_override
@@ -204,7 +233,7 @@ func entity_add_component(entity: PECSEntityMarker, component: Script, value: Va
 	var related_lenses = relevant_lenses.get_or_add(component, [])
 	for lens in related_lenses:
 		lens.consider(entity)
-	_update_pairs.append([entity, component])
+	entity.mark_updated(component)
 
 func entity_remove_component(entity: PECSEntityMarker, component: Script) -> void:
 	var ind = entity.component_handles[component]
@@ -234,7 +263,11 @@ func entity_remove_relation(source: PECSEntityMarker, relation: Script):
 func entity_get_component(entity: PECSEntityMarker, component: Script) -> Variant:
 	return component_store[component][entity.component_handles[component]]
 func entity_mark_component_updated(entity: PECSEntityMarker, component: Script) -> void:
-	_update_pairs.append([entity, component])
+	for fx: PECSSideEffect in entity.side_effects:
+		var reacts = fx.listening_for_update.get(component, false)
+		if reacts:
+			fx.run(entity, component, component_store[component][entity.component_handles[component]])
+	entity.mutated.emit(component)
 
 func _relevant_lens_add(lens: Lens, component: Script):
 	var arr: Array = relevant_lenses.get_or_add(component, [])
@@ -254,12 +287,7 @@ func refresh_lens(lens: Lens):
 		lens.consider(e)
 	lens.dirty_lens = false
 
-func set_core_relationship(relationship: Script, target: PECSEntityMarker):
-	_core_relationships[relationship] = target
-func get_core_relationship(relationship: Script) -> PECSEntityMarker:
-	return _core_relationships.get(relationship, null)
-func remove_core_relationship(relationship: Script):
-	_core_relationships.erase(relationship)
+
 
 func _sort_systems(l: PECSSystem, r: PECSSystem) -> bool:
 	if l.priority == r.priority:
@@ -269,6 +297,23 @@ func _sort_observers(l: PECSObserver, r: PECSObserver) -> bool:
 	if l.priority == r.priority:
 		return l._internal_index < r._internal_index
 	return l.priority > r.priority
+
+func get_partition(partition_script: Script) -> PECSPartition:
+	for p in partitions:
+		if p.get_script() == partition_script:
+			return p
+	return null
+
+func find_entity_by_component(type: Script) -> PECSEntityMarker:
+	if component_store.has(type):
+		var array: Array = component_store[type]
+		if !array.is_empty():
+			if len(array) > 1:
+				note.warn("Filtering entity by type returned multiple entities when this method is intended for singleton style entities. Prefer using a lens.")
+			var component = array[0] as PECSComponent
+			if component != null:
+				return component.component_entity
+	return null
 
 func find_system_by_type(type: Script) -> PECSSystem:
 	for sys in systems:
@@ -280,6 +325,14 @@ func find_observer_by_type(type: Script) -> PECSObserver:
 		if is_instance_of(obs, type):
 			return obs
 	return null
+
+func partition_add_via_script(partition: Script) -> void:
+	var instance = Node.new()
+	instance.set_script(partition)
+	if instance is PECSPartition:
+		partition_add_via_node(instance)
+func partition_add_via_node(node: PECSPartition) -> void:
+	partitions.append(node)
 
 func observer_add_via_script(observer: Script) -> void:
 	var instance = Node.new()
@@ -331,6 +384,9 @@ func system_remove_via_script(system: Script) -> void:
 			system_remove_via_node(s)
 			break
 
+func get_default_root() -> Node:
+	return root_nodes[default_root]
+
 ## Creates and maintains a lens which lets you filter and look for
 ## entities dynamically. The entity list is refreshed for the first time
 ## on an ECS run tick, after which all changes to entities will be reflected
@@ -353,15 +409,7 @@ func run_ecs(delta: float):
 	_in_run = true
 	for sys in systems:
 		sys.run(delta)
-	for pair in _update_pairs:
-		var ent = pair[0] as PECSEntityMarker
-		var component = pair[1] as Script
-		for fx: PECSSideEffect in ent.side_effects:
-			var reacts = fx.listening_for_update.get(component, false)
-			if reacts:
-				fx.run(ent, component, component_store[component][ent.component_handles[component]])
 	_in_run = false
-	_update_pairs.clear()
 	_flush_deferred_events()
 
 func _flush_deferred_events():

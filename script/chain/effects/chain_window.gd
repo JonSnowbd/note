@@ -1,17 +1,23 @@
 extends ChainNode
 class_name ChainWindow
 
+signal window_created(window: NoteWindow)
+
 ## This should be a packed scene with a NoteWindow type at the root,
 ## this will be opened.
 @export var window_scene: PackedScene
 @export var blackout_color: Color = Color(0.0,0.0,0.0,0.0)
 @export var interrupt_focus: bool = true
+@export var configure_script: Script = null
 
 var current_window: NoteWindow
 
 func _chain_start(instance: RunInstance):
 	if current_window != null: note.error("Chain Window called despite already having a window open.")
 	current_window = note.ui.window(window_scene, blackout_color)
+	if configure_script != null:
+		note.execute(configure_script, [current_window, instance])
+	window_created.emit(current_window)
 
 func _chain_work(instance: RunInstance, delta: float) -> Response:
 	if !is_instance_valid(current_window) or current_window.is_queued_for_deletion():
